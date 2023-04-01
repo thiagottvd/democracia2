@@ -2,6 +2,7 @@ package pt.ul.fc.css.example.demo.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.springframework.lang.NonNull;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 @Entity
 public final class Author {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NonNull
