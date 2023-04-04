@@ -1,5 +1,10 @@
 # Projecto de Referência de SpringBoot
 
+## Equipa do Projeto
+Diogo Pinto   fc55179
+Ivo Estrela   fc51051
+Thiago Duarte fc53636
+
 ## O que fazer
 
 Este projecto serve para verificar que todas as dependências necessárias ao projecto estão a funcionar.
