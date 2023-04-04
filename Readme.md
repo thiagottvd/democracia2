@@ -1,9 +1,9 @@
 # Projecto de Referência de SpringBoot
 
 ## Equipa do Projeto
-Diogo Pinto   fc55179
-Ivo Estrela   fc51051
-Thiago Duarte fc53636
+* Diogo Pinto   fc55179
+* Ivo Estrela   fc51051
+* Thiago Duarte fc53636
 
 ## O que fazer
 
