@@ -6,11 +6,20 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Citizen {
-    @Id
-    @GeneratedValue
-    private Long id;
+  @Id @GeneratedValue private long id;
 
-    public Long getId() {
-        return id;
-    }
+  private String name;
+
+  private int nif;
+
+  @ManyToMany
+  // private List<DelegateTheme> delegateThemes;
+
+  public Long getId() {
+    return id;
+  }
+
+  protected Citizen() {
+    // Empty constructor required by JPA.
+  }
 }
