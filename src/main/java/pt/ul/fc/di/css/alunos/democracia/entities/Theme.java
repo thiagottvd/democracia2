@@ -47,4 +47,12 @@ public class Theme {
     public String getDesignation(){
         return this.designation;
     }
+
+    /*
+        Sets a new parent theme.
+        @param parentTheme The new parent theme.
+     */
+    public void setParentTheme(Theme parentTheme){
+        this.parentTheme = parentTheme;
+    }
 }
