@@ -36,23 +36,23 @@ public class ListActivePollsServiceTest {
   @Test
   public void testGetActivePolls() {
     // Create the bills and polls
-    Bill bill1 = new Bill("Bill 1", LocalDate.now());
+    Bill bill1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     Poll poll1 = new Poll(bill1);
     entityManager.persist(bill1);
     entityManager.persist(poll1);
 
-    Bill bill2 = new Bill("Bill 2", LocalDate.now().minusDays(5));
+    Bill bill2 = new Bill("Bill2", "desc bill2", null, LocalDate.now().minusDays(1), null, null);
     Poll poll2 = new Poll(bill2);
     poll2.setStatus(PollStatus.APPROVED);
     entityManager.persist(bill2);
     entityManager.persist(poll2);
 
-    Bill bill3 = new Bill("Bill 3", LocalDate.now().minusDays(1));
+    Bill bill3 = new Bill("Bill3", "desc bill3", null, LocalDate.now().minusDays(2), null, null);
     Poll poll3 = new Poll(bill3);
     entityManager.persist(bill3);
     entityManager.persist(poll3);
 
-    Bill bill4 = new Bill("Bill 4", LocalDate.now().minusDays(1));
+    Bill bill4 = new Bill("Bill4", "desc bill4", null, LocalDate.now().minusDays(3), null, null);
     Poll poll4 = new Poll(bill4);
     poll4.setStatus(PollStatus.REJECTED);
     entityManager.persist(bill4);
@@ -63,7 +63,7 @@ public class ListActivePollsServiceTest {
 
     // Verify the results
     assertEquals(2, activeBills.size());
-    assertEquals(bill1.getTitle(), "Bill 1");
-    assertEquals(bill3.getTitle(), "Bill 3");
+    assertEquals(bill1.getTitle(), "Bill1");
+    assertEquals(bill3.getTitle(), "Bill3");
   }
 }
