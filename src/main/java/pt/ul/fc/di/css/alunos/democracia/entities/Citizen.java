@@ -12,7 +12,7 @@ public class Citizen {
 
   private int nif;
 
-  @ManyToMany
+  // @ManyToMany
   // private List<DelegateTheme> delegateThemes;
 
   public Long getId() {
