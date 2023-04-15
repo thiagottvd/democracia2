@@ -1,14 +1,12 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
-import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Bill {
@@ -21,11 +19,15 @@ public class Bill {
   private BillStatus status;
   private int numSupporters;
 
+  // Object Associations
   @OneToOne
   private Theme theme;
   @OneToOne
   private Delegate delegate;
-  @OneToOne private Poll associatedPoll;
+  @OneToOne
+  private Poll associatedPoll;
+  @OneToMany
+  private List<Citizen> supporters;
 
   protected Bill() {
     // Empty constructor required by JPA.
@@ -38,6 +40,28 @@ public class Bill {
     this.expirationDate = expirationDate;
     this.delegate = delegate;
     this.theme = theme;
+    supporters = new ArrayList<>();
+  }
+
+  /*
+    Returns a boolean indicating if a voter is supporting this Bill.
+    @param voter The citizen to check.
+   */
+  public boolean checkSupport(Citizen voter){
+    for(Citizen c : supporters){
+      if(voter.equals(c)) return true;
+    }
+    return false;
+  }
+
+  /*
+    Adds a new voter to the supporters list if he hasn't voted yet.
+    @param voter The citizen to add.
+   */
+  public void addSupporter(Citizen voter){
+    if(!checkSupport(voter)) {
+      supporters.add(voter);
+    }
   }
 
   public Long getId() {
