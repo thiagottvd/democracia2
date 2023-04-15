@@ -2,25 +2,26 @@ package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
-import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
+import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
+import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
-import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
 @Component
 public class ListActivePollsHandler {
 
-  private final PollRepository pollRepository;
+  private final PollCatalog pollCatalog;
 
-  public ListActivePollsHandler(PollRepository pollRepository) {
-    this.pollRepository = pollRepository;
+  @Autowired
+  public ListActivePollsHandler(PollCatalog pollCatalog) {
+    this.pollCatalog = pollCatalog;
   }
 
-  public List<BillDTO> getActivePolls() {
-    List<Poll> activePolls = pollRepository.findAllActivePolls(PollStatus.ACTIVE);
+  public List<PollDTO> getActivePolls() {
+    List<Poll> activePolls = pollCatalog.getActivePolls();
     return activePolls.stream()
-        .map(poll -> new BillDTO(poll.getBill()))
+        .map(poll -> new PollDTO(poll.getBill().getTitle(), poll.getBill().getExpirationDate()))
         .collect(Collectors.toList());
   }
 }
