@@ -64,15 +64,42 @@ public class Bill {
     }
   }
 
+  /*
+    Sets the Bill status to closed.
+   */
+  public void setClosedStatus(){
+    status = BillStatus.CLOSED;
+  }
+
   public Long getId() {
     return id;
   }
 
+  /*
+    Returns the Bill title.
+   */
   public String getTitle() {
     return title;
   }
 
+  /*
+    Returns the Bill expiration date.
+   */
   public LocalDate getExpirationDate() {
     return expirationDate;
+  }
+
+  /*
+    Returns the number of supporters in this Bill.
+   */
+  public int getNumSupporters(){
+    return supporters.size();
+  }
+
+  /*
+    Returns the Bill theme.
+   */
+  public Theme getTheme(){
+    return theme;
   }
 }
