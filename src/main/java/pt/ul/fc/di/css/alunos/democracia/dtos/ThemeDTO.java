@@ -8,4 +8,8 @@ public class ThemeDTO {
         @param designation The theme designation.
      */
     public ThemeDTO(String designation){ this.designation = designation; }
+
+    public String getDesignation(){
+        return designation;
+    }
 }
