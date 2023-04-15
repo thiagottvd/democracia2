@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class Delegate implements Citizen {
+public class Delegate extends Citizen {
 
   @Id @GeneratedValue private Long id;
 
