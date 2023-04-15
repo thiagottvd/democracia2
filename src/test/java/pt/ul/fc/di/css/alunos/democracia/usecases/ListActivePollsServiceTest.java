@@ -10,8 +10,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
-import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
+import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ListActivePollsHandler;
@@ -21,15 +22,15 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 public class ListActivePollsServiceTest {
 
   @Autowired private TestEntityManager entityManager;
-
   @Autowired private PollRepository pollRepository;
-
+  private PollCatalog pollCatalog;
   private ListActivePollsHandler listActivePollsHandler;
 
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
-    listActivePollsHandler = new ListActivePollsHandler(pollRepository);
+    pollCatalog = new PollCatalog(pollRepository);
+    listActivePollsHandler = new ListActivePollsHandler(pollCatalog);
   }
 
   @Test
@@ -58,7 +59,7 @@ public class ListActivePollsServiceTest {
     entityManager.persist(poll4);
 
     // Call the use case
-    List<BillDTO> activeBills = listActivePollsHandler.getActivePolls();
+    List<PollDTO> activeBills = listActivePollsHandler.getActivePolls();
 
     // Verify the results
     assertEquals(2, activeBills.size());
