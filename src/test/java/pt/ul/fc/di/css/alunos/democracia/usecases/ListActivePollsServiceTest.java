@@ -61,6 +61,7 @@ public class ListActivePollsServiceTest {
     // Call the use case
     List<PollDTO> activeBills = listActivePollsHandler.getActivePolls();
 
+
     // Verify the results
     assertEquals(2, activeBills.size());
     assertEquals(bill1.getTitle(), "Bill1");
