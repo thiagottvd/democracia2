@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
-    @Query("SELECT b FROM Bill b WHERE b.status = :OPEN")
-    List<Bill> findAllOpenBills();
+    @Query("SELECT b FROM Bill b WHERE b.status = :status")
+    List<Bill> findAllOpenBills(@Param("status") BillStatus status);
 }
