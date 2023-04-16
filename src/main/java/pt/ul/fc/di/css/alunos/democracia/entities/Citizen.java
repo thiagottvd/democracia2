@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.entities;
 import static jakarta.persistence.InheritanceType.*;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class Citizen {
   private int nif;
 
   @ManyToMany(mappedBy = "voters")
-  private List<DelegateTheme> delegateThemes;
+  private List<DelegateTheme> delegateThemes = new ArrayList<>();
 
   public Long getId() {
     return id;

@@ -54,6 +54,7 @@ public class ChooseDelegateHandler {
     for (int i = 0; i < dt_list.size() && !exists; i++) {
       DelegateTheme dt = dt_list.get(i);
       if (dt.checkDelegateTheme(d, t)) {
+        exists = true;
         dt.addVoter(c);
         c.addDelegateTheme(dt);
       }
