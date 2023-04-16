@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
+import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ProposeBillHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
+import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
 
 import java.time.LocalDate;
@@ -29,8 +31,11 @@ public class ProposeBillTest {
     private BillRepository billRepository;
     @Autowired
     private ThemeRepository themeRepository;
+    @Autowired
+    private CitizenRepository citizenRepository;
     private BillCatalog billCatalog;
     private ThemeCatalog themeCatalog;
+    private CitizenCatalog citizenCatalog;
     private ProposeBillHandler proposeBillHandler;
 
     @BeforeEach
@@ -38,7 +43,8 @@ public class ProposeBillTest {
         MockitoAnnotations.openMocks(this);
         billCatalog = new BillCatalog(billRepository);
         themeCatalog = new ThemeCatalog(themeRepository);
-        proposeBillHandler = new ProposeBillHandler(themeCatalog, billCatalog);
+        citizenCatalog = new CitizenCatalog(citizenRepository);
+        proposeBillHandler = new ProposeBillHandler(themeCatalog, billCatalog, citizenCatalog);
     }
 
     @Test

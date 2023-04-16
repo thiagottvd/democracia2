@@ -13,6 +13,6 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
     @Query("SELECT themes FROM Theme themes")
     List<Theme> getAllThemes();
 
-    @Query("SELECT theme FROM Theme theme WHERE theme.id = :id")
-    Theme findThemeByID(@Param("id") long id);
+    @Query("SELECT theme FROM Theme theme WHERE theme.designation = :designation")
+    Theme findThemeByDesignation(@Param("designation") String designation);
 }
