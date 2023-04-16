@@ -24,7 +24,7 @@ public class DelegateTheme {
         // Empty constructor required by JPA.
     }
 
-    public DelegateTheme(Theme theme, Delegate delegate){
+    public DelegateTheme(Delegate delegate, Theme theme){
         this.theme = theme;
         this.delegate = delegate;
         voters = new ArrayList<Citizen>();
