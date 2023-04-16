@@ -17,6 +17,11 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
+  public Bill getBill(Long id) {
+    // TODO
+    return null;
+  }
+
   public List<Bill> getOpenBills() {
     return billRepository.findAllOpenBills(BillStatus.OPEN);
   }
