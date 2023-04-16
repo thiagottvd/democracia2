@@ -41,4 +41,8 @@ public class BillCatalog {
   public void closeExpiredBills() {
     billRepository.closeExpiredBills(BillStatus.CLOSED);
   }
+
+  public void saveBill(Bill bill) {
+    billRepository.save(bill);
+  }
 }

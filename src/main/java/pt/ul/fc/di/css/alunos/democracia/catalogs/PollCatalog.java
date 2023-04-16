@@ -20,4 +20,8 @@ public class PollCatalog {
   public List<Poll> getActivePolls() {
     return pollRepository.findAllActivePolls(PollStatus.ACTIVE);
   }
+
+  public void savePoll(Poll poll) {
+    pollRepository.save(poll);
+  }
 }

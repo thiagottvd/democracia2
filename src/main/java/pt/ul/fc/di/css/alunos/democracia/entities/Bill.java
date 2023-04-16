@@ -53,10 +53,7 @@ public class Bill {
    @param voter The citizen to check.
   */
   public boolean checkSupport(Citizen voter) {
-    for (Citizen c : supporters) {
-      if (voter.equals(c)) return true;
-    }
-    return false;
+    return supporters.contains(voter);
   }
 
   /*
@@ -66,6 +63,7 @@ public class Bill {
   public void addSupporter(Citizen voter) {
     if (!checkSupport(voter)) {
       supporters.add(voter);
+      numSupporters++;
     }
   }
 

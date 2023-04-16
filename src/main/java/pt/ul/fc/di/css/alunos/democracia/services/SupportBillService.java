@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.services;
 
 import org.springframework.stereotype.Service;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.SupportBillHandler;
 
 @Service
@@ -12,7 +13,7 @@ public class SupportBillService {
     this.supportBillHandler = supportBillHandler;
   }
 
-  public void supportBill(Long billId, int nif) {
+  public void supportBill(Long billId, int nif) throws ApplicationException {
     supportBillHandler.supportBill(billId, nif);
   }
 }
