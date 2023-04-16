@@ -49,13 +49,13 @@ public class ProposeBillHandler {
         @param theme The new bill theme.
      */
     public void proposeBill(String title, String description, byte[] pdf, LocalDate expirationDate, ThemeDTO themeDTO, DelegateDTO delegateDTO){
-        Delegate delegate = citizenCatalog.getDelegate(delegateDTO.getNif());
-        Theme theme = themeCatalog.getTheme(themeDTO.getDesignation());
-        if(delegate == null){
+        if(delegateDTO == null){
             System.out.println("No Delegate found.");
-        }else if(theme == null){
+        }else if(themeDTO == null){
             System.out.println("No corresponding Theme found.");
         }else{
+            Delegate delegate = citizenCatalog.getDelegate(delegateDTO.getNif());
+            Theme theme = themeCatalog.getTheme(themeDTO.getDesignation());
             billCatalog.addBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
         }
     }

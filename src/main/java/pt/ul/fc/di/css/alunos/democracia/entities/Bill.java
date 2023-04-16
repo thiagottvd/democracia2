@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
 
@@ -25,9 +27,9 @@ public class Bill {
   @Enumerated(EnumType.STRING)
   private BillStatus status = BillStatus.OPEN;
 
-  @OneToOne private Theme theme;
-  @OneToOne private Delegate delegate;
-  @OneToOne private Poll associatedPoll;
+  @OneToOne(cascade = CascadeType.ALL) private Theme theme;
+  @OneToOne(cascade = CascadeType.ALL) private Delegate delegate;
+  @OneToOne(cascade = CascadeType.ALL) private Poll associatedPoll;
 
   protected Bill() {
     // Empty constructor required by JPA.
