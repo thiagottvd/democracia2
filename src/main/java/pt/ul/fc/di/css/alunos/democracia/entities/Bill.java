@@ -112,6 +112,23 @@ public class Bill {
     return theme;
   }
 
+  /**
+   * Returns the bill description.
+   *
+   * @return the bill description.
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  public Delegate getDelegate() {
+    return delegate;
+  }
+
+  public Poll getPoll() {
+    return associatedPoll;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

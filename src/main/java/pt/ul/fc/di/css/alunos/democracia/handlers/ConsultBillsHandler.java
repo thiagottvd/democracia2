@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,10 +41,10 @@ public class ConsultBillsHandler {
    * @throws ApplicationException if there is an error retrieving the bill.
    */
   public BillDTO getBillDetails(Long billId) throws ApplicationException {
-    Bill bill = billCatalog.getBill(billId);
-    if (bill == null) {
+    Optional<Bill> bill = billCatalog.getBill(billId);
+    if (bill.isEmpty()) {
       throw new BillNotFoundException("The bill \"" + billId + "\" was not found.");
     }
-    return new BillDTO(bill);
+    return new BillDTO(bill.get());
   }
 }

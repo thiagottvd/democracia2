@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.catalogs;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
@@ -17,9 +18,8 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
-  public Bill getBill(Long id) {
-    // TODO
-    return null;
+  public Optional<Bill> getBill(Long id) {
+    return billRepository.findById(id);
   }
 
   public List<Bill> getOpenBills() {

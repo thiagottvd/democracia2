@@ -22,4 +22,13 @@ public class Citizen {
   protected Citizen() {
     // Empty constructor required by JPA.
   }
+
+  /**
+   * Returns the citizen name.
+   *
+   * @return the citizen name.
+   */
+  public String getName() {
+    return name;
+  }
 }
