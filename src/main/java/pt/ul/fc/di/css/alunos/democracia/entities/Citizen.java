@@ -1,12 +1,13 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import static jakarta.persistence.InheritanceType.*;
+
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = TABLE_PER_CLASS)
+// @DiscriminatorColumn(name="VOTER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class Citizen {
   @Id @GeneratedValue private long id;
 
@@ -58,5 +59,9 @@ public class Citizen {
    */
   public String getName() {
     return name;
+  }
+
+  public int getNif() {
+    return nif;
   }
 }
