@@ -17,13 +17,13 @@ public class CitizenCatalog {
 
     public Citizen getCitizen(Citizen c){
         //TODO verifications
-        return citizenRepository.findCitizenByID(c.getId());
+        return citizenRepository.findCitizenByNif(c.getNif());
     }
 
     public Delegate getDelegate(int nif){
         //TODO verifications e perceber se Delegates vao ter tabela propria ou nao
-        //return citizenRepository.findDelegateById()
-        return null;
+        Citizen c = citizenRepository.findCitizenByNif(nif);
+        return new Delegate(c.getName(), c.getNif());
     }
 
     public List<Delegate> getDelegates(){
