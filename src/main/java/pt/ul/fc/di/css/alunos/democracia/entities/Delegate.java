@@ -9,10 +9,6 @@ public class Delegate extends Citizen {
 
   @Id @GeneratedValue private Long id;
 
-  public Long getId() {
-    return id;
-  }
-
   protected Delegate() {
     // Empty constructor required by JPA.
   }
