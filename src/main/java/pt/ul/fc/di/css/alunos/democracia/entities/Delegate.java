@@ -5,15 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class Delegate implements Citizen {
+public class Delegate extends Citizen {
 
   @Id @GeneratedValue private Long id;
 
-  public Long getId() {
-    return id;
-  }
-
   protected Delegate() {
     // Empty constructor required by JPA.
+  }
+
+  public Delegate(String name, int nif) {
+    super(name, nif);
   }
 }
