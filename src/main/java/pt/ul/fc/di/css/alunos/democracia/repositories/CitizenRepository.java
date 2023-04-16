@@ -8,6 +8,6 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, Long> {
-    @Query("SELECT c FROM Citizen c WHERE c.id = :id")
-    Citizen findCitizenByID(@Param("id") long id);
+    @Query("SELECT c FROM Citizen c WHERE c.nif = :nif")
+    Citizen findCitizenByNif(@Param("nif") int nif);
 }
