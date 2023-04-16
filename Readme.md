@@ -10,6 +10,7 @@
  * Use Case D: Implementado; testes parcialmente implementados.
  * Use Case F: Implementado; testes parcialmente implementados.
  * Use Case G: Implementado; testes parcialmente implementados.
+ * Use Case H: Implementado; sem testes.
 
 ## Dependências
 
