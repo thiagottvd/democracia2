@@ -3,7 +3,6 @@ package pt.ul.fc.di.css.alunos.democracia.dtos;
 public class DelegateDTO {
 
   private final String name;
-
   private int nif;
 
   public DelegateDTO(String name, int nif) {
