@@ -1,7 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Bill {
   private String title;
   private String description;
   private int numSupporters = 0;
-  private File file;
+  @Lob private byte[] fileData;
   @OneToMany private List<Citizen> supporters = new ArrayList<>();;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -36,13 +35,13 @@ public class Bill {
   public Bill(
       String title,
       String description,
-      File file,
+      byte[] fileData,
       LocalDate expirationDate,
       Delegate delegate,
       Theme theme) {
     this.title = title;
     this.description = description;
-    this.file = file;
+    this.fileData = fileData;
     this.expirationDate = expirationDate;
     this.delegate = delegate;
     this.theme = theme;
@@ -129,6 +128,10 @@ public class Bill {
     return associatedPoll;
   }
 
+  public byte[] getFileData() {
+    return fileData;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -138,7 +141,7 @@ public class Bill {
         && Objects.equals(id, bill.id)
         && Objects.equals(title, bill.title)
         && Objects.equals(description, bill.description)
-        && Objects.equals(file, bill.file)
+        && Objects.equals(fileData, bill.fileData)
         && Objects.equals(expirationDate, bill.expirationDate)
         && status == bill.status
         && Objects.equals(theme, bill.theme)
@@ -152,7 +155,7 @@ public class Bill {
         id,
         title,
         description,
-        file,
+        fileData,
         expirationDate,
         status,
         numSupporters,

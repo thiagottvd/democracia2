@@ -17,20 +17,23 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ListActivePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
+import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 
 @DataJpaTest
-public class ListActivePollsServiceTest {
+public class ListActivePollsUseCaseTest {
 
   @Autowired private TestEntityManager entityManager;
   @Autowired private PollRepository pollRepository;
   private PollCatalog pollCatalog;
   private ListActivePollsHandler listActivePollsHandler;
+  private ListActivePollsService listActivePollsService;
 
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
     pollCatalog = new PollCatalog(pollRepository);
     listActivePollsHandler = new ListActivePollsHandler(pollCatalog);
+    listActivePollsService = new ListActivePollsService(listActivePollsHandler);
   }
 
   @Test
@@ -59,7 +62,7 @@ public class ListActivePollsServiceTest {
     entityManager.persist(poll4);
 
     // Call the use case
-    List<PollDTO> activeBills = listActivePollsHandler.getActivePolls();
+    List<PollDTO> activeBills = listActivePollsService.getActivePolls();
 
     // Verify the results
     assertEquals(2, activeBills.size());

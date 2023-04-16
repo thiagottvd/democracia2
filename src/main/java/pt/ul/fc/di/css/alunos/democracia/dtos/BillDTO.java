@@ -10,7 +10,7 @@ public class BillDTO {
   private String title;
   private String description;
   private int numSupporters;
-  // TODO private byte[] fileData;
+  private byte[] fileData;
   private LocalDate expirationDate;
   private String theme;
   private String delegate;
@@ -36,7 +36,7 @@ public class BillDTO {
     this.title = bill.getTitle();
     this.description = bill.getDescription();
     this.numSupporters = bill.getNumSupporters();
-    // TODO this.fileData = bill.getFileData();
+    this.fileData = bill.getFileData();
     this.expirationDate = bill.getExpirationDate();
     this.theme = bill.getTheme().getDesignation();
     this.delegate = bill.getDelegate().getName();
@@ -49,5 +49,33 @@ public class BillDTO {
    */
   public Long getId() {
     return id;
+  }
+
+  public byte[] getFileData() {
+    return fileData;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public int getNumSupporters() {
+    return numSupporters;
+  }
+
+  public LocalDate getExpirationDate() {
+    return expirationDate;
+  }
+
+  public String getTheme() {
+    return theme;
+  }
+
+  public String getDelegate() {
+    return delegate;
   }
 }

@@ -16,7 +16,7 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.CloseExpiredBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 
 @DataJpaTest
-public class CloseExpiredBillsTest {
+public class CloseExpiredBillsUseCaseTest {
 
   @Autowired private TestEntityManager entityManager;
   @Autowired private BillRepository billRepository;
