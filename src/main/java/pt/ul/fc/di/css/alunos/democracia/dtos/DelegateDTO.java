@@ -4,15 +4,15 @@ public class DelegateDTO {
 
   private final String name;
 
-  private final Long id;
+  private int nif;
 
-  public DelegateDTO(String name, Long id) {
+  public DelegateDTO(String name, int nif) {
     this.name = name;
-    this.id = id;
+    this.nif = nif;
   }
 
-  public Long getId() {
-    return id;
+  public int getNif() {
+    return nif;
   }
 
   public String getName() {
