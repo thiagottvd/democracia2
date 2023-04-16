@@ -1,7 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -85,7 +84,12 @@ public class ConsultBillsUseCaseTest {
   }
 
   @Test
-  public void testGetBillDetails() throws ApplicationException, IOException {
+  public void testGetBillDetailsValidation() {
+    assertThrows(ApplicationException.class, () -> consultBillsService.getBillDetails(-1L));
+  }
+
+  @Test
+  public void testGetBillDetails() throws IOException, ApplicationException {
     // Create temporary files
     File tempFile = File.createTempFile("test", ".pdf");
     FileWriter writer = new FileWriter(tempFile);
@@ -111,7 +115,7 @@ public class ConsultBillsUseCaseTest {
 
     BillDTO expectedBillDTO = new BillDTO(expectedBill);
 
-    BillDTO actualBill = consultBillsService.getBillDetails(expectedBill.getId());
+    BillDTO actualBill = actualBill = consultBillsService.getBillDetails(expectedBill.getId());
 
     assertEquals(expectedBill.getId(), actualBill.getId());
     assertEquals(expectedBill.getTitle(), actualBill.getTitle());
