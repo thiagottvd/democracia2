@@ -9,8 +9,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
+import pt.ul.fc.di.css.alunos.democracia.dtos.DelegateDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
+import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
+import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ProposeBillHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
@@ -49,6 +52,7 @@ public class ProposeBillTest {
 
     @Test
     public void testProposeBill() {
+        // OS TESTES ESTAO ERRADOS É PRECISO MUDAR
         Theme theme1 = new Theme("theme1", null);
         Bill bill1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
         entityManager.persist(theme1);
@@ -61,7 +65,9 @@ public class ProposeBillTest {
 
         // Call the use case
         List<ThemeDTO> themesDTOList = proposeBillHandler.getThemes();
-        proposeBillHandler.proposeBill("Bill3", "desc Bill3", null, LocalDate.now(), null, null);
+        Citizen delegate = new Citizen("John", 12345);
+        entityManager.persist(delegate);
+        proposeBillHandler.proposeBill("Bill3", "desc Bill3", null, LocalDate.now(), new ThemeDTO(theme1.getDesignation()), new DelegateDTO(delegate.getName(), delegate.getNif()));
 
         // Verify the results
         for(ThemeDTO theme : themesDTOList){

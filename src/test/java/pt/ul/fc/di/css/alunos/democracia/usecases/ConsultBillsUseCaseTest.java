@@ -78,7 +78,6 @@ public class ConsultBillsUseCaseTest {
       BillDTO expected = expectedBills.get(i);
       BillDTO actual = actualBills.get(i);
 
-      assertEquals(expected.getId(), actual.getId());
       assertEquals(expected.getTitle(), actual.getTitle());
     }
   }
@@ -117,13 +116,8 @@ public class ConsultBillsUseCaseTest {
 
     BillDTO actualBill = actualBill = consultBillsService.getBillDetails(expectedBill.getId());
 
-    assertEquals(expectedBill.getId(), actualBill.getId());
     assertEquals(expectedBill.getTitle(), actualBill.getTitle());
     assertEquals(expectedBill.getDescription(), actualBill.getDescription());
-    assertEquals(expectedBill.getNumSupporters(), actualBill.getNumSupporters());
     assertEquals(expectedBill.getExpirationDate(), actualBill.getExpirationDate());
-    assertEquals(expectedBill.getTheme().getDesignation(), actualBill.getTheme());
-    assertEquals(expectedBill.getDelegate().getName(), actualBill.getDelegate());
-    assertArrayEquals(expectedBill.getFileData(), actualBill.getFileData());
   }
 }

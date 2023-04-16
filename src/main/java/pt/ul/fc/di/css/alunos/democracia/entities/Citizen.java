@@ -59,4 +59,6 @@ public class Citizen {
   public String getName() {
     return name;
   }
+
+  public int getNif(){ return nif; }
 }
