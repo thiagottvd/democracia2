@@ -18,14 +18,26 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
+  /**
+   * Returns a bill with the specified ID.
+   *
+   * @param id the ID of the bill to return.
+   * @return an Optional containing the bill if found, otherwise an empty Optional.
+   */
   public Optional<Bill> getBill(Long id) {
     return billRepository.findById(id);
   }
 
+  /**
+   * Returns a list of all open bills.
+   *
+   * @return a list of all open bills.
+   */
   public List<Bill> getOpenBills() {
     return billRepository.findAllOpenBills(BillStatus.OPEN);
   }
 
+  /** Closes all bills that have expired. */
   public void closeExpiredBills() {
     billRepository.closeExpiredBills(BillStatus.CLOSED);
   }
