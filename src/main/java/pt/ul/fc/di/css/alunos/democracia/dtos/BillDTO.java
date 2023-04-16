@@ -10,6 +10,10 @@ public class BillDTO {
   private LocalDate expirationDate;
   private Theme theme;
 
+  public BillDTO(String title) {
+    this.title = title;
+  }
+
   public BillDTO(Bill bill) {
     this.title = bill.getTitle();
     this.expirationDate = bill.getExpirationDate();
