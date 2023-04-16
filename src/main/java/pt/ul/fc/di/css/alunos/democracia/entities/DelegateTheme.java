@@ -1,61 +1,55 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class DelegateTheme {
 
-    @Id @GeneratedValue
-    private Long id;
+  @Id @GeneratedValue private Long id;
 
-    @OneToOne
-    private Theme theme;
+  @OneToOne private Theme theme;
 
-    @OneToOne
-    private Delegate delegate;
+  @OneToOne private Delegate delegate;
 
-    @ManyToMany
-    private List<Citizen> voters;
+  @ManyToMany private List<Citizen> voters;
 
-    protected DelegateTheme(){
-        // Empty constructor required by JPA.
-    }
+  protected DelegateTheme() {
+    // Empty constructor required by JPA.
+  }
 
-    public DelegateTheme(Delegate delegate, Theme theme){
-        this.theme = theme;
-        this.delegate = delegate;
-        voters = new ArrayList<Citizen>();
-    }
+  public DelegateTheme(Delegate delegate, Theme theme) {
+    this.theme = theme;
+    this.delegate = delegate;
+    voters = new ArrayList<>();
+  }
 
-    public Delegate getDelegate() {
-        return delegate;
-    }
+  public Delegate getDelegate() {
+    return delegate;
+  }
 
-    public Theme getTheme() {
-        return theme;
-    }
+  public Theme getTheme() {
+    return theme;
+  }
 
-    public void addVoter(Citizen citizen){
+  public void addVoter(Citizen citizen) {
 
-        voters.add(citizen);
+    voters.add(citizen);
+  }
 
-    }
+  public List<Citizen> getVoters() {
+    return voters;
+  }
 
-    public List<Citizen> getVoters() {
-        return voters;
-    }
+  public boolean checkTheme(Theme t) {
+    return theme.getDesignation().equals(t.getDesignation());
+  }
 
-    public boolean checkTheme(Theme t){
-        return theme.getDesignation().equals(t.getDesignation());
-    }
-
-    /*
-        Checks if the Delegate and Theme given are the same as the attributes
-     */
-    public boolean checkDelegateTheme(Delegate d, Theme t){
-        return d.getId().equals(delegate.getId()) && t.getDesignation().equals(theme.getDesignation());
-    }
+  /*
+     Checks if the Delegate and Theme given are the same as the attributes
+  */
+  public boolean checkDelegateTheme(Delegate d, Theme t) {
+    return d.getId().equals(delegate.getId()) && t.getDesignation().equals(theme.getDesignation());
+  }
 }

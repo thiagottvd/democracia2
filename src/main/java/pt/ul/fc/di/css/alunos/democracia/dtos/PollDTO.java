@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class PollDTO {
 
-  private String title;
-  private LocalDate expirationDate;
+  private final String title;
+  private final LocalDate expirationDate;
 
   public PollDTO(String title, LocalDate expirationDate) {
     this.title = title;

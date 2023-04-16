@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-
 import java.util.List;
 
 @Entity
@@ -15,7 +14,7 @@ public class Citizen {
 
   private int nif;
 
-  @ManyToMany(mappedBy = "voters" )
+  @ManyToMany(mappedBy = "voters")
   private List<DelegateTheme> delegateThemes;
 
   public Long getId() {
@@ -26,7 +25,7 @@ public class Citizen {
     // Empty constructor required by JPA.
   }
 
-  public Citizen(String name, int nif){
+  public Citizen(String name, int nif) {
     this.name = name;
     this.nif = nif;
   }
@@ -35,20 +34,29 @@ public class Citizen {
     return delegateThemes;
   }
   /*
-    Checks if the chosen DelegateTheme already represents this citizen
-   */
-  public void addDelegateTheme(DelegateTheme dt){
+   Checks if the chosen DelegateTheme already represents this citizen
+  */
+  public void addDelegateTheme(DelegateTheme dt) {
     boolean alreadyRepresents = false;
     for (int i = 0; i < delegateThemes.size() && !alreadyRepresents; i++) {
-      if(dt.getTheme().getDesignation().equals(delegateThemes.get(i).getTheme().getDesignation())){
-        if(dt.getDelegate().getId().equals(delegateThemes.get(i).getDelegate().getId())){
+      if (dt.getTheme()
+          .getDesignation()
+          .equals(delegateThemes.get(i).getTheme().getDesignation())) {
+        if (dt.getDelegate().getId().equals(delegateThemes.get(i).getDelegate().getId())) {
           alreadyRepresents = true;
         }
       }
     }
-    if(!alreadyRepresents){
+    if (!alreadyRepresents) {
       delegateThemes.add(dt);
     }
-
+  }
+  /**
+   * Returns the citizen name.
+   *
+   * @return the citizen name.
+   */
+  public String getName() {
+    return name;
   }
 }

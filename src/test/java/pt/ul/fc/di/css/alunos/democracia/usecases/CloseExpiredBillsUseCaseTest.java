@@ -16,17 +16,16 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.CloseExpiredBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 
 @DataJpaTest
-public class CloseExpiredBillsTest {
+public class CloseExpiredBillsUseCaseTest {
 
   @Autowired private TestEntityManager entityManager;
   @Autowired private BillRepository billRepository;
-  private BillCatalog billCatalog;
   private CloseExpiredBillsHandler closeExpiredBillsHandler;
 
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
-    billCatalog = new BillCatalog(billRepository);
+    BillCatalog billCatalog = new BillCatalog(billRepository);
     closeExpiredBillsHandler = new CloseExpiredBillsHandler(billCatalog);
   }
 
