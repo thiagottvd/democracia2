@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.handlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
+import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
@@ -19,11 +20,13 @@ public class ProposeBillHandler {
 
     private final ThemeCatalog themeCatalog;
     private final BillCatalog billCatalog;
+    private final CitizenCatalog citizenCatalog;
 
     @Autowired
-    public ProposeBillHandler(ThemeCatalog themeCatalog, BillCatalog billCatalog) {
+    public ProposeBillHandler(ThemeCatalog themeCatalog, BillCatalog billCatalog, CitizenCatalog citizenCatalog) {
         this.themeCatalog = themeCatalog;
         this.billCatalog = billCatalog;
+        this.citizenCatalog = citizenCatalog;
     }
 
     /*
@@ -46,6 +49,12 @@ public class ProposeBillHandler {
         @param theme The new bill theme.
      */
     public void proposeBill(String title, String description, File pdf, LocalDate expirationDate, Theme theme, Delegate delegate){
-        billCatalog.getOpenBills().add(new Bill(title, description, pdf, expirationDate, delegate, theme));
+        if(citizenCatalog.getDelegate(delegate) == null){
+            System.out.println("No Delegate found.");
+        }else if(themeCatalog.getTheme(theme) == null){
+            System.out.println("No corresponding Theme found.");
+        }else{
+            billCatalog.getOpenBills().add(new Bill(title, description, pdf, expirationDate, delegate, theme));
+        }
     }
 }

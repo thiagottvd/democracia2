@@ -18,4 +18,12 @@ public class ThemeCatalog {
     public List<Theme> getThemes(){
         return themeRepository.getAllThemes();
     }
+
+    /*
+        Returns the corresponding theme from the DB.
+        @param theme The theme to retrieve.
+     */
+    public Theme getTheme(Theme theme){
+        return themeRepository.findThemeByID(theme.getId());
+    }
 }
