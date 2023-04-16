@@ -23,7 +23,7 @@ public class ThemeCatalog {
         Returns the corresponding theme from the DB.
         @param theme The theme to retrieve.
      */
-    public Theme getTheme(Theme theme){
-        return themeRepository.findThemeByID(theme.getId());
+    public Theme getTheme(String designation){
+        return themeRepository.findThemeByDesignation(designation);
     }
 }

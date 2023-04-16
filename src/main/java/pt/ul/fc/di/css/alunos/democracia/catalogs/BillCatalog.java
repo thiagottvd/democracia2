@@ -18,6 +18,11 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
+  // Verificar se isto esta certo
+  public void addBill(Bill bill){
+    billRepository.save(bill);
+  }
+
   /**
    * Returns a bill with the specified ID.
    *

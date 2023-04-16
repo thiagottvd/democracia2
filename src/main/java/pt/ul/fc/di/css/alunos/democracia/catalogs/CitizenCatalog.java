@@ -20,7 +20,7 @@ public class CitizenCatalog {
         return citizenRepository.findCitizenByID(c.getId());
     }
 
-    public Delegate getDelegate(Delegate delegate){
+    public Delegate getDelegate(int nif){
         //TODO verifications e perceber se Delegates vao ter tabela propria ou nao
         //return citizenRepository.findDelegateById()
         return null;
