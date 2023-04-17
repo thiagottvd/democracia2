@@ -54,7 +54,7 @@ public class ProposeBillHandler {
         }else if(themeDTO == null){
             System.out.println("No corresponding Theme found.");
         }else{
-            Delegate delegate = citizenCatalog.getDelegate(delegateDTO.getNif());
+            Delegate delegate = citizenCatalog.getDelegate(delegateDTO.getCc());
             Theme theme = themeCatalog.getTheme(themeDTO.getDesignation());
             billCatalog.addBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
         }
