@@ -37,6 +37,15 @@ public class PollCatalog {
   }
 
   /**
+   * Returns the Poll with a given title.
+   * @param title The title of the Poll we need.
+   * @return The corresponding Poll.
+   */
+  public Poll getPollByTitle(String title){
+    return pollRepository.findPollByTitle(title);
+  }
+
+  /**
    * Saves a poll to the database.
    *
    * @param poll the Poll object to save.
