@@ -15,7 +15,7 @@ public class Bill {
   @Id @GeneratedValue private Long id;
   private String title;
   private String description;
-  private int numSupporters = 0;
+  private int numSupporters = 1;
   @Lob private byte[] fileData;
   @OneToMany private List<Citizen> supporters = new ArrayList<>();
 
@@ -46,6 +46,7 @@ public class Bill {
     this.expirationDate = expirationDate;
     this.delegate = delegate;
     this.theme = theme;
+    supporters.add(delegate);
   }
 
   /*

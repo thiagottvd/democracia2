@@ -12,13 +12,15 @@ public class Poll {
   @Id @GeneratedValue private Long id;
   private int numPositiveVotes = 0;
   private int numNegativeVotes = 0;
+
+  // HashMap isnt working
+  private List<Long> publicVoters = new ArrayList<>();
+  private List<VoteType> publicVotersVote = new ArrayList<>();
+
   private LocalDate closingDate;
 
   @Enumerated(EnumType.STRING)
   private PollStatus status;
-
-  // IS THIS CORRECT????
-  // private Map<Long,VoteType> publicVoters = new HashMap<>();
 
   @OneToMany private List<Citizen> privateVoters = new ArrayList<>();
 
@@ -47,10 +49,6 @@ public class Poll {
   public List<Citizen> getPrivateVoters() {
     return privateVoters;
   }
-
-  //  public VoteType getPublicVote(Long d) {
-  //    return publicVoters.get(d);
-  //  }
 
   public PollStatus getStatus() {
     return status;
@@ -99,7 +97,9 @@ public class Poll {
       incNegativeVotes();
     }
 
-    // publicVoters.put(delegate.getId(),voteType);
+    publicVoters.add(delegate.getId());
+    publicVotersVote.add(voteType);
+    // privateVoters.add(delegate);
 
   }
 
@@ -109,6 +109,10 @@ public class Poll {
     }
   }
 
+  public VoteType getPublicVote(Long id) {
+    return publicVotersVote.get(publicVoters.indexOf(id));
+  }
+
   public boolean hasVoted(Citizen c) {
 
     for (Citizen privateVoter : privateVoters) {
@@ -116,7 +120,8 @@ public class Poll {
         return true;
       }
     }
-    return false; // publicVoters.containsKey(c.getId());
+
+    return publicVoters.contains(c.getId());
   }
 
   public boolean hasExpired() {

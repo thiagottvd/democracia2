@@ -17,12 +17,10 @@ public class CitizenCatalog {
   }
 
   public Citizen getCitizen(int nif) {
-    // TODO verifications
     return citizenRepository.findCitizenByNif(nif);
   }
 
   public Delegate getDelegate(int nif) {
-    // TODO verifications e perceber se Delegates vao ter tabela propria ou nao
     return citizenRepository.findDelegateByNif(nif);
   }
 
