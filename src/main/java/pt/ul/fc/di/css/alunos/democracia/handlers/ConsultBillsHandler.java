@@ -29,7 +29,7 @@ public class ConsultBillsHandler {
   public List<BillDTO> getOpenBills() {
     List<Bill> openBills = billCatalog.getOpenBills();
     return openBills.stream()
-        .map(bill -> new BillDTO(bill.getId(), bill.getTitle()))
+        .map(bill -> new BillDTO(bill.getTitle(), bill.getDescription(), bill.getExpirationDate()))
         .collect(Collectors.toList());
   }
 
