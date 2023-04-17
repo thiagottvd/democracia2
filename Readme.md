@@ -12,6 +12,7 @@
  * Use Case G: Implementado; testes parcialmente implementados.
  * Use Case H: Implementado; testes implementados.
  * Use Case I: Implementado; testes parciais.
+ * Use Case K: Implementado (Not merged); VERIFICAR LÓGICA; POSSÍVEIS BUGS; faltam testes.
 
 ## Dependências
 
