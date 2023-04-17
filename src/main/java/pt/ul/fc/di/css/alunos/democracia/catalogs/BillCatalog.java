@@ -8,18 +8,27 @@ import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 
+/**
+ * The BillCatalog class is responsible for managing bills by providing operations to retrieve, save
+ * and close them. It uses a BillRepository to perform the database operations.
+ */
 @Component
 public class BillCatalog {
 
   private final BillRepository billRepository;
 
+  /**
+   * Constructs a BillCatalog instance with the specified BillRepository instance.
+   *
+   * @param billRepository the BillRepository instance to use for performing database operations.
+   */
   @Autowired
   public BillCatalog(BillRepository billRepository) {
     this.billRepository = billRepository;
   }
 
   // Verificar se isto esta certo
-  public void addBill(Bill bill){
+  public void addBill(Bill bill) {
     billRepository.save(bill);
   }
 
@@ -45,5 +54,14 @@ public class BillCatalog {
   /** Closes all bills that have expired. */
   public void closeExpiredBills() {
     billRepository.closeExpiredBills(BillStatus.CLOSED);
+  }
+
+  /**
+   * Saves a bill to the database.
+   *
+   * @param bill the bill to save.
+   */
+  public void saveBill(Bill bill) {
+    billRepository.save(bill);
   }
 }

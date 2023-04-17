@@ -11,4 +11,8 @@ public class PollDTO {
     this.title = title;
     this.expirationDate = expirationDate;
   }
+
+  public String getTitle() {
+    return title;
+  }
 }

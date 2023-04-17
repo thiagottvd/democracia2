@@ -1,8 +1,10 @@
 package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.DelegateThemeCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
@@ -13,6 +15,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 
+@Component
 public class ChooseDelegateHandler {
 
   private final ThemeCatalog themeCatalog;
@@ -31,7 +34,7 @@ public class ChooseDelegateHandler {
     // TODO
     List<Delegate> delegates = citizenCatalog.getDelegates();
     return delegates.stream()
-        .map(delegate -> new DelegateDTO(delegate.getName(), delegate.getNif()))
+        .map(delegate -> new DelegateDTO(delegate.getName(), delegate.getCc()))
         .collect(Collectors.toList());
   }
 
@@ -42,11 +45,11 @@ public class ChooseDelegateHandler {
         .collect(Collectors.toList());
   }
 
-  public void chooseDelegate(DelegateDTO delegate, ThemeDTO theme, int nif) {
+  public void chooseDelegate(DelegateDTO delegate, ThemeDTO theme, int cc) {
 
-    Delegate d = citizenCatalog.getDelegate(delegate.getNif());
+    Delegate d = citizenCatalog.getDelegate(delegate.getCc());
     Theme t = themeCatalog.getTheme(theme.getDesignation());
-    Citizen c = citizenCatalog.getCitizen(nif);
+    Optional<Citizen> c = citizenCatalog.getCitizenByCc(cc);
 
     List<DelegateTheme> dt_list = dtCatalog.getAll();
 
@@ -55,14 +58,14 @@ public class ChooseDelegateHandler {
       DelegateTheme dt = dt_list.get(i);
       if (dt.checkDelegateTheme(d, t)) {
         exists = true;
-        dt.addVoter(c);
-        c.addDelegateTheme(dt);
+        dt.addVoter(c.get());
+        c.get().addDelegateTheme(dt);
       }
     }
     if (!exists) {
       DelegateTheme dt = new DelegateTheme(d, t);
-      dt.addVoter(c);
-      c.addDelegateTheme(dt);
+      dt.addVoter(c.get());
+      c.get().addDelegateTheme(dt);
       dtCatalog.addDT(dt);
     }
   }

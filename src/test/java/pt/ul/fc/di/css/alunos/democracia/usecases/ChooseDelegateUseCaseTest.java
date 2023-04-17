@@ -67,7 +67,7 @@ public class ChooseDelegateUseCaseTest {
     for (int i = 0; i < delegates.size(); i++) {
 
       assertEquals(delegates.get(i).getName(), delegateDTOS.get(i).getName());
-      assertEquals(delegates.get(i).getNif(), delegateDTOS.get(i).getNif());
+      assertEquals(delegates.get(i).getCc(), delegateDTOS.get(i).getCc());
     }
   }
 
@@ -89,7 +89,7 @@ public class ChooseDelegateUseCaseTest {
     List<DelegateDTO> delegateDTOS = chooseDelegateHandler.getDelegates();
 
     for (int i = 0; i < themes.size(); i++) {
-      chooseDelegateHandler.chooseDelegate(delegateDTOS.get(i), themes.get(i), c1.getNif());
+      chooseDelegateHandler.chooseDelegate(delegateDTOS.get(i), themes.get(i), c1.getCc());
     }
 
     List<DelegateTheme> dt_list = dtRepository.getAllDTs();
@@ -110,7 +110,7 @@ public class ChooseDelegateUseCaseTest {
 
     Citizen c2 = new Citizen("Sarah", 4);
     em.persist(c2);
-    chooseDelegateHandler.chooseDelegate(delegateDTOS.get(0), themes.get(0), c2.getNif());
+    chooseDelegateHandler.chooseDelegate(delegateDTOS.get(0), themes.get(0), c2.getCc());
     List<DelegateTheme> dt_list2 = dtRepository.getAllDTs();
 
     for (DelegateTheme delegateTheme : dt_list2) {

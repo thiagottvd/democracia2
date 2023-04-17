@@ -14,7 +14,7 @@ public class Citizen {
 
   private String name;
 
-  private int nif;
+  private int cc;
 
   @ManyToMany(mappedBy = "voters")
   private List<DelegateTheme> delegateThemes = new ArrayList<>();
@@ -27,9 +27,9 @@ public class Citizen {
     // Empty constructor required by JPA.
   }
 
-  public Citizen(String name, int nif) {
+  public Citizen(String name, int cc) {
     this.name = name;
-    this.nif = nif;
+    this.cc = cc;
   }
 
   public List<DelegateTheme> getDelegateThemes() {
@@ -62,7 +62,12 @@ public class Citizen {
     return name;
   }
 
-  public int getNif() {
-    return nif;
+  /**
+   * Returns the citizen card number.
+   *
+   * @return the citizen card number.
+   */
+  public int getCc() {
+    return cc;
   }
 }

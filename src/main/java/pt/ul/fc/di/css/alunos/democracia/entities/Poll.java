@@ -127,4 +127,8 @@ public class Poll {
   public boolean hasExpired() {
     return closingDate.isBefore(LocalDate.now());
   }
+
+  public LocalDate closingDate() {
+    return closingDate;
+  }
 }

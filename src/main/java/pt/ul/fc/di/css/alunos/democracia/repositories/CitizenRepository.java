@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,12 +11,12 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, Long> {
-  @Query("SELECT c FROM Citizen c WHERE c.nif = :nif")
-  Citizen findCitizenByNif(@Param("nif") int nif);
+  @Query("SELECT c FROM Citizen c WHERE c.cc = :cc")
+  Optional<Citizen> findByCc(@Param("cc") int cc);
 
   @Query("SELECT d FROM Delegate d")
   List<Delegate> getAllDelegates();
 
-  @Query("SELECT d FROM Delegate d WHERE d.nif = :nif")
-  Delegate findDelegateByNif(@Param("nif") int nif);
+  @Query("SELECT d FROM Delegate d WHERE d.cc = :cc")
+  Delegate findDelegateByCc(@Param("cc") int cc);
 }

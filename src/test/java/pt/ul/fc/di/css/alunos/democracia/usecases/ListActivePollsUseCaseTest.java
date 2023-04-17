@@ -64,10 +64,9 @@ public class ListActivePollsUseCaseTest {
     // Call the use case
     List<PollDTO> activeBills = listActivePollsService.getActivePolls();
 
-
     // Verify the results
     assertEquals(2, activeBills.size());
-    assertEquals(bill1.getTitle(), "Bill1");
-    assertEquals(bill3.getTitle(), "Bill3");
+    assertEquals(activeBills.get(0).getTitle(), "Bill1");
+    assertEquals(activeBills.get(1).getTitle(), "Bill3");
   }
 }

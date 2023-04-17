@@ -4,15 +4,15 @@ public class DelegateDTO {
 
   private final String name;
 
-  private int nif;
+  private final int cc;
 
-  public DelegateDTO(String name, int nif) {
+  public DelegateDTO(String name, int cc) {
     this.name = name;
-    this.nif = nif;
+    this.cc = cc;
   }
 
-  public int getNif() {
-    return nif;
+  public int getCc() {
+    return cc;
   }
 
   public String getName() {
