@@ -7,8 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.VoteType;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 
 @Entity
 public class Poll {

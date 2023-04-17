@@ -3,7 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.catalogs;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
@@ -38,10 +38,11 @@ public class PollCatalog {
 
   /**
    * Returns the Poll with a given title.
+   *
    * @param title The title of the Poll we need.
    * @return The corresponding Poll.
    */
-  public Poll getPollByTitle(String title){
+  public Poll getPollByTitle(String title) {
     return pollRepository.findPollByTitle(title);
   }
 

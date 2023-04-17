@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;

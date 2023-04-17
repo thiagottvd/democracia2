@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
-import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 
 @Repository

@@ -70,6 +70,6 @@ public class ProposeBillHandler {
       throw new ThemeNotFoundException(
           "The theme with title " + themeDesignation + " was not found.");
     }
-    billCatalog.addBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
+    billCatalog.saveBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
   }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 

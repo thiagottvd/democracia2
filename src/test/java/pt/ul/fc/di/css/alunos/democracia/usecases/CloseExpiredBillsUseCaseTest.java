@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.handlers.CloseExpiredBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;

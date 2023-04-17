@@ -35,14 +35,6 @@ public class CitizenCatalog {
     return citizenRepository.getAllDelegates();
   }
 
-  // Ideia para o caso de uso J -> 1 - d = getDelegate | 2 - if(d=null) c = getCitizen, NotDelegate
-  // = true
-  // Mais eficiente que usar o isDelegate já q no best case scenario só percorre uma tabela
-  public boolean isDelegate(int cc) {
-    Delegate d = citizenRepository.findDelegateByCc(cc);
-    return d != null;
-  }
-
   /**
    * Retrieves a Citizen object from the database based on the provided cc number.
    *

@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
-import pt.ul.fc.di.css.alunos.democracia.dataacess.VoteType;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ClosePollsHandler;
@@ -20,7 +20,7 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
 @DataJpaTest
-public class closePollsTest {
+public class ClosePollsTest {
   @Autowired private TestEntityManager em;
   @Autowired private PollRepository pollRepository;
   @Autowired private CitizenRepository citizenRepository;

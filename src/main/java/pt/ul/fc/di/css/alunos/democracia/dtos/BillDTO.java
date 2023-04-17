@@ -17,17 +17,6 @@ public class BillDTO {
   }
 
   /**
-   * Constructs a BillDTO object with the given ID and title.
-   *
-   * @param title the title of the bill.
-   */
-  public BillDTO(String title, String description, LocalDate expirationDate) {
-    this.title = title;
-    this.description = description;
-    this.expirationDate = expirationDate;
-  }
-
-  /**
    * Constructs a BillDTO object from a Bill object.
    *
    * @param bill the Bill object to construct the BillDTO from.
