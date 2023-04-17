@@ -15,24 +15,23 @@ import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
-import pt.ul.fc.di.css.alunos.democracia.handlers.AssignVotesAndClosePollsHandler;
+import pt.ul.fc.di.css.alunos.democracia.handlers.ClosePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
 @DataJpaTest
-public class AssignVotesAndClosePollsTest {
+public class closePollsTest {
   @Autowired private TestEntityManager em;
   @Autowired private PollRepository pollRepository;
   @Autowired private CitizenRepository citizenRepository;
-  private AssignVotesAndClosePollsHandler assignVotesAndClosePollsHandler;
+  private ClosePollsHandler closePollsHandler;
 
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
     PollCatalog pollCatalog = new PollCatalog(pollRepository);
-    assignVotesAndClosePollsHandler =
-        new AssignVotesAndClosePollsHandler(pollCatalog, citizenCatalog);
+    closePollsHandler = new ClosePollsHandler(pollCatalog, citizenCatalog);
   }
 
   @Test
@@ -90,7 +89,7 @@ public class AssignVotesAndClosePollsTest {
     c4.addDelegateTheme(dt6);
 
     // Calling the method being tested
-    assignVotesAndClosePollsHandler.assignVotesAndClosePolls();
+    closePollsHandler.closePolls();
 
     // Checking that the poll has been closed and the vote counts are correct
     assertEquals(PollStatus.REJECTED, poll.getStatus());

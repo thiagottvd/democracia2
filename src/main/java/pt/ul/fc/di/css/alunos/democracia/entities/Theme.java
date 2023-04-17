@@ -26,7 +26,7 @@ public class Theme {
      @param designation The theme designation.
      @param parentTheme This theme parentTheme.
   */
-  public Theme(String designation, Theme parentTheme) {
+  public Theme(@NonNull String designation, Theme parentTheme) {
     this.designation = designation;
     this.parentTheme = parentTheme;
   }
@@ -45,15 +45,8 @@ public class Theme {
   /*
      Returns the theme designation.
   */
+  @NonNull
   public String getDesignation() {
     return this.designation;
-  }
-
-  /*
-     Sets a new parent theme.
-     @param parentTheme The new parent theme.
-  */
-  public void setParentTheme(Theme parentTheme) {
-    this.parentTheme = parentTheme;
   }
 }

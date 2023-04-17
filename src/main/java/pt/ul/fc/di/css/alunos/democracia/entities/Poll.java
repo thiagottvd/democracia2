@@ -76,6 +76,7 @@ public class Poll {
     return status;
   }
 
+  @NonNull
   public Bill getAssociatedBill() {
     return associatedBill;
   }
@@ -121,25 +122,8 @@ public class Poll {
     publicVoters.put(delegate, voteType);
   }
 
-  public void autoVote(List<Citizen> citizens, VoteType voteType) {
-    for (Citizen c : citizens) {
-      addPrivateVoter(c, voteType);
-    }
-  }
-
   public VoteType getPublicVote(Delegate delegate) {
     return publicVoters.get(delegate);
-  }
-
-  public boolean hasVoted(Citizen c) {
-    if (c.getClass() == Delegate.class) {
-      return publicVoters.containsKey((Delegate) c);
-    }
-    return privateVoters.contains(c);
-  }
-
-  public boolean hasExpired() {
-    return closingDate.isBefore(LocalDate.now());
   }
 
   public LocalDate closingDate() {

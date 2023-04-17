@@ -45,15 +45,6 @@ public class PollCatalog {
     pollRepository.save(poll);
   }
 
-  /**
-   * Changes the status of all polls to the specified status type.
-   *
-   * @param pollStatus the new status to set for expired polls
-   */
-  public void closePolls(PollStatus pollStatus) {
-    pollRepository.closePolls(pollStatus);
-  }
-
   public List<Poll> getExpiredPolls() {
     return pollRepository.findAllExpiredPolls();
   }

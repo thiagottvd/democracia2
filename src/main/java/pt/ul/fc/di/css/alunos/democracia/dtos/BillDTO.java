@@ -6,9 +6,15 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 /** A Data Transfer Object (DTO) representing a bill. */
 public class BillDTO {
 
+  private Long id;
   private final String title;
   private String description;
   private LocalDate expirationDate;
+
+  public BillDTO(Long id, String title) {
+    this.id = id;
+    this.title = title;
+  }
 
   /**
    * Constructs a BillDTO object with the given ID and title.
@@ -42,5 +48,9 @@ public class BillDTO {
 
   public LocalDate getExpirationDate() {
     return expirationDate;
+  }
+
+  public Long getId() {
+    return id;
   }
 }
