@@ -55,15 +55,16 @@ public class SupportBillUseCaseTest {
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     billRepository.save(b);
 
-    assertThrows(ApplicationException.class, () -> supportBillService.supportBill(1L, 1));
-    assertThrows(CitizenNotFoundException.class, () -> supportBillService.supportBill(1L, 1));
+    assertThrows(ApplicationException.class, () -> supportBillService.supportBill(b.getId(), 1));
+    assertThrows(
+        CitizenNotFoundException.class, () -> supportBillService.supportBill(b.getId(), 1));
 
     billRepository.delete(b);
     Citizen c = new Citizen("Thiago", 123);
     citizenRepository.save(c);
 
-    assertThrows(ApplicationException.class, () -> supportBillService.supportBill(1L, 1));
-    assertThrows(BillNotFoundException.class, () -> supportBillService.supportBill(1L, 1));
+    assertThrows(ApplicationException.class, () -> supportBillService.supportBill(1L, c.getCc()));
+    assertThrows(BillNotFoundException.class, () -> supportBillService.supportBill(1L, c.getCc()));
   }
 
   @Test
