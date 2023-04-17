@@ -52,4 +52,8 @@ public class CitizenCatalog {
   public Optional<Citizen> getCitizenByCc(int cc) {
     return citizenRepository.findByCc(cc);
   }
+
+  public List<Citizen> findAllNonVoters(List<Citizen> voters) {
+    return citizenRepository.findAllNonVoters(voters);
+  }
 }

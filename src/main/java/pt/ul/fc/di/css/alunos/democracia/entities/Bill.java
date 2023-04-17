@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
@@ -17,11 +17,18 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 public class Bill {
 
   @Id @GeneratedValue private Long id;
+
   private String title;
+
   private String description;
+
   private int numSupporters = 1;
+
   @Lob private byte[] fileData;
-  @OneToMany private List<Citizen> supporters = new ArrayList<>();
+
+  @OneToMany
+  @Cascade(CascadeType.ALL)
+  private List<Citizen> supporters = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDate expirationDate;
@@ -29,9 +36,17 @@ public class Bill {
   @Enumerated(EnumType.STRING)
   private BillStatus status = BillStatus.OPEN;
 
-  @OneToOne(cascade = CascadeType.ALL) private Theme theme;
-  @OneToOne(cascade = CascadeType.ALL) private Delegate delegate;
-  @OneToOne(cascade = CascadeType.ALL) private Poll associatedPoll;
+  @OneToOne
+  @Cascade(CascadeType.ALL)
+  private Theme theme;
+
+  @OneToOne
+  @Cascade(CascadeType.ALL)
+  private Delegate delegate;
+
+  @OneToOne
+  @Cascade(CascadeType.ALL)
+  private Poll associatedPoll;
 
   protected Bill() {
     // Empty constructor required by JPA.

@@ -29,7 +29,7 @@ public class ChooseDelegateUseCaseTest {
 
   @Autowired private TestEntityManager em;
 
-  @Autowired private CitizenRepository citRepository;
+  @Autowired private CitizenRepository citizenRepository;
   @Autowired private ThemeRepository themeRepository;
   @Autowired private DelegateThemeRepository dtRepository;
 
@@ -38,7 +38,7 @@ public class ChooseDelegateUseCaseTest {
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
-    CitizenCatalog citizenCatalog = new CitizenCatalog(citRepository);
+    CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
     ThemeCatalog themeCatalog = new ThemeCatalog(themeRepository);
     DelegateThemeCatalog dtCatalog = new DelegateThemeCatalog(dtRepository);
 

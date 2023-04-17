@@ -1,58 +1,59 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
-
 import java.util.List;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.springframework.lang.NonNull;
 
 @Entity
 public class Theme {
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String designation;
+  @Id @GeneratedValue private Long id;
+  @NonNull private String designation;
 
-    @OneToMany
-    private List<Theme> subThemes;
-    @OneToOne
-    private Theme parentTheme;
+  @OneToMany(mappedBy = "parentTheme")
+  @Cascade(CascadeType.ALL)
+  private List<Theme> subThemes;
 
-    public Theme(){
-        // Empty constructor required by JPA.
-    }
+  @ManyToOne private Theme parentTheme;
 
-    /*
-        Theme class constructor.
-        @param designation The theme designation.
-        @param parentTheme This theme parentTheme.
-     */
-    public Theme(String designation, Theme parentTheme){
-        this.designation = designation;
-        this.parentTheme = parentTheme;
-    }
+  public Theme() {
+    // Empty constructor required by JPA.
+  }
 
-    public Long getId() {
-        return id;
-    }
+  /*
+     Theme class constructor.
+     @param designation The theme designation.
+     @param parentTheme This theme parentTheme.
+  */
+  public Theme(String designation, Theme parentTheme) {
+    this.designation = designation;
+    this.parentTheme = parentTheme;
+  }
 
-    /*
-        Returns the parent theme.
-     */
-    public Theme getParentTheme(){
-        return this.parentTheme;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    /*
-        Returns the theme designation.
-     */
-    public String getDesignation(){
-        return this.designation;
-    }
+  /*
+     Returns the parent theme.
+  */
+  public Theme getParentTheme() {
+    return this.parentTheme;
+  }
 
-    /*
-        Sets a new parent theme.
-        @param parentTheme The new parent theme.
-     */
-    public void setParentTheme(Theme parentTheme){
-        this.parentTheme = parentTheme;
-    }
+  /*
+     Returns the theme designation.
+  */
+  public String getDesignation() {
+    return this.designation;
+  }
+
+  /*
+     Sets a new parent theme.
+     @param parentTheme The new parent theme.
+  */
+  public void setParentTheme(Theme parentTheme) {
+    this.parentTheme = parentTheme;
+  }
 }
