@@ -29,8 +29,9 @@ public class ProposeBillHandler {
         this.citizenCatalog = citizenCatalog;
     }
 
-    /*
-        Returns a list of all available themes.
+    /**
+     * Returns a list of all available themes.
+     * @return A list of all available themes.
      */
     public List<ThemeDTO> getThemes(){
         List<Theme> themes = themeCatalog.getThemes();
@@ -39,14 +40,14 @@ public class ProposeBillHandler {
                 .collect(Collectors.toList());
     }
 
-    /*
-        Creates a new bill and adds it to the open bills list.
-        @param title The new bill title.
-        @param description The new bill description.
-        @param pdf The new bill pdf file with the main content.
-        @param expirationDate The new bill expiration date.
-        @param delegate The new bill delegate.
-        @param theme The new bill theme.
+    /**
+     * Creates a new bill and adds it to the open bills list.
+     * @param title The new bill title.
+     * @param description The new bill description.
+     * @param pdf The new bill pdf file with the main content.
+     * @param expirationDate The new bill expiration date.
+     * @param themeDTO The new bill delegate.
+     * @param delegateDTO The new bill theme.
      */
     public void proposeBill(String title, String description, byte[] pdf, LocalDate expirationDate, ThemeDTO themeDTO, DelegateDTO delegateDTO){
         if(delegateDTO == null){
