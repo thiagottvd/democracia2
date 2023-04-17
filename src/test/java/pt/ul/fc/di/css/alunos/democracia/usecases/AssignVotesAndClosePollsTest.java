@@ -84,7 +84,7 @@ public class AssignVotesAndClosePollsTest {
 
     DelegateTheme dt4 = em.persist(new DelegateTheme(deleg2, medicos));
     DelegateTheme dt5 = em.persist(new DelegateTheme(deleg3, saude));
-    DelegateTheme dt6 = em.persist(new DelegateTheme(deleg1, saude));
+    DelegateTheme dt6 = em.persist(new DelegateTheme(deleg1, profissionalSaude));
     c4.addDelegateTheme(dt4);
     c4.addDelegateTheme(dt5);
     c4.addDelegateTheme(dt6);

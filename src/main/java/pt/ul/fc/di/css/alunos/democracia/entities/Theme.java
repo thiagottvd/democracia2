@@ -2,14 +2,20 @@ package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
 import java.util.List;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.lang.NonNull;
 
 @Entity
 public class Theme {
   @Id @GeneratedValue private Long id;
   @NonNull private String designation;
-  @OneToMany private List<Theme> subThemes;
-  @OneToOne private Theme parentTheme;
+
+  @OneToMany(mappedBy = "parentTheme")
+  @Cascade(CascadeType.ALL)
+  private List<Theme> subThemes;
+
+  @ManyToOne private Theme parentTheme;
 
   public Theme() {
     // Empty constructor required by JPA.

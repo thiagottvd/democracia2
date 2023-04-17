@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
@@ -15,11 +17,18 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 public class Bill {
 
   @Id @GeneratedValue private Long id;
+
   private String title;
+
   private String description;
+
   private int numSupporters = 1;
+
   @Lob private byte[] fileData;
-  @OneToMany private List<Citizen> supporters = new ArrayList<>();
+
+  @OneToMany
+  @Cascade(CascadeType.ALL)
+  private List<Citizen> supporters = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDate expirationDate;

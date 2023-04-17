@@ -5,6 +5,8 @@ import static jakarta.persistence.InheritanceType.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.lang.NonNull;
 
 @Entity
@@ -18,6 +20,7 @@ public class Citizen {
   private int cc;
 
   @ManyToMany(mappedBy = "voters")
+  @Cascade(CascadeType.ALL)
   private List<DelegateTheme> delegateThemes = new ArrayList<>();
 
   public Long getId() {
