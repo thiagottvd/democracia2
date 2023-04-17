@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
-import pt.ul.fc.di.css.alunos.democracia.dtos.DelegateDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
 @Component
 public class ProposeBillHandler {
@@ -48,24 +50,26 @@ public class ProposeBillHandler {
    * @param description The new bill description.
    * @param pdf The new bill pdf file with the main content.
    * @param expirationDate The new bill expiration date.
-   * @param themeDTO The new bill delegate.
-   * @param delegateDTO The new bill theme.
+   * @param cc The new bill delegate.
+   * @param themeDesignation The new bill theme.
    */
   public void proposeBill(
       String title,
       String description,
       byte[] pdf,
       LocalDate expirationDate,
-      ThemeDTO themeDTO,
-      DelegateDTO delegateDTO) {
-    if (delegateDTO == null) {
-      System.out.println("No Delegate found.");
-    } else if (themeDTO == null) {
-      System.out.println("No corresponding Theme found.");
-    } else {
-      Delegate delegate = citizenCatalog.getDelegate(delegateDTO.getCc());
-      Theme theme = themeCatalog.getTheme(themeDTO.getDesignation());
-      billCatalog.addBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
+      String themeDesignation,
+      int cc)
+      throws ApplicationException {
+    Delegate delegate = citizenCatalog.getDelegate(cc);
+    if (delegate == null) {
+      throw new CitizenNotFoundException("The delegate with cc " + cc + " was not found.");
     }
+    Theme theme = themeCatalog.getTheme(themeDesignation);
+    if (theme == null) {
+      throw new ThemeNotFoundException(
+          "The theme with title " + themeDesignation + " was not found.");
+    }
+    billCatalog.addBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
   }
 }
