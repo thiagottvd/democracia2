@@ -2,21 +2,41 @@ package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.VoteType;
 
 @Entity
 public class Poll {
+
   @Id @GeneratedValue private Long id;
+
   private int numPositiveVotes = 0;
+
   private int numNegativeVotes = 0;
 
-  // HashMap isnt working
-  private List<Long> publicVoters = new ArrayList<>();
-  private List<VoteType> publicVotersVote = new ArrayList<>();
+  @ElementCollection // Indicates that publicVoters is a collection of simple or embeddable types.
+  @CollectionTable(
+      name = "public_voters") // Specifies the name of the table that will hold the collection
+  // elements. In this case, the table name is "public_voters".
+  @MapKeyJoinColumn(
+      name = "delegate_id") // Specifies the name of the foreign key column that references the
+  // Delegate entity. The column name is "delegate_id".
+  @Column(
+      name =
+          "vote_type") // Specifies the name of the column that holds the VoteType enum value. The
+  // column name is "vote_type".
+  @Enumerated(
+      EnumType
+          .STRING) // Indicates that the VoteType enum should be stored as a string in the database.
+  private Map<Delegate, VoteType> publicVoters = new HashMap<>();
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  @NonNull
   private LocalDate closingDate;
 
   @Enumerated(EnumType.STRING)
@@ -25,6 +45,8 @@ public class Poll {
   @OneToMany private List<Citizen> privateVoters = new ArrayList<>();
 
   @OneToOne(mappedBy = "associatedPoll")
+  @Cascade(CascadeType.PERSIST)
+  @NonNull
   private Bill associatedBill;
 
   protected Poll() {
@@ -35,7 +57,7 @@ public class Poll {
     this.associatedBill = associatedBill;
     this.closingDate = associatedBill.getExpirationDate();
     this.status = PollStatus.ACTIVE;
-    incPositiveVotes();
+    addPublicVoter(this.associatedBill.getDelegate(), VoteType.POSITIVE);
   }
 
   public Long getId() {
@@ -96,11 +118,7 @@ public class Poll {
     } else {
       incNegativeVotes();
     }
-
-    publicVoters.add(delegate.getId());
-    publicVotersVote.add(voteType);
-    // privateVoters.add(delegate);
-
+    publicVoters.put(delegate, voteType);
   }
 
   public void autoVote(List<Citizen> citizens, VoteType voteType) {
@@ -109,19 +127,15 @@ public class Poll {
     }
   }
 
-  public VoteType getPublicVote(Long id) {
-    return publicVotersVote.get(publicVoters.indexOf(id));
+  public VoteType getPublicVote(Delegate delegate) {
+    return publicVoters.get(delegate);
   }
 
   public boolean hasVoted(Citizen c) {
-
-    for (Citizen privateVoter : privateVoters) {
-      if (privateVoter.getId().equals(c.getId())) {
-        return true;
-      }
+    if (c.getClass() == Delegate.class) {
+      return publicVoters.containsKey((Delegate) c);
     }
-
-    return publicVoters.contains(c.getId());
+    return privateVoters.contains(c);
   }
 
   public boolean hasExpired() {
@@ -130,5 +144,16 @@ public class Poll {
 
   public LocalDate closingDate() {
     return closingDate;
+  }
+
+  public Map<Delegate, VoteType> getPublicVoters() {
+    return publicVoters;
+  }
+
+  public List<Citizen> getAllVoters() {
+    ArrayList<Citizen> voters = new ArrayList<>();
+    voters.addAll(this.getPrivateVoters());
+    voters.addAll(this.getPublicVoters().keySet());
+    return voters;
   }
 }

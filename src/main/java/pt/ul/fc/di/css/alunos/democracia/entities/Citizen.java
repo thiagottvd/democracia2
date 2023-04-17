@@ -5,15 +5,16 @@ import static jakarta.persistence.InheritanceType.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.lang.NonNull;
 
 @Entity
 @Inheritance(strategy = TABLE_PER_CLASS)
-// @DiscriminatorColumn(name="VOTER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class Citizen {
   @Id @GeneratedValue private long id;
+  @NonNull private String name;
 
-  private String name;
-
+  @Column(unique = true)
+  @NonNull
   private int cc;
 
   @ManyToMany(mappedBy = "voters")
@@ -35,6 +36,7 @@ public class Citizen {
   public List<DelegateTheme> getDelegateThemes() {
     return delegateThemes;
   }
+
   /*
    Checks if the chosen DelegateTheme already represents this citizen
   */

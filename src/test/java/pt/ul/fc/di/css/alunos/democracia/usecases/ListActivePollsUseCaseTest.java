@@ -14,7 +14,9 @@ import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
+import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
+import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ListActivePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
@@ -39,25 +41,35 @@ public class ListActivePollsUseCaseTest {
   @Test
   public void testGetActivePolls() {
     // Create the bills and polls
-    Bill bill1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
+    Delegate d1 = new Delegate("a", 1);
+    Theme t1 = new Theme("s", null);
+    Bill bill1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d1, t1);
     Poll poll1 = new Poll(bill1);
+    entityManager.persist(t1);
+    entityManager.persist(d1);
     entityManager.persist(bill1);
     entityManager.persist(poll1);
 
-    Bill bill2 = new Bill("Bill2", "desc bill2", null, LocalDate.now().minusDays(1), null, null);
+    Delegate d2 = new Delegate("a", 2);
+    Bill bill2 = new Bill("Bill2", "desc bill2", null, LocalDate.now().minusDays(1), d2, t1);
     Poll poll2 = new Poll(bill2);
     poll2.setStatus(PollStatus.APPROVED);
+    entityManager.persist(d2);
     entityManager.persist(bill2);
     entityManager.persist(poll2);
 
-    Bill bill3 = new Bill("Bill3", "desc bill3", null, LocalDate.now().minusDays(2), null, null);
+    Delegate d3 = new Delegate("a", 3);
+    Bill bill3 = new Bill("Bill3", "desc bill3", null, LocalDate.now().minusDays(2), d3, t1);
     Poll poll3 = new Poll(bill3);
+    entityManager.persist(d3);
     entityManager.persist(bill3);
     entityManager.persist(poll3);
 
-    Bill bill4 = new Bill("Bill4", "desc bill4", null, LocalDate.now().minusDays(3), null, null);
+    Delegate d4 = new Delegate("a", 4);
+    Bill bill4 = new Bill("Bill4", "desc bill4", null, LocalDate.now().minusDays(3), d4, t1);
     Poll poll4 = new Poll(bill4);
     poll4.setStatus(PollStatus.REJECTED);
+    entityManager.persist(d4);
     entityManager.persist(bill4);
     entityManager.persist(poll4);
 

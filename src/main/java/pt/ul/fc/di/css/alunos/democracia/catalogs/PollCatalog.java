@@ -27,12 +27,13 @@ public class PollCatalog {
   }
 
   /**
-   * Returns a list of all active polls.
+   * Retrieves a list of polls with the specified status type.
    *
-   * @return a List of Poll objects representing the active polls.
+   * @param statusType the status type of the polls to retrieve.
+   * @return a list of polls with the specified status type.
    */
-  public List<Poll> getActivePolls() {
-    return pollRepository.findAllActivePolls(PollStatus.ACTIVE);
+  public List<Poll> getPollsByStatusType(PollStatus statusType) {
+    return pollRepository.findAllPolls(statusType);
   }
 
   /**
@@ -42,5 +43,18 @@ public class PollCatalog {
    */
   public void savePoll(Poll poll) {
     pollRepository.save(poll);
+  }
+
+  /**
+   * Changes the status of all polls to the specified status type.
+   *
+   * @param pollStatus the new status to set for expired polls
+   */
+  public void closePolls(PollStatus pollStatus) {
+    pollRepository.closePolls(pollStatus);
+  }
+
+  public List<Poll> getExpiredPolls() {
+    return pollRepository.findAllExpiredPolls();
   }
 }

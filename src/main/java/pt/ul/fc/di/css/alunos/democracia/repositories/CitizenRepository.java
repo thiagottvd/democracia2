@@ -19,4 +19,7 @@ public interface CitizenRepository extends JpaRepository<Citizen, Long> {
 
   @Query("SELECT d FROM Delegate d WHERE d.cc = :cc")
   Delegate findDelegateByCc(@Param("cc") int cc);
+
+  @Query("SELECT nv FROM Citizen nv WHERE nv NOT IN (SELECT v FROM Citizen v WHERE v IN :voters)")
+  List<Citizen> findAllNonVoters(@Param("voters") List<Citizen> voters);
 }
