@@ -62,7 +62,7 @@ public class Bill {
    Adds a new voter to the supporters list if he hasn't voted yet.
    @param voter The citizen to add.
   */
-  public void addSupporter(Citizen voter)
+  public void addSupporterVote(Citizen voter)
       throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
     if (supportsBill(voter)) {
       throw new CitizenAlreadySupportsBillException(

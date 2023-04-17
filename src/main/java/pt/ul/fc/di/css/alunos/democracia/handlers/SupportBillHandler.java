@@ -14,6 +14,10 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 
+/**
+ * Handles the use case H: the support of bills by citizens and the creation of polls for bills that
+ * have reached a certain number of supporters.
+ */
 @Component
 public class SupportBillHandler {
   /*
@@ -27,6 +31,13 @@ public class SupportBillHandler {
   private final CitizenCatalog citizenCatalog;
   private final PollCatalog pollCatalog;
 
+  /**
+   * Creates a new SupportBillHandler instance with the given catalogs.
+   *
+   * @param billCatalog the catalog of bills.
+   * @param citizenCatalog the catalog of citizens.
+   * @param pollCatalog the catalog of polls.
+   */
   @Autowired
   public SupportBillHandler(
       BillCatalog billCatalog, CitizenCatalog citizenCatalog, PollCatalog pollCatalog) {
@@ -35,28 +46,46 @@ public class SupportBillHandler {
     this.pollCatalog = pollCatalog;
   }
 
-  public void supportBill(Long billId, int nif) throws ApplicationException {
+  /**
+   * Adds the support of a citizen identified by its NIF to a given bill.
+   *
+   * @param billId the ID of the bill to support.
+   * @param cc the citizen card of the citizen who wants to support the bill.
+   * @throws ApplicationException if the bill or the citizen are not found.
+   */
+  public void supportBill(Long billId, int cc) throws ApplicationException {
     Optional<Bill> bill = billCatalog.getBill(billId);
     if (bill.isEmpty()) {
       throw new BillNotFoundException("The bill \"" + billId + "\" was not found.");
     }
 
-    Optional<Citizen> citizen = citizenCatalog.getCitizenByNif(nif);
+    Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(cc);
     if (citizen.isEmpty()) {
-      throw new CitizenNotFoundException("The citizen with nif \"" + nif + "\" was not found.");
+      throw new CitizenNotFoundException("The citizen with cc \"" + cc + "\" was not found.");
     }
 
-    bill.get().addSupporter(citizen.get());
+    bill.get().addSupporterVote(citizen.get());
 
     checkNumOfSupports(bill.get());
   }
 
+  /**
+   * Checks if a bill has reached the required number of supporters to create a poll, and creates
+   * the poll if so.
+   *
+   * @param bill the bill to check.
+   */
   private void checkNumOfSupports(Bill bill) {
     if (bill.getNumSupporters() >= CREATION_POLL_TRIGGER_VALUE) {
       createPoll(bill);
     }
   }
 
+  /**
+   * Creates a new poll for the given bill and sets the bill status to {@code CLOSED}.
+   *
+   * @param bill the bill for which to create the poll.
+   */
   private void createPoll(Bill bill) {
     /*
     TODO: com uma data de fecho igual à data de expiração do projecto de
@@ -69,10 +98,10 @@ public class SupportBillHandler {
   }
 
   /**
-   * Sets the value of the {@code CREATION_POLL_TRIGGER_VALUE} constant. This method is intended to
-   * be used only for JUnit testing purposes and should not be used in production code.
+   * Sets the value of the {@code CREATION_POLL_TRIGGER_VALUE} constant. {@warning} This method is
+   * intended to be used only for JUnit testing purposes and should not be used in production code.
    *
-   * @param newValue the new value of the {@code CREATION_POLL_TRIGGER_VALUE} constant to be set
+   * @param newValue the new value of the {@code CREATION_POLL_TRIGGER_VALUE} constant to be set.
    */
   public void setCreationPollTriggerValue(int newValue) {
     CREATION_POLL_TRIGGER_VALUE = newValue;
