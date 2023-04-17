@@ -9,6 +9,6 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, Long> {
-  @Query("SELECT c FROM Citizen c WHERE c.nif = :nif")
-  Optional<Citizen> findByNif(@Param("nif") int nif);
+  @Query("SELECT c FROM Citizen c WHERE c.cc = :cc")
+  Optional<Citizen> findByCc(@Param("cc") int cc);
 }

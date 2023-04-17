@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.format.annotation.DateTimeFormat;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 
 @Entity
 public class Bill {
@@ -52,7 +54,7 @@ public class Bill {
    Returns a boolean indicating if a voter is supporting this Bill.
    @param voter The citizen to check.
   */
-  public boolean checkSupport(Citizen voter) {
+  public boolean supportsBill(Citizen voter) {
     return supporters.contains(voter);
   }
 
@@ -60,18 +62,34 @@ public class Bill {
    Adds a new voter to the supporters list if he hasn't voted yet.
    @param voter The citizen to add.
   */
-  public void addSupporter(Citizen voter) {
-    if (!checkSupport(voter)) {
-      supporters.add(voter);
-      numSupporters++;
+  public void addSupporter(Citizen voter)
+      throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
+    if (supportsBill(voter)) {
+      throw new CitizenAlreadySupportsBillException(
+          "The citizen with cc "
+              + voter.getCc()
+              + " already supports bill with id "
+              + this.getId()
+              + ".");
     }
+    if (this.getStatus().equals(BillStatus.CLOSED)) {
+      throw new VoteInClosedBillException(
+          "The citizen with cc "
+              + voter.getCc()
+              + " can not vote for bill with id "
+              + this.getId()
+              + " because it is closed.");
+    }
+    supporters.add(voter);
+    numSupporters++;
   }
 
-  /*
-   Sets the Bill status to closed.
-  */
-  public void setClosedStatus() {
-    status = BillStatus.CLOSED;
+  public void setStatus(BillStatus status) {
+    this.status = status;
+  }
+
+  public void setPoll(Poll associatedPoll) {
+    this.associatedPoll = associatedPoll;
   }
 
   public Long getId() {

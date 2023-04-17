@@ -16,7 +16,7 @@ public class CitizenCatalog {
     this.citizenRepository = citizenRepository;
   }
 
-  public Optional<Citizen> getCitizenByNif(int nif) {
-    return citizenRepository.findByNif(nif);
+  public Optional<Citizen> getCitizenByNif(int cc) {
+    return citizenRepository.findByCc(cc);
   }
 }

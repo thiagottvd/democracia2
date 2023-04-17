@@ -13,7 +13,7 @@ public class SupportBillService {
     this.supportBillHandler = supportBillHandler;
   }
 
-  public void supportBill(Long billId, int nif) throws ApplicationException {
-    supportBillHandler.supportBill(billId, nif);
+  public void supportBill(Long billId, int cc) throws ApplicationException {
+    supportBillHandler.supportBill(billId, cc);
   }
 }
