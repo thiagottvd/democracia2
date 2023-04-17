@@ -27,4 +27,12 @@ public class CitizenCatalog {
   public List<Delegate> getDelegates() {
     return citizenRepository.getAllDelegates();
   }
+
+  // Ideia para o caso de uso J -> 1 - d = getDelegate | 2 - if(d=null) c = getCitizen, NotDelegate
+  // = true
+  // Mais eficiente que usar o isDelegate já q no best case scenario só percorre uma tabela
+  public boolean isDelegate(int nif) {
+    Delegate d = citizenRepository.findDelegateByNif(nif);
+    return d != null;
+  }
 }
