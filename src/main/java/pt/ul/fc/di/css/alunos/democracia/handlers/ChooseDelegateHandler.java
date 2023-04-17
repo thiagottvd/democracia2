@@ -14,6 +14,9 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
 @Component
 public class ChooseDelegateHandler {
@@ -45,11 +48,22 @@ public class ChooseDelegateHandler {
         .collect(Collectors.toList());
   }
 
-  public void chooseDelegate(DelegateDTO delegate, ThemeDTO theme, int cc) {
+  public void chooseDelegate(int delegateCc, String themeDesignation, int voterCc)
+      throws ApplicationException {
 
-    Delegate d = citizenCatalog.getDelegate(delegate.getCc());
-    Theme t = themeCatalog.getTheme(theme.getDesignation());
-    Optional<Citizen> c = citizenCatalog.getCitizenByCc(cc);
+    Delegate d = citizenCatalog.getDelegate(delegateCc);
+    if (d == null) {
+      throw new CitizenNotFoundException("Delegate with cc" + delegateCc + " not found.");
+    }
+    Theme t = themeCatalog.getTheme(themeDesignation);
+    if (t == null) {
+      throw new ThemeNotFoundException(
+          "Theme with designation " + themeDesignation + " not found.");
+    }
+    Optional<Citizen> c = citizenCatalog.getCitizenByCc(voterCc);
+    if (c.isEmpty()) {
+      throw new CitizenNotFoundException("Citizen with cc" + c.get().getCc() + " not found.");
+    }
 
     List<DelegateTheme> dt_list = dtCatalog.getAll();
 

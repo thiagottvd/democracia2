@@ -19,6 +19,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ChooseDelegateHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.DelegateThemeRepository;
@@ -72,7 +73,7 @@ public class ChooseDelegateUseCaseTest {
   }
 
   @Test
-  public void chooseDelegateTest() {
+  public void chooseDelegateTest() throws ApplicationException {
     Citizen c1 = new Citizen("Sara", 1);
     Theme theme1 = new Theme("Saude", null);
     Theme theme2 = new Theme("Educacao", null);
@@ -89,7 +90,8 @@ public class ChooseDelegateUseCaseTest {
     List<DelegateDTO> delegateDTOS = chooseDelegateHandler.getDelegates();
 
     for (int i = 0; i < themes.size(); i++) {
-      chooseDelegateHandler.chooseDelegate(delegateDTOS.get(i), themes.get(i), c1.getCc());
+      chooseDelegateHandler.chooseDelegate(
+          delegateDTOS.get(i).getCc(), themes.get(i).getDesignation(), c1.getCc());
     }
 
     List<DelegateTheme> dt_list = dtRepository.getAllDTs();
@@ -110,7 +112,8 @@ public class ChooseDelegateUseCaseTest {
 
     Citizen c2 = new Citizen("Sarah", 4);
     em.persist(c2);
-    chooseDelegateHandler.chooseDelegate(delegateDTOS.get(0), themes.get(0), c2.getCc());
+    chooseDelegateHandler.chooseDelegate(
+        delegateDTOS.get(0).getCc(), themes.get(0).getDesignation(), c2.getCc());
     List<DelegateTheme> dt_list2 = dtRepository.getAllDTs();
 
     for (DelegateTheme delegateTheme : dt_list2) {
