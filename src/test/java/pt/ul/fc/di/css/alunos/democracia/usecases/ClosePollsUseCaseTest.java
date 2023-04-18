@@ -20,7 +20,7 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
 @DataJpaTest
-public class ClosePollsTest {
+public class ClosePollsUseCaseTest {
   @Autowired private TestEntityManager em;
   @Autowired private PollRepository pollRepository;
   @Autowired private CitizenRepository citizenRepository;

@@ -28,16 +28,16 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ProposeBillService;
 
 /**
- * The ProposeBillTest class is a JUnit test case that tests the ProposeBillService class which is
- * used to propose new bills. This class has several test cases to test different functionality of
- * the /ProposeBillService class such as: testOutputTypeGetThemes() - test the output type of the
- * getThemes() method. testThereIsNoThemes() - test the behavior when there are no themes.
- * testGetThemes() - test the getThemes() method to ensure that all persisted themes are returned
- * properly. testProposeBillInputValidation() - test the input validation of the proposeBill()
- * method.
+ * The ProposeBillUseCaseTest class is a JUnit test case that tests the ProposeBillService class
+ * which is used to propose new bills. This class has several test cases to test different
+ * functionality of the /ProposeBillService class such as: testOutputTypeGetThemes() - test the
+ * output type of the getThemes() method. testThereIsNoThemes() - test the behavior when there are
+ * no themes. testGetThemes() - test the getThemes() method to ensure that all persisted themes are
+ * returned properly. testProposeBillInputValidation() - test the input validation of the
+ * proposeBill() method.
  */
 @DataJpaTest
-public class ProposeBillTest {
+public class ProposeBillUseCaseTest {
 
   @Autowired private TestEntityManager entityManager;
   @Autowired private BillRepository billRepository;
