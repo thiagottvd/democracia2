@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +22,10 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.ListActivePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 
+/**
+ * This class contains the test cases for the use case D. The class tests the system behaviour when
+ * retrieving active polls and verifies the output type. It uses Mockito and JUnit 5.
+ */
 @DataJpaTest
 public class ListActivePollsUseCaseTest {
 
@@ -30,6 +35,7 @@ public class ListActivePollsUseCaseTest {
   private ListActivePollsHandler listActivePollsHandler;
   private ListActivePollsService listActivePollsService;
 
+  /** Initializes the objects needed for each test case. */
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
@@ -38,47 +44,85 @@ public class ListActivePollsUseCaseTest {
     listActivePollsService = new ListActivePollsService(listActivePollsHandler);
   }
 
+  /** Test case to test the output type (should be PollDTO). */
   @Test
-  public void testGetActivePolls() {
-    // Create the bills and polls
-    Delegate d1 = new Delegate("a", 1);
-    Theme t1 = new Theme("s", null);
-    Bill bill1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d1, t1);
-    Poll poll1 = new Poll(bill1);
-    entityManager.persist(t1);
-    entityManager.persist(d1);
-    entityManager.persist(bill1);
-    entityManager.persist(poll1);
+  public void testOutputType() {
+    // Creating and persisting test data
+    Delegate d = new Delegate("d", 1);
+    entityManager.persist(d);
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+    Bill b = new Bill("b", "b", null, LocalDate.now(), d, t);
+    entityManager.persist(b);
+    Poll p = new Poll(b);
+    entityManager.persist(p);
 
-    Delegate d2 = new Delegate("a", 2);
-    Bill bill2 = new Bill("Bill2", "desc bill2", null, LocalDate.now().minusDays(1), d2, t1);
-    Poll poll2 = new Poll(bill2);
-    poll2.setStatus(PollStatus.APPROVED);
-    entityManager.persist(d2);
-    entityManager.persist(bill2);
-    entityManager.persist(poll2);
+    // Getting the active polls list
+    List<PollDTO> activePolls = listActivePollsService.getActivePolls();
 
-    Delegate d3 = new Delegate("a", 3);
-    Bill bill3 = new Bill("Bill3", "desc bill3", null, LocalDate.now().minusDays(2), d3, t1);
-    Poll poll3 = new Poll(bill3);
-    entityManager.persist(d3);
-    entityManager.persist(bill3);
-    entityManager.persist(poll3);
+    // Verifying that the list is not empty
+    assertFalse(activePolls.isEmpty());
 
-    Delegate d4 = new Delegate("a", 4);
-    Bill bill4 = new Bill("Bill4", "desc bill4", null, LocalDate.now().minusDays(3), d4, t1);
-    Poll poll4 = new Poll(bill4);
-    poll4.setStatus(PollStatus.REJECTED);
-    entityManager.persist(d4);
-    entityManager.persist(bill4);
-    entityManager.persist(poll4);
+    // Verifying that the first element is a PollDTO
+    assertEquals(PollDTO.class, activePolls.get(0).getClass());
+  }
 
-    // Call the use case
+  /** Test case to test the system behaviour when there is no current active polls. */
+  @Test
+  public void testThereIsNoActivePolls() {
+    // Given an empty database
+
+    // When calling the method to retrieve active polls
     List<PollDTO> activeBills = listActivePollsService.getActivePolls();
 
+    // Then the returned list should be empty
+    assertEquals(0, activeBills.size());
+  }
+
+  /**
+   * The test method creates and persists test data consisting of 50 Delegates, Themes, Bills, and
+   * Polls, where every even numbered Poll is either approved or rejected. The test then calls the
+   * "getActivePolls" method of the ListActivePollsService to retrieve all active Polls and verify
+   * their status. The test passes if there are exactly 25 active Polls and the status of each
+   * active Poll is equal to "ACTIVE".
+   */
+  @Test
+  public void testGetActivePolls() {
+    boolean approvedType = false;
+
+    // Loop through 50 times to create and persist test data
+    for (int i = 0; i < 50; i++) {
+      Delegate d = new Delegate(String.valueOf(i), i);
+      entityManager.persist(d);
+      Theme t = new Theme(String.valueOf(i), null);
+      entityManager.persist(t);
+      Bill b = new Bill(String.valueOf(i + 1), String.valueOf(i), null, LocalDate.now(), d, t);
+      entityManager.persist(b);
+      Poll p = new Poll(b);
+      b.setPoll(p);
+      entityManager.persist(p);
+
+      // Alternate between setting the Poll status to APPROVED and REJECTED. It does it 25 times.
+      if (i % 2 == 0) {
+        if (approvedType) {
+          p.setStatus(PollStatus.APPROVED);
+        } else {
+          p.setStatus(PollStatus.REJECTED);
+        }
+        approvedType = !approvedType;
+      }
+    }
+
+    // Call the use case
+    List<PollDTO> activePolls = listActivePollsService.getActivePolls();
+
     // Verify the results
-    assertEquals(2, activeBills.size());
-    assertEquals(activeBills.get(0).getTitle(), "Bill1");
-    assertEquals(activeBills.get(1).getTitle(), "Bill3");
+    // Ensure that there are 25 active Polls returned
+    assertEquals(25, activePolls.size());
+
+    // Ensure that each PollDTO in the list has a status of ACTIVE.
+    for (PollDTO pollDTO : activePolls) {
+      assertEquals(PollStatus.ACTIVE, pollCatalog.getPollByTitle(pollDTO.getTitle()).getStatus());
+    }
   }
 }

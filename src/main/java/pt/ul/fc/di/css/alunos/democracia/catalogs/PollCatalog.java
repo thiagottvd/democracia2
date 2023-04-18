@@ -55,6 +55,11 @@ public class PollCatalog {
     pollRepository.save(poll);
   }
 
+  /**
+   * Returns a list of expired polls.
+   *
+   * @return a list of expired polls.
+   */
   public List<Poll> getExpiredPolls() {
     return pollRepository.findAllExpiredPolls();
   }
