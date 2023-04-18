@@ -47,6 +47,10 @@ public class DelegateTheme {
     return theme.getDesignation().equals(t.getDesignation());
   }
 
+  public Long getId() {
+    return id;
+  }
+
   /*
      Checks if the Delegate and Theme given are the same as the attributes
   */
