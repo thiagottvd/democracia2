@@ -18,6 +18,11 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
+/**
+ * Use case I.
+ *
+ * <p>Handler that chooses a delegate for a citizen in a theme.
+ */
 @Component
 public class ChooseDelegateHandler {
 
@@ -105,9 +110,13 @@ public class ChooseDelegateHandler {
     }
   }
 
-  /*
+  /**
+   * Method that finds if there is a current delegate(DelegateTheme) representing the citizen in the
+   * given theme. Removes citizen from dt.voters list and dt from citizen.delegateThemes list if it
+   * finds.
    *
-   * Removes citizen from dt.voters list and dt from citizen.delegateThemes list
+   * @param citizen Citizen that is replacing delegate
+   * @param t Theme in which delegate is going to be replaced
    */
   private void removeOldDelegateTheme(Theme t, Citizen citizen) {
     List<DelegateTheme> dt_list = citizen.getDelegateThemes();
