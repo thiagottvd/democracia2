@@ -1,5 +1,10 @@
 package pt.ul.fc.di.css.alunos.democracia.exceptions;
 
+/**
+ * The CitizenAlreadySupportsBillException is an exception that is thrown when a citizen is trying
+ * to support a bill that they have already supported. It is a subclass of ApplicationException,
+ * which is itself a subclass of Exception.
+ */
 public class CitizenAlreadySupportsBillException extends ApplicationException {
 
   /**

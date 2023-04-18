@@ -1,5 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.exceptions;
 
+/** Exception class for application-level errors. */
 public class ApplicationException extends Exception {
 
   /**
