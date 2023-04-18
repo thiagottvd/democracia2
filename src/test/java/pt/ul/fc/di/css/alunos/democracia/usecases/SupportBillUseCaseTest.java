@@ -203,7 +203,7 @@ public class SupportBillUseCaseTest {
     // assert that the poll is associated with the correct bill and has the correct
     // closing date, as well as the expected number of positive and negative votes
     assertEquals(b, b.getPoll().getAssociatedBill());
-    assertEquals(b.getExpirationDate(), b.getPoll().closingDate());
+    assertEquals(b.getExpirationDate(), b.getPoll().getClosingDate());
     assertEquals(1, b.getPoll().getNumPositiveVotes());
     assertEquals(0, b.getPoll().getNumNegativeVotes());
 
