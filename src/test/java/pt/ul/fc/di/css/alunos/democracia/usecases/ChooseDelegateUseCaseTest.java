@@ -214,42 +214,5 @@ public class ChooseDelegateUseCaseTest {
     // Paulo in Health and Paula in Education do not have anymore citizens to represent.
     assertEquals(0, dtRepository.getAllDTs().get(0).getVoters().size());
     assertEquals(0, dtRepository.getAllDTs().get(1).getVoters().size());
-
-    /*
-
-
-    for (DelegateTheme delegateTheme : dt_list) {
-
-      System.out.println(
-          "DT: "
-              + delegateTheme.getDelegate().getName()
-              + " "
-              + delegateTheme.getTheme().getDesignation());
-
-      for (int j = 0; j < delegateTheme.getVoters().size(); j++) {
-        System.out.println("Voters: " + delegateTheme.getVoters().get(j).getName());
-        assertEquals(delegateTheme.getVoters().get(j).getName(), c1.getName());
-      }
-    }
-
-    Citizen c2 = new Citizen("Sarah", 4);
-    em.persist(c2);
-    chooseDelegateService.chooseDelegate(
-        delegateDTOS.get(0).getCc(), themes.get(0).getDesignation(), c2.getCc());
-    List<DelegateTheme> dt_list2 = dtRepository.getAllDTs();
-
-    for (DelegateTheme delegateTheme : dt_list2) {
-      System.out.println(
-          "DT: "
-              + delegateTheme.getDelegate().getName()
-              + " "
-              + delegateTheme.getTheme().getDesignation());
-    }
-
-    assertEquals(dt_list2.size(), 2);
-
-    DelegateTheme dt = dt_list2.get(0);
-
-    assertEquals(dt.getVoters().size(), 2);*/
   }
 }
