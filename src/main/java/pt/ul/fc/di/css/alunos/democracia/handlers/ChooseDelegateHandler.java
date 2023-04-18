@@ -111,11 +111,16 @@ public class ChooseDelegateHandler {
    */
   private void removeOldDelegateTheme(Theme t, Citizen citizen) {
     List<DelegateTheme> dt_list = citizen.getDelegateThemes();
+    DelegateTheme delegateThemeToRemove = null;
     for (DelegateTheme dt : dt_list) {
       if (dt.checkTheme(t)) {
-        citizen.removeDelegateTheme(dt);
+        delegateThemeToRemove = dt;
         dt.removeCitizenRep(citizen);
+        break;
       }
+    }
+    if (delegateThemeToRemove != null) {
+      citizen.removeDelegateTheme(delegateThemeToRemove);
     }
   }
 }
