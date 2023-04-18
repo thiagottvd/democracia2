@@ -29,11 +29,6 @@ public class ThemeCatalog {
         return themeRepository.getAllThemes();
     }
 
-    /*
-        Returns the corresponding theme from the DB.
-        @param theme The theme to retrieve.
-     */
-
     /**
      * Retrieves the theme with the corresponding designation from the database.
      * @param designation The theme designation we want to retrieve.

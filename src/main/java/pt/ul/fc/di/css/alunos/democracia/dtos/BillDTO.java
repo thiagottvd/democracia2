@@ -32,6 +32,8 @@ public class BillDTO {
     this.expirationDate = bill.getExpirationDate();
   }
 
+  /***** GETTERS *****/
+
   public String getTitle() {
     return title;
   }
