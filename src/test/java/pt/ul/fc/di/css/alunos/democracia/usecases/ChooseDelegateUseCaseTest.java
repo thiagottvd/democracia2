@@ -24,6 +24,7 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.ChooseDelegateHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.DelegateThemeRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
+import pt.ul.fc.di.css.alunos.democracia.services.ChooseDelegateService;
 
 @DataJpaTest
 public class ChooseDelegateUseCaseTest {
@@ -35,6 +36,7 @@ public class ChooseDelegateUseCaseTest {
   @Autowired private DelegateThemeRepository dtRepository;
 
   private ChooseDelegateHandler chooseDelegateHandler;
+  private ChooseDelegateService chooseDelegateService;
 
   @BeforeEach
   public void init() {
@@ -44,6 +46,7 @@ public class ChooseDelegateUseCaseTest {
     DelegateThemeCatalog dtCatalog = new DelegateThemeCatalog(dtRepository);
 
     chooseDelegateHandler = new ChooseDelegateHandler(themeCatalog, dtCatalog, citizenCatalog);
+    chooseDelegateService = new ChooseDelegateService(chooseDelegateHandler);
   }
 
   @Test
@@ -63,7 +66,7 @@ public class ChooseDelegateUseCaseTest {
     delegates.add(d1);
     delegates.add(d2);
 
-    List<DelegateDTO> delegateDTOS = chooseDelegateHandler.getDelegates();
+    List<DelegateDTO> delegateDTOS = chooseDelegateService.getDelegates();
 
     for (int i = 0; i < delegates.size(); i++) {
 
@@ -86,11 +89,11 @@ public class ChooseDelegateUseCaseTest {
     em.persist(d1);
     em.persist(d2);
 
-    List<ThemeDTO> themes = chooseDelegateHandler.getThemes();
-    List<DelegateDTO> delegateDTOS = chooseDelegateHandler.getDelegates();
+    List<ThemeDTO> themes = chooseDelegateService.getThemes();
+    List<DelegateDTO> delegateDTOS = chooseDelegateService.getDelegates();
 
     for (int i = 0; i < themes.size(); i++) {
-      chooseDelegateHandler.chooseDelegate(
+      chooseDelegateService.chooseDelegate(
           delegateDTOS.get(i).getCc(), themes.get(i).getDesignation(), c1.getCc());
     }
 
@@ -112,7 +115,7 @@ public class ChooseDelegateUseCaseTest {
 
     Citizen c2 = new Citizen("Sarah", 4);
     em.persist(c2);
-    chooseDelegateHandler.chooseDelegate(
+    chooseDelegateService.chooseDelegate(
         delegateDTOS.get(0).getCc(), themes.get(0).getDesignation(), c2.getCc());
     List<DelegateTheme> dt_list2 = dtRepository.getAllDTs();
 
