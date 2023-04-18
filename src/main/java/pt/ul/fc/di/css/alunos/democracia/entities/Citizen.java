@@ -79,11 +79,6 @@ public class Citizen {
     return cc;
   }
 
-  public void replaceDelegateTheme(int oldDT_Index, DelegateTheme dt) {
-    this.delegateThemes.remove(oldDT_Index);
-    this.delegateThemes.add(dt);
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -92,5 +87,9 @@ public class Citizen {
     return Objects.equals(id, citizen.id)
         && Objects.equals(cc, citizen.cc)
         && Objects.equals(name, citizen.name);
+  }
+
+  public void removeDelegateTheme(DelegateTheme dt) {
+    this.delegateThemes.remove(dt);
   }
 }

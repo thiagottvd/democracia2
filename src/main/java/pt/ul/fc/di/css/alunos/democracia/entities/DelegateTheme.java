@@ -67,4 +67,8 @@ public class DelegateTheme {
         && Objects.equals(theme.getDesignation(), delegateTheme.theme.getDesignation())
         && Objects.equals(delegate.getId(), delegateTheme.theme.getId());
   }
+
+  public void removeCitizenRep(Citizen citizen) {
+    this.getVoters().remove(citizen);
+  }
 }
