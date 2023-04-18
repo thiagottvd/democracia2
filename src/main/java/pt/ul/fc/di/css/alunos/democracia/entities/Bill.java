@@ -194,4 +194,13 @@ public class Bill {
         delegate,
         associatedPoll);
   }
+
+  /**
+   * Retrieves the bill file data.
+   *
+   * @return the bill file data.
+   */
+  public byte[] getFileData() {
+    return fileData;
+  }
 }

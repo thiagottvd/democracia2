@@ -1,5 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
@@ -13,19 +14,28 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
-import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
+import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
-import pt.ul.fc.di.css.alunos.democracia.handlers.ConsultBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ProposeBillHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
+import pt.ul.fc.di.css.alunos.democracia.services.ProposeBillService;
 
+/**
+ * The ProposeBillTest class is a JUnit test case that tests the ProposeBillService class which is
+ * used to propose new bills. This class has several test cases to test different functionality of
+ * the /ProposeBillService class such as: testOutputTypeGetThemes() - test the output type of the
+ * getThemes() method. testThereIsNoThemes() - test the behavior when there are no themes.
+ * testGetThemes() - test the getThemes() method to ensure that all persisted themes are returned
+ * properly. testProposeBillInputValidation() - test the input validation of the proposeBill()
+ * method.
+ */
 @DataJpaTest
 public class ProposeBillTest {
 
@@ -37,8 +47,12 @@ public class ProposeBillTest {
   private ThemeCatalog themeCatalog;
   private CitizenCatalog citizenCatalog;
   private ProposeBillHandler proposeBillHandler;
-  private ConsultBillsHandler consultBillsHandler;
+  private ProposeBillService proposeBillService;
 
+  /**
+   * Initializes the ProposeBillTest class by instantiating the BillCatalog, ThemeCatalog,
+   * CitizenCatalog, ProposeBillHandler, and ProposeBillService.
+   */
   @BeforeEach
   public void init() {
     MockitoAnnotations.openMocks(this);
@@ -46,48 +60,139 @@ public class ProposeBillTest {
     themeCatalog = new ThemeCatalog(themeRepository);
     citizenCatalog = new CitizenCatalog(citizenRepository);
     proposeBillHandler = new ProposeBillHandler(themeCatalog, billCatalog, citizenCatalog);
-    consultBillsHandler = new ConsultBillsHandler(billCatalog);
+    proposeBillService = new ProposeBillService(proposeBillHandler);
   }
 
+  /** Test case to test the output type of the method getThemes (should be ThemeDTO). */
   @Test
-  public void testProposeBill() throws ApplicationException {
-    Theme theme1 = new Theme("theme1", null);
-    Theme theme2 = new Theme("theme2", null);
-    entityManager.persist(theme1);
-    entityManager.persist(theme2);
+  public void testOutputTypeGetThemes() {
+    // Creating and persisting test data
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
 
-    Delegate delegate1 = new Delegate("John", 12345);
-    Delegate delegate2 = new Delegate("Diogo", 00000);
-    entityManager.persist(delegate1);
-    entityManager.persist(delegate2);
+    // Getting the themes list
+    List<ThemeDTO> themes = proposeBillService.getThemes();
 
-    // Call the use case
-    List<ThemeDTO> themesDTOList = proposeBillHandler.getThemes();
+    // Verifying that the list is not empty
+    assertFalse(themes.isEmpty());
 
-    // Teste aceite
-    proposeBillHandler.proposeBill(
-        "Bill1", "desc Bill1", null, LocalDate.now(), theme1.getDesignation(), delegate1.getCc());
-    // Teste sem delegate
+    // Verifying that the first element is a PollDTO
+    assertEquals(ThemeDTO.class, themes.get(0).getClass());
+  }
+
+  /** Test case to test the system behaviour when there is no themes. */
+  @Test
+  public void testThereIsNoThemes() {
+    // Given an empty database
+
+    // When calling the method to retrieve all themes
+    List<ThemeDTO> themes = proposeBillService.getThemes();
+
+    // Then the returned list should be empty
+    assertEquals(0, themes.size());
+  }
+
+  /**
+   * This test method verifies the functionality of the getThemes() method of the ProposeBillService
+   * class. It performs the following steps: Creates 50 themes using a for loop and persists them
+   * using EntityManager. Calls the getThemes() method of ProposeBillService. Verifies that the
+   * returned list of ThemeDTOs has a size of 50. This test ensures that the getThemes() method
+   * properly retrieves all persisted themes and returns them as a list of ThemeDTOs.
+   */
+  @Test
+  public void testGetThemes() {
+    // Loop through 50 times to create and persist test data
+    for (int i = 0; i < 50; i++) {
+      Theme t = new Theme(String.valueOf(i), null);
+      entityManager.persist(t);
+    }
+
+    // Call the getThemes method
+    List<ThemeDTO> themes = proposeBillService.getThemes();
+
+    // Verify the results
+    // Ensure that there are 50 themes returned
+    assertEquals(50, themes.size());
+  }
+
+  /**
+   * This test method verifies the input validation of the proposeBill() method of the
+   * ProposeBillService class. It performs the following steps: Creates a new theme and persists it
+   * using EntityManager. Calls the proposeBill() method of ProposeBillService with only the theme
+   * designation parameter and expects a CitizenNotFoundException to be thrown. Deletes the theme
+   * created in step 1 and creates a new delegate, persisting it using EntityManager. Calls the
+   * proposeBill() method of ProposeBillService with only the delegate cc number parameter and
+   * expects a ThemeNotFoundException to be thrown. This test ensures that the proposeBill() method
+   * properly validates its input parameters and throws the appropriate exceptions when necessary.
+   */
+  @Test
+  public void testProposeBillInputValidation() {
+    // creating a theme
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+
+    // call the proposeBill method given only the theme designation (should throw
+    // CitizenNotFoundException)
     assertThrows(
         CitizenNotFoundException.class,
         () ->
-            proposeBillHandler.proposeBill(
-                "Bill2", "desc Bill2", null, LocalDate.now(), theme2.getDesignation(), -5));
-    // Teste sem theme
+            proposeBillService.proposeBill("b", "b", null, LocalDate.now(), t.getDesignation(), 1));
+
+    // deleting theme and creating a delegate
+    entityManager.remove(t);
+    Delegate d = new Delegate("d", 1);
+    entityManager.persist(d);
+
+    // call the proposeBill method given only the delegate cc number (should throw
+    // ThemeNotFoundException)
     assertThrows(
         ThemeNotFoundException.class,
-        () ->
-            proposeBillHandler.proposeBill(
-                "Bill3", "desc Bill3", null, LocalDate.now(), null, delegate1.getCc()));
+        () -> proposeBillService.proposeBill("b", "b", null, LocalDate.now(), null, d.getCc()));
+  }
 
-    List<BillDTO> billDTOList = consultBillsHandler.getOpenBills();
+  /**
+   * Tests the proposeBill() method of the ProposeBillService by creating and persisting necessary
+   * data and calling the method 50 times, then verifying the results.
+   *
+   * <p>Specifically, this test verifies that 50 bills are added to the system, and that the title,
+   * description, file data, expiration date, theme, and delegate of each bill are correctly set.
+   */
+  @Test
+  public void testProposeBill() throws ApplicationException {
 
-    // Verify the results
-    for (ThemeDTO theme : themesDTOList) {
-      System.out.println("Theme designation: " + theme.getDesignation());
+    // Create a local date object for testing purposes
+    LocalDate localDate = LocalDate.now();
+
+    // Create and persist necessary data, and call the proposeBill method 50 times
+    for (int i = 0; i < 50; i++) {
+      Theme t = new Theme(String.valueOf(i), null);
+      entityManager.persist(t);
+      Delegate d = new Delegate(String.valueOf(i), i);
+      entityManager.persist(d);
+
+      // Call the proposeBill method with the unique parameters for this iteration of the loop
+      proposeBillService.proposeBill(
+          String.valueOf(i),
+          String.valueOf(i),
+          String.valueOf(i).getBytes(),
+          localDate,
+          t.getDesignation(),
+          d.getCc());
     }
-    for (BillDTO bill : billDTOList) {
-      System.out.println("Bill title: " + bill.getTitle());
+
+    // Verify that 50 bills were added to the system
+    List<Bill> bills = billCatalog.getOpenBills();
+    assertEquals(50, bills.size());
+
+    // Verify the data for each bill in the system
+    for (int i = 0; i < 50; i++) {
+      Bill b = bills.get(i);
+      assertEquals(String.valueOf(i), b.getTitle());
+      assertEquals(String.valueOf(i), b.getDescription());
+      assertArrayEquals(String.valueOf(i).getBytes(), b.getFileData());
+      assertEquals(localDate, b.getExpirationDate());
+      assertEquals(themeCatalog.getTheme(String.valueOf(i)), b.getTheme());
+      assertEquals(citizenCatalog.getCitizenByCc(i).get(), b.getDelegate());
     }
   }
 }
