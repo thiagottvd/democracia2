@@ -13,7 +13,18 @@
  * Use Case G: Implementado; testes parcialmente implementados.
  * Use Case H: Implementado; testes implementados.
  * Use Case I: Implementado; testes parciais.
- * Use Case K: Implementado (Not merged); VERIFICAR LÓGICA; POSSÍVEIS BUGS; faltam testes.
+ * Use Case J: Implementado; sem testes.
+ * Use Case K: Implementado; VERIFICAR LÓGICA; POSSÍVEIS BUGS; testes parciais.
+
+ ## TODO
+
+ * Documentar por completo os use cases: G, H, I, J e K.
+ * **[CRÍTICO]** Implementar testes (completos) para os use cases: G, H, I, J e K.
+ * Finalizar os desenhos (IDs, SSDs, etc) e colocar as imagens nos docs.
+ * Verificar se o mapeamento está o melhor possível.
+ * **[CRÍTICO]** Fazer relatório.
+ * **[CRÍTICO]** Fazer um script test.sh que corra os testes dentro de um container docker e testa-los na base de dados Postgres.
+ * **[CRÍTICO]** Entregar projeto.
 
 ## Dependências
 
@@ -30,4 +41,4 @@ Este comando vai iniciar dois containers:
 
 ## Correr testes
 
-TODO
+Deve correr `test.sh`.
