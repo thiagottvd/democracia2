@@ -21,38 +21,32 @@ public class Theme {
     // Empty constructor required by JPA.
   }
 
-  /*
-     Theme class constructor.
-     @param designation The theme designation.
-     @param parentTheme This theme parentTheme.
-  */
+  /**
+   * Theme class constructor.
+   * @param designation The theme designation.
+   * @param parentTheme The theme parent theme.
+   */
   public Theme(String designation, Theme parentTheme) {
     this.designation = designation;
     this.parentTheme = parentTheme;
   }
 
+  /***** GETTERS *****/
+
   public Long getId() {
     return id;
   }
 
-  /*
-     Returns the parent theme.
-  */
   public Theme getParentTheme() {
     return this.parentTheme;
   }
 
-  /*
-     Returns the theme designation.
-  */
   public String getDesignation() {
     return this.designation;
   }
 
-  /*
-     Sets a new parent theme.
-     @param parentTheme The new parent theme.
-  */
+  /***** SETTERS *****/
+
   public void setParentTheme(Theme parentTheme) {
     this.parentTheme = parentTheme;
   }

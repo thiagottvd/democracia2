@@ -16,7 +16,6 @@ public class Poll {
   @Id @GeneratedValue private Long id;
 
   private int numPositiveVotes = 0;
-
   private int numNegativeVotes = 0;
 
   @ElementCollection // Indicates that publicVoters is a collection of simple or embeddable types.
@@ -53,12 +52,83 @@ public class Poll {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Poll class constructor.
+   * @param associatedBill The associated Bill.
+   */
   public Poll(Bill associatedBill) {
     this.associatedBill = associatedBill;
     this.closingDate = associatedBill.getExpirationDate();
     this.status = PollStatus.ACTIVE;
     addPublicVoter(this.associatedBill.getDelegate(), VoteType.POSITIVE);
   }
+
+  /**
+   * Increases the positive voters.
+   */
+  public void incPositiveVotes() {
+    numPositiveVotes++;
+  }
+
+  /**
+   * Increase the negative voters.
+   */
+  public void incNegativeVotes() {
+    numNegativeVotes++;
+  }
+
+  /**
+   * Adds a new private voter to the Poll.
+   * @param citizen The voter.
+   * @param voteType The vote type.
+   */
+  public void addPrivateVoter(Citizen citizen, VoteType voteType) {
+
+    if (voteType == VoteType.POSITIVE) {
+      incPositiveVotes();
+    } else {
+      incNegativeVotes();
+    }
+
+    privateVoters.add(citizen);
+  }
+
+  /**
+   * Adds a new public voter to the Poll.
+   * @param delegate The voter.
+   * @param voteType The vote type.
+   */
+  public void addPublicVoter(Delegate delegate, VoteType voteType) {
+
+    if (voteType == VoteType.POSITIVE) {
+      incPositiveVotes();
+    } else {
+      incNegativeVotes();
+    }
+    publicVoters.put(delegate, voteType);
+  }
+
+  // NOT USED
+  public void autoVote(List<Citizen> citizens, VoteType voteType) {
+    for (Citizen c : citizens) {
+      addPrivateVoter(c, voteType);
+    }
+  }
+
+  // NOT USED
+  public boolean hasVoted(Citizen c) {
+    if (c.getClass() == Delegate.class) {
+      return publicVoters.containsKey((Delegate) c);
+    }
+    return privateVoters.contains(c);
+  }
+
+  // NOT USED
+  public boolean hasExpired() {
+    return closingDate.isBefore(LocalDate.now());
+  }
+
+  /***** GETTERS *****/
 
   public Long getId() {
     return id;
@@ -88,64 +158,6 @@ public class Poll {
     return numPositiveVotes;
   }
 
-  public void incPositiveVotes() {
-    numPositiveVotes++;
-  }
-
-  public void incNegativeVotes() {
-    numNegativeVotes++;
-  }
-
-  public void setStatus(PollStatus status) {
-    this.status = status;
-  }
-
-  public void addPrivateVoter(Citizen citizen, VoteType voteType) {
-
-    if (voteType == VoteType.POSITIVE) {
-      incPositiveVotes();
-    } else {
-      incNegativeVotes();
-    }
-
-    privateVoters.add(citizen);
-  }
-
-  public void addPublicVoter(Delegate delegate, VoteType voteType) {
-
-    if (voteType == VoteType.POSITIVE) {
-      incPositiveVotes();
-    } else {
-      incNegativeVotes();
-    }
-    publicVoters.put(delegate, voteType);
-  }
-
-  public void autoVote(List<Citizen> citizens, VoteType voteType) {
-    for (Citizen c : citizens) {
-      addPrivateVoter(c, voteType);
-    }
-  }
-
-  public VoteType getPublicVote(Delegate delegate) {
-    return publicVoters.get(delegate);
-  }
-
-  public boolean hasVoted(Citizen c) {
-    if (c.getClass() == Delegate.class) {
-      return publicVoters.containsKey((Delegate) c);
-    }
-    return privateVoters.contains(c);
-  }
-
-  public boolean hasExpired() {
-    return closingDate.isBefore(LocalDate.now());
-  }
-
-  public LocalDate closingDate() {
-    return closingDate;
-  }
-
   public Map<Delegate, VoteType> getPublicVoters() {
     return publicVoters;
   }
@@ -155,5 +167,19 @@ public class Poll {
     voters.addAll(this.getPrivateVoters());
     voters.addAll(this.getPublicVoters().keySet());
     return voters;
+  }
+
+  public VoteType getPublicVote(Delegate delegate) {
+    return publicVoters.get(delegate);
+  }
+
+  public LocalDate closingDate() {
+    return closingDate;
+  }
+
+  /***** SETTERS *****/
+
+  public void setStatus(PollStatus status) {
+    this.status = status;
   }
 }

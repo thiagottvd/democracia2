@@ -19,9 +19,7 @@ public class Bill {
   @Id @GeneratedValue private Long id;
 
   private String title;
-
   private String description;
-
   private int numSupporters = 1;
 
   @Lob private byte[] fileData;
@@ -52,6 +50,15 @@ public class Bill {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Bill class constructor.
+   * @param title The bill title.
+   * @param description The bill description.
+   * @param fileData The bill pdf file.
+   * @param expirationDate The bill expiration date.
+   * @param delegate The bill delegate.
+   * @param theme The bill theme.
+   */
   public Bill(
       String title,
       String description,
@@ -68,20 +75,23 @@ public class Bill {
     supporters.add(delegate);
   }
 
-  /*
-   Returns a boolean indicating if a voter is supporting this Bill.
-   @param voter The citizen to check.
-  */
+  /**
+   * Returns a boolean indicating if a voter is supporting this Bill.
+   * @param voter The citizen we want to check.
+   * @return True or false accordingly.
+   */
   public boolean supportsBill(Citizen voter) {
     return supporters.contains(voter);
   }
 
-  /*
-   Adds a new voter to the supporters list if he hasn't voted yet.
-   @param voter The citizen to add.
-  */
+  /**
+   * Adds a new voter to the supporters list if he hasn't voted yet.
+   * @param voter The citizen to add.
+   * @throws CitizenAlreadySupportsBillException
+   * @throws VoteInClosedBillException
+   */
   public void addSupporterVote(Citizen voter)
-      throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
+          throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
     if (supportsBill(voter)) {
       throw new CitizenAlreadySupportsBillException(
           "The citizen with cc "
@@ -102,6 +112,8 @@ public class Bill {
     numSupporters++;
   }
 
+  /***** SETTERS *****/
+
   public void setStatus(BillStatus status) {
     this.status = status;
   }
@@ -110,20 +122,16 @@ public class Bill {
     this.associatedPoll = associatedPoll;
   }
 
+  /***** GETTERS *****/
+
   public Long getId() {
     return id;
   }
 
-  /*
-   Returns the Bill title.
-  */
   public String getTitle() {
     return title;
   }
 
-  /*
-   Returns the Bill expiration date.
-  */
   public BillStatus getStatus() {
     return status;
   }
@@ -132,25 +140,14 @@ public class Bill {
     return expirationDate;
   }
 
-  /*
-   Returns the number of supporters in this Bill.
-  */
   public int getNumSupporters() {
     return supporters.size();
   }
 
-  /*
-   Returns the Bill theme.
-  */
   public Theme getTheme() {
     return theme;
   }
 
-  /**
-   * Returns the bill description.
-   *
-   * @return the bill description.
-   */
   public String getDescription() {
     return description;
   }

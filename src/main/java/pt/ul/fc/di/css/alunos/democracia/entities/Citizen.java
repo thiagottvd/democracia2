@@ -23,26 +23,24 @@ public class Citizen {
   @Cascade(CascadeType.ALL)
   private List<DelegateTheme> delegateThemes = new ArrayList<>();
 
-  public Long getId() {
-    return id;
-  }
-
   protected Citizen() {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Citizen class constructor.
+   * @param name The citizen name.
+   * @param cc The citizen cc.
+   */
   public Citizen(String name, int cc) {
     this.name = name;
     this.cc = cc;
   }
 
-  public List<DelegateTheme> getDelegateThemes() {
-    return delegateThemes;
-  }
-
-  /*
-   Checks if the chosen DelegateTheme already represents this citizen
-  */
+  /**
+   * Checks if the chosen DelegateTheme already represents this citizen.
+   * @param dt The delegate theme we want to check.
+   */
   public void addDelegateTheme(DelegateTheme dt) {
     boolean alreadyRepresents = false;
     for (int i = 0; i < delegateThemes.size() && !alreadyRepresents; i++) {
@@ -58,21 +56,22 @@ public class Citizen {
       delegateThemes.add(dt);
     }
   }
-  /**
-   * Returns the citizen name.
-   *
-   * @return the citizen name.
-   */
+
+  /***** GETTERS *****/
+
+  public Long getId() {
+    return id;
+  }
+
   public String getName() {
     return name;
   }
 
-  /**
-   * Returns the citizen card number.
-   *
-   * @return the citizen card number.
-   */
   public int getCc() {
     return cc;
+  }
+
+  public List<DelegateTheme> getDelegateThemes() {
+    return delegateThemes;
   }
 }
