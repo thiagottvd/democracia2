@@ -8,6 +8,7 @@
 ## O que já foi feito
 
  * Use Case D: Implementado; Totalmente documentado; Testes Implementados.
+ * Use Case E: Implementado; Totalmente documentado; Testes Implementados.
  * Use Case F: Implementado; testes parcialmente implementados.
  * Use Case G: Implementado; testes parcialmente implementados.
  * Use Case H: Implementado; testes implementados.
