@@ -18,7 +18,7 @@ public class CitizenCatalog {
   private final CitizenRepository citizenRepository;
 
   /**
-   * Constructor that receives the CitizenRepository dependency.
+   * Constructor of the CitizenCatalog class that receives the CitizenRepository dependency.
    *
    * @param citizenRepository the repository used to access Citizen data.
    */
@@ -27,17 +27,28 @@ public class CitizenCatalog {
     this.citizenRepository = citizenRepository;
   }
 
+  /**
+   * Finds a Delegate from the database with the corresponding cc.
+   * @param cc The cc of the Delegate we want to retrieve.
+   * @return The Delegate if found.
+   */
   public Delegate getDelegate(int cc) {
     return citizenRepository.findDelegateByCc(cc);
   }
 
+  /**
+   * Gets a list of all the Delegates in the database.
+   * @return The list containing all Delegates.
+   */
   public List<Delegate> getDelegates() {
     return citizenRepository.getAllDelegates();
   }
 
-  // Ideia para o caso de uso J -> 1 - d = getDelegate | 2 - if(d=null) c = getCitizen, NotDelegate
-  // = true
-  // Mais eficiente que usar o isDelegate já q no best case scenario só percorre uma tabela
+  /**
+   * Checks if a Delegate with the given cc exists.
+   * @param cc The cc of the Citizen we want to check.
+   * @return True or false accordingly.
+   */
   public boolean isDelegate(int cc) {
     Delegate d = citizenRepository.findDelegateByCc(cc);
     return d != null;

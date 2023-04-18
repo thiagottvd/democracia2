@@ -63,6 +63,10 @@ public class PollCatalog {
     pollRepository.closePolls(pollStatus);
   }
 
+  /**
+   * Gets a list of all the expired Polls in the database.
+   * @return The list containing all expired Polls.
+   */
   public List<Poll> getExpiredPolls() {
     return pollRepository.findAllExpiredPolls();
   }

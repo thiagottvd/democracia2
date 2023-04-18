@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.dataacess.BillStatus;
-import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 
@@ -28,7 +27,10 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
-  // Verificar se isto esta certo
+  /**
+   * Saves a new Bill to the database.
+   * @param bill The Bill we want to save.
+   */
   public void addBill(Bill bill) {
     billRepository.save(bill);
   }
@@ -55,14 +57,5 @@ public class BillCatalog {
   /** Closes all bills that have expired. */
   public void closeExpiredBills() {
     billRepository.closeExpiredBills(BillStatus.CLOSED);
-  }
-
-  /**
-   * Saves a bill to the database.
-   *
-   * @param bill the bill to save.
-   */
-  public void saveBill(Bill bill) {
-    billRepository.save(bill);
   }
 }
