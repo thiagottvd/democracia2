@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.entities;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class DelegateTheme {
@@ -51,5 +52,15 @@ public class DelegateTheme {
   */
   public boolean checkDelegateTheme(Delegate d, Theme t) {
     return d.getId().equals(delegate.getId()) && t.getDesignation().equals(theme.getDesignation());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    DelegateTheme delegateTheme = (DelegateTheme) o;
+    return Objects.equals(id, delegateTheme.id)
+        && Objects.equals(theme.getDesignation(), delegateTheme.theme.getDesignation())
+        && Objects.equals(delegate.getId(), delegateTheme.theme.getId());
   }
 }
