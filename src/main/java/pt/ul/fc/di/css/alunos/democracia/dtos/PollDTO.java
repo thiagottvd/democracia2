@@ -1,17 +1,24 @@
 package pt.ul.fc.di.css.alunos.democracia.dtos;
 
-import java.time.LocalDate;
-
+/** A data transfer object (DTO) representing a poll. */
 public class PollDTO {
 
   private final String title;
-  private final LocalDate expirationDate;
 
-  public PollDTO(String title, LocalDate expirationDate) {
+  /**
+   * Constructs a new PollDTO with the given title.
+   *
+   * @param title the title of the poll.
+   */
+  public PollDTO(String title) {
     this.title = title;
-    this.expirationDate = expirationDate;
   }
 
+  /**
+   * Returns the title of the poll.
+   *
+   * @return the title of the poll.
+   */
   public String getTitle() {
     return title;
   }

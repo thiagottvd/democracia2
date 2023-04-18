@@ -11,6 +11,12 @@ public class BillDTO {
   private String description;
   private LocalDate expirationDate;
 
+  /**
+   * Constructs a BillDTO object with the given ID and title.
+   *
+   * @param id the ID of the bill.
+   * @param title the title of the bill.
+   */
   public BillDTO(Long id, String title) {
     this.id = id;
     this.title = title;
@@ -27,18 +33,38 @@ public class BillDTO {
     this.expirationDate = bill.getExpirationDate();
   }
 
+  /**
+   * Returns the title of the bill.
+   *
+   * @return the title of the bill.
+   */
   public String getTitle() {
     return title;
   }
 
+  /**
+   * Returns the description of the bill.
+   *
+   * @return the description of the bill.
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   * Returns the expiration date of the bill.
+   *
+   * @return the expiration date of the bill.
+   */
   public LocalDate getExpirationDate() {
     return expirationDate;
   }
 
+  /**
+   * Returns the ID of the bill.
+   *
+   * @return the ID of the bill.
+   */
   public Long getId() {
     return id;
   }

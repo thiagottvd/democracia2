@@ -22,7 +22,7 @@ public class ListActivePollsHandler {
   public List<PollDTO> getActivePolls() {
     List<Poll> activePolls = pollCatalog.getPollsByStatusType(PollStatus.ACTIVE);
     return activePolls.stream()
-        .map(poll -> new PollDTO(poll.getBill().getTitle(), poll.getBill().getExpirationDate()))
+        .map(poll -> new PollDTO(poll.getBill().getTitle()))
         .collect(Collectors.toList());
   }
 }
