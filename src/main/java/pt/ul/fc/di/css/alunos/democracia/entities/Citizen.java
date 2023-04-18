@@ -17,7 +17,7 @@ public class Citizen {
 
   @Column(unique = true)
   @NonNull
-  private int cc;
+  private Integer cc;
 
   @ManyToMany(mappedBy = "voters")
   @Cascade(CascadeType.ALL)
@@ -31,7 +31,7 @@ public class Citizen {
     // Empty constructor required by JPA.
   }
 
-  public Citizen(String name, int cc) {
+  public Citizen(@NonNull String name, Integer cc) {
     this.name = name;
     this.cc = cc;
   }
@@ -63,6 +63,7 @@ public class Citizen {
    *
    * @return the citizen name.
    */
+  @NonNull
   public String getName() {
     return name;
   }
@@ -72,7 +73,8 @@ public class Citizen {
    *
    * @return the citizen card number.
    */
-  public int getCc() {
+  @NonNull
+  public Integer getCc() {
     return cc;
   }
 }

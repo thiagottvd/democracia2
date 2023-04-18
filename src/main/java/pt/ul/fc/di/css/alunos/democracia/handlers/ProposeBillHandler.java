@@ -59,7 +59,7 @@ public class ProposeBillHandler {
       byte[] pdf,
       LocalDate expirationDate,
       String themeDesignation,
-      int cc)
+      Integer cc)
       throws ApplicationException {
     Delegate delegate = citizenCatalog.getDelegate(cc);
     if (delegate == null) {

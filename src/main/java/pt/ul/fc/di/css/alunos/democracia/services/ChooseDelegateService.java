@@ -26,7 +26,7 @@ public class ChooseDelegateService {
     return chooseDelegateHandler.getThemes();
   }
 
-  public void chooseDelegate(int delegateCc, String themeDesignation, int voterCc)
+  public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
       throws ApplicationException {
     chooseDelegateHandler.chooseDelegate(delegateCc, themeDesignation, voterCc);
   }

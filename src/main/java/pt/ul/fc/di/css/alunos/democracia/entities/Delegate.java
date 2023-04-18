@@ -10,7 +10,7 @@ public class Delegate extends Citizen {
     // Empty constructor required by JPA.
   }
 
-  public Delegate(String name, int nif) {
-    super(name, nif);
+  public Delegate(String name, Integer cc) {
+    super(name, cc);
   }
 }

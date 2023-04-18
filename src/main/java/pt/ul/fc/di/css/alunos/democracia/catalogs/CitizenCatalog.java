@@ -27,7 +27,7 @@ public class CitizenCatalog {
     this.citizenRepository = citizenRepository;
   }
 
-  public Delegate getDelegate(int cc) {
+  public Delegate getDelegate(Integer cc) {
     return citizenRepository.findDelegateByCc(cc);
   }
 
@@ -41,7 +41,7 @@ public class CitizenCatalog {
    * @param cc the cc number of the citizen to retrieve.
    * @return an Optional containing the Citizen object if found, otherwise an empty Optional.
    */
-  public Optional<Citizen> getCitizenByCc(int cc) {
+  public Optional<Citizen> getCitizenByCc(Integer cc) {
     return citizenRepository.findByCc(cc);
   }
 

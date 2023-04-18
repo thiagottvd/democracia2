@@ -4,7 +4,7 @@ package pt.ul.fc.di.css.alunos.democracia.dtos;
 public class DelegateDTO {
 
   private final String name;
-  private final int cc;
+  private final Integer cc;
 
   /**
    * Constructs a DelegateDTO object with the given name and ID number.
@@ -12,7 +12,7 @@ public class DelegateDTO {
    * @param name the name of the delegate.
    * @param cc the ID number of the delegate.
    */
-  public DelegateDTO(String name, int cc) {
+  public DelegateDTO(String name, Integer cc) {
     this.name = name;
     this.cc = cc;
   }
@@ -22,7 +22,7 @@ public class DelegateDTO {
    *
    * @return the ID number of the delegate.
    */
-  public int getCc() {
+  public Integer getCc() {
     return cc;
   }
 

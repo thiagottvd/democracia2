@@ -163,10 +163,6 @@ public class Bill {
     return associatedPoll;
   }
 
-  public byte[] getFileData() {
-    return fileData;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

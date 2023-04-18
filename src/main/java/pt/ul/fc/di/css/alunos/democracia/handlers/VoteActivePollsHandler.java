@@ -51,7 +51,7 @@ public class VoteActivePollsHandler {
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(PollDTO pollDTO, int voterCc) throws ApplicationException {
+  public VoteType checkDelegateVote(PollDTO pollDTO, Integer voterCc) throws ApplicationException {
     Citizen citizen = validateCitizen(voterCc).get();
     Poll poll = validatePoll(pollDTO);
     Theme theme = poll.getAssociatedBill().getTheme();
@@ -79,7 +79,7 @@ public class VoteActivePollsHandler {
    * @param option The VoteType of the Citizen.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public void vote(PollDTO pollDTO, int voterCc, VoteType option) throws ApplicationException {
+  public void vote(PollDTO pollDTO, Integer voterCc, VoteType option) throws ApplicationException {
     if (option == null) {
       throw new ApplicationException("The vote type is invalid.");
     }
@@ -95,7 +95,7 @@ public class VoteActivePollsHandler {
    * @return The Citizen if found.
    * @throws CitizenNotFoundException If no Citizen is found.
    */
-  private Optional<Citizen> validateCitizen(int voterCc) throws CitizenNotFoundException {
+  private Optional<Citizen> validateCitizen(Integer voterCc) throws CitizenNotFoundException {
     Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(voterCc);
     if (citizen.isEmpty()) {
       throw new CitizenNotFoundException("Citizen with id: " + voterCc + " not found.");

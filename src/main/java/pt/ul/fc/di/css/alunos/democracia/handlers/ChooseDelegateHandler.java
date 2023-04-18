@@ -34,7 +34,6 @@ public class ChooseDelegateHandler {
   }
 
   public List<DelegateDTO> getDelegates() {
-    // TODO
     List<Delegate> delegates = citizenCatalog.getDelegates();
     return delegates.stream()
         .map(delegate -> new DelegateDTO(delegate.getName(), delegate.getCc()))
@@ -48,7 +47,7 @@ public class ChooseDelegateHandler {
         .collect(Collectors.toList());
   }
 
-  public void chooseDelegate(int delegateCc, String themeDesignation, int voterCc)
+  public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
       throws ApplicationException {
 
     Delegate d = citizenCatalog.getDelegate(delegateCc);

@@ -44,7 +44,7 @@ public class ProposeBillService {
       byte[] pdf,
       LocalDate expirationDate,
       String themeDesignation,
-      int cc)
+      Integer cc)
       throws ApplicationException {
     proposeBillHandler.proposeBill(title, description, pdf, expirationDate, themeDesignation, cc);
   }

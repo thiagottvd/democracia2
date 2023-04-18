@@ -30,7 +30,7 @@ public class SupportBillService {
    * @param cc the citizen card number of the citizen who supports the bill.
    * @throws ApplicationException if an error occurs during the support operation.
    */
-  public void supportBill(Long billId, int cc) throws ApplicationException {
+  public void supportBill(Long billId, Integer cc) throws ApplicationException {
     supportBillHandler.supportBill(billId, cc);
   }
 }
