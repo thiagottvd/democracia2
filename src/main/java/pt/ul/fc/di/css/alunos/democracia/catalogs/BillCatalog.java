@@ -27,7 +27,11 @@ public class BillCatalog {
     this.billRepository = billRepository;
   }
 
-  // Verificar se isto esta certo
+  /**
+   * Saves the specified bill to the database.
+   *
+   * @param bill the bill to save.
+   */
   public void saveBill(Bill bill) {
     billRepository.save(bill);
   }

@@ -16,6 +16,12 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
+/**
+ * Use case E.
+ *
+ * <p>Handler that proposes a bill and retrieves a list of all themes converting them to a list of
+ * {@link ThemeDTO} objects.
+ */
 @Component
 public class ProposeBillHandler {
 
@@ -23,6 +29,14 @@ public class ProposeBillHandler {
   private final BillCatalog billCatalog;
   private final CitizenCatalog citizenCatalog;
 
+  /**
+   * Constructor for the ProposeBillHandler class. It takes a ThemeCatalog, BillCatalog and
+   * CitizenCatalog objects as parameter and sets them as an attributes.
+   *
+   * @param themeCatalog the catalog responsible for managing polls.
+   * @param billCatalog the catalog responsible for managing bills.
+   * @param citizenCatalog the catalog responsible for managing citizens.
+   */
   @Autowired
   public ProposeBillHandler(
       ThemeCatalog themeCatalog, BillCatalog billCatalog, CitizenCatalog citizenCatalog) {
@@ -32,9 +46,9 @@ public class ProposeBillHandler {
   }
 
   /**
-   * Returns a list of all available themes.
+   * Returns a list of ThemeDTO objects representing all themes.
    *
-   * @return A list of all available themes.
+   * @return a list of ThemeDTO objects representing all themes.
    */
   public List<ThemeDTO> getThemes() {
     List<Theme> themes = themeCatalog.getThemes();
@@ -44,19 +58,20 @@ public class ProposeBillHandler {
   }
 
   /**
-   * Creates a new bill and adds it to the open bills list.
+   * Proposes a new bill with the given parameters.
    *
-   * @param title The new bill title.
-   * @param description The new bill description.
-   * @param pdf The new bill pdf file with the main content.
-   * @param expirationDate The new bill expiration date.
-   * @param cc The new bill delegate.
-   * @param themeDesignation The new bill theme.
+   * @param title the title of the bill.
+   * @param description the description of the bill.
+   * @param pdfData the pdf data of the bill.
+   * @param expirationDate the expiration date of the bill.
+   * @param themeDesignation the theme designation of the bill.
+   * @param cc the citizen card number of the bill proposer.
+   * @throws ApplicationException if the delegate or the theme are not found.
    */
   public void proposeBill(
       String title,
       String description,
-      byte[] pdf,
+      byte[] pdfData,
       LocalDate expirationDate,
       String themeDesignation,
       Integer cc)
@@ -70,6 +85,6 @@ public class ProposeBillHandler {
       throw new ThemeNotFoundException(
           "The theme with title " + themeDesignation + " was not found.");
     }
-    billCatalog.saveBill(new Bill(title, description, pdf, expirationDate, delegate, theme));
+    billCatalog.saveBill(new Bill(title, description, pdfData, expirationDate, delegate, theme));
   }
 }

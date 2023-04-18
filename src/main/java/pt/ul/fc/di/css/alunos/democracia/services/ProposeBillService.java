@@ -8,11 +8,24 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ProposeBillHandler;
 
+/**
+ * Use case E.
+ *
+ * <p>This service class provides methods for proposing a bill and retrieving a list of all themes
+ * calling the appropriate handler {@link ProposeBillHandler}.
+ */
 @Service
 public class ProposeBillService {
 
   private final ProposeBillHandler proposeBillHandler;
 
+  /**
+   * Constructor for the ProposeBillService class. It takes a ProposeBillHandler object as parameter
+   * and sets it as an attribute.
+   *
+   * @param proposeBillHandler proposeBillHandler the handler responsible for handling the logic
+   *     related to proposing a bill and retrieving a list of all themes.
+   */
   @Autowired
   public ProposeBillService(ProposeBillHandler proposeBillHandler) {
     this.proposeBillHandler = proposeBillHandler;
@@ -28,24 +41,25 @@ public class ProposeBillService {
   }
 
   /**
-   * Creates a new bill.
+   * Proposes a new bill with the given parameters.
    *
-   * @param title the title of a Bill
-   * @param description description of Bill
-   * @param pdf a file with Bill details
-   * @param expirationDate expiration of Date
-   * @param themeDesignation name of theme of Bill
-   * @param cc delegate identification
-   * @throws ApplicationException if there is an error retrieving the bill.
+   * @param title the title of the bill.
+   * @param description the description of the bill.
+   * @param pdfData the pdf data of the bill.
+   * @param expirationDate the expiration date of the bill.
+   * @param themeDesignation the theme designation of the bill.
+   * @param cc the citizen card number of the bill proposer.
+   * @throws ApplicationException if there is an exception during the bill proposal process.
    */
   public void proposeBill(
       String title,
       String description,
-      byte[] pdf,
+      byte[] pdfData,
       LocalDate expirationDate,
       String themeDesignation,
       Integer cc)
       throws ApplicationException {
-    proposeBillHandler.proposeBill(title, description, pdf, expirationDate, themeDesignation, cc);
+    proposeBillHandler.proposeBill(
+        title, description, pdfData, expirationDate, themeDesignation, cc);
   }
 }
