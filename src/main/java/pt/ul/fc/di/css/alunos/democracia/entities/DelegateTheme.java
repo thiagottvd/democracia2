@@ -69,6 +69,6 @@ public class DelegateTheme {
   }
 
   public void removeCitizenRep(Citizen citizen) {
-    this.getVoters().remove(citizen);
+    this.voters.remove(citizen);
   }
 }

@@ -33,6 +33,11 @@ public class ChooseDelegateHandler {
     this.citizenCatalog = citizenCatalog;
   }
 
+  /**
+   * Fetches delegates from database
+   *
+   * @return list of DelegateDTOs
+   */
   public List<DelegateDTO> getDelegates() {
     List<Delegate> delegates = citizenCatalog.getDelegates();
     return delegates.stream()
@@ -40,6 +45,11 @@ public class ChooseDelegateHandler {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Fetches themes from database
+   *
+   * @return list of ThemeDTOs
+   */
   public List<ThemeDTO> getThemes() {
     List<Theme> themes = themeCatalog.getThemes();
     return themes.stream()
@@ -47,6 +57,15 @@ public class ChooseDelegateHandler {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Chooses delegate for a citizen in a certain theme using the DelegateTheme class. -> removes old
+   * delegate representation if new choosen delegate is choosen in the same theme as the old one to
+   * avoid multiple representation in the same field a.k.a multiple votes for 1 individual
+   *
+   * @param delegateCc Delegate identification
+   * @param themeDesignation Theme identification
+   * @param voterCc Citizen who is choosing DelegateTheme identification
+   */
   public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
       throws ApplicationException {
 
@@ -66,6 +85,9 @@ public class ChooseDelegateHandler {
 
     List<DelegateTheme> dt_list = dtCatalog.getAll();
 
+    // Removes old delegates that have the same theme as the one choosen;
+    removeOldDelegateTheme(t, c.get());
+
     boolean exists = false;
     for (int i = 0; i < dt_list.size() && !exists; i++) {
       DelegateTheme dt = dt_list.get(i);
@@ -80,6 +102,20 @@ public class ChooseDelegateHandler {
       dt.addVoter(c.get());
       c.get().addDelegateTheme(dt);
       dtCatalog.addDT(dt);
+    }
+  }
+
+  /*
+   *
+   * Removes citizen from dt.voters list and dt from citizen.delegateThemes list
+   */
+  private void removeOldDelegateTheme(Theme t, Citizen citizen) {
+    List<DelegateTheme> dt_list = citizen.getDelegateThemes();
+    for (DelegateTheme dt : dt_list) {
+      if (dt.checkTheme(t)) {
+        citizen.removeDelegateTheme(dt);
+        dt.removeCitizenRep(citizen);
+      }
     }
   }
 }
