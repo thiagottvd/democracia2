@@ -11,15 +11,22 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.ChooseDelegateHandler;
 /**
  * Use case F.
  *
- * <p>Service class that retrieves a list of delegates selects a delegate and a list of themes, and
- * it also selects a delegate for a given theme by a citizen (voter). It calls the appropriate
- * {@link ChooseDelegateHandler} to handle those operations.
+ * <p>Service class that retrieves a list of delegates, a list of themes, and it also selects a
+ * delegate for a given theme by a citizen (voter). It calls the appropriate {@link
+ * ChooseDelegateHandler} to handle those operations.
  */
 @Service
 public class ChooseDelegateService {
 
   private final ChooseDelegateHandler chooseDelegateHandler;
 
+  /**
+   * Constructor for the ChooseDelegateService class. It takes a ChooseDelegateHandler object as
+   * parameter and sets it as an attribute.
+   *
+   * @param chooseDelegateHandler the handler responsible for retrieving a list of delegates and a
+   *     list of themes, and it also selects a delegate for a given theme by a citizen (voter).
+   */
   @Autowired
   public ChooseDelegateService(ChooseDelegateHandler chooseDelegateHandler) {
     this.chooseDelegateHandler = chooseDelegateHandler;

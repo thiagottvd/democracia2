@@ -1,10 +1,10 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,14 @@ public class ChooseDelegateUseCaseTest {
 
   private ChooseDelegateService chooseDelegateService;
 
+  /**
+   * Initializes the ChooseDelegateService with the necessary dependencies. The method creates
+   * instances of CitizenCatalog, ThemeCatalog and DelegateThemeCatalog classes using the specified
+   * citizenRepository, themeRepository, and dtRepository respectively. Then, it creates a
+   * ChooseDelegateHandler instance using the created instances of ThemeCatalog,
+   * DelegateThemeCatalog, and CitizenCatalog classes. Finally, it initializes the
+   * ChooseDelegateService using the ChooseDelegateHandler instance.
+   */
   @BeforeEach
   public void init() {
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
@@ -48,6 +56,7 @@ public class ChooseDelegateUseCaseTest {
     chooseDelegateService = new ChooseDelegateService(chooseDelegateHandler);
   }
 
+  /** Tests getDelegates method. */
   @Test
   public void getDelegatesTest() {
 
@@ -73,6 +82,11 @@ public class ChooseDelegateUseCaseTest {
     }
   }
 
+  /**
+   * Test equals method from Citizen and DelegateTheme classes.
+   *
+   * @throws ApplicationException if an error occurs while testing.
+   */
   @Test
   public void equalsTest() throws ApplicationException {
     Citizen c1 = new Citizen("Sara", 1);
@@ -98,15 +112,21 @@ public class ChooseDelegateUseCaseTest {
     List<DelegateTheme> dt_list = dtRepository.getAllDTs();
     assertEquals(2, dt_list.size());
 
-    Optional<Citizen> c = citizenRepository.findByCc(1);
-    DelegateTheme dt = c.get().getDelegateThemes().get(0);
+    Citizen c = citizenRepository.findByCc(1).orElse(null);
+    assertNotNull(c);
+    DelegateTheme dt = c.getDelegateThemes().get(0);
 
     // Testing equals method
-    assertEquals(c1, c.get());
+    assertEquals(c1, c);
     assertEquals(dt_list.get(0), dt);
     assertEquals(dt_list.get(0), dtRepository.getDT(dt_list.get(0).getId()));
   }
 
+  /**
+   * Tests chooseDelegate method.
+   *
+   * @throws ApplicationException if an error occurs while testing the method.
+   */
   @Test
   public void chooseDelegateTest() throws ApplicationException {
     Citizen c1 = new Citizen("Sara", 1);

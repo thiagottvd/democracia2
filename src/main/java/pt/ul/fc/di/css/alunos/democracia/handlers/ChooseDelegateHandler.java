@@ -21,8 +21,8 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 /**
  * Use case I.
  *
- * <p>Handler that retrieves a list of delegates selects a delegate and a list of themes, and It
- * also selects a delegate for a given theme by a citizen (voter).
+ * <p>Handler that retrieves a list of delegates, a list of themes, and it also selects a delegate
+ * for a given theme by a citizen (voter).
  */
 @Component
 public class ChooseDelegateHandler {
