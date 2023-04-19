@@ -201,7 +201,7 @@ public class Poll {
   /**
    * Checks if a given citizen has already voted in this poll.
    *
-   * @param citizen the citizen to check if has already voted.
+   * @param citizen the citizen to check.
    * @return true if the citizen has already voted, false otherwise.
    */
   private boolean hasVoted(Citizen citizen) {
