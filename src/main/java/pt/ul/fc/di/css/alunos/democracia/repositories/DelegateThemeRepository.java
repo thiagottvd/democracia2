@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.repositories;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 
@@ -20,4 +21,7 @@ public interface DelegateThemeRepository extends JpaRepository<DelegateTheme, Lo
    */
   @Query("SELECT dt FROM DelegateTheme dt")
   List<DelegateTheme> getAllDTs();
+
+  @Query("SELECT dt FROM DelegateTheme dt WHERE dt.id = :id")
+  DelegateTheme getDT(@Param("id") Long id);
 }

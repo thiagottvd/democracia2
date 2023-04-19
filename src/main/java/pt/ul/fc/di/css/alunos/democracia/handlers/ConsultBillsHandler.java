@@ -11,6 +11,11 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
 
+/**
+ * Use case G.
+ *
+ * <p>Handler that returns bill details.
+ */
 @Component
 public class ConsultBillsHandler {
 

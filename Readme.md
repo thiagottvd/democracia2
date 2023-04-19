@@ -10,19 +10,16 @@
  * Use Case D: Implementado; Totalmente documentado; Testes Implementados.
  * Use Case E: Implementado; Totalmente documentado; Testes Implementados.
  * Use Case F: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case G: Implementado; testes parcialmente implementados.
- * Use Case H: Implementado; testes implementados.
- * Use Case I: Implementado; testes parciais.
- * Use Case J: Implementado; sem testes.
- * Use Case K: Implementado; VERIFICAR LÓGICA; POSSÍVEIS BUGS; testes parciais.
+ * Use Case G: Implementado; Totalmente documentado; testes parcialmente implementados.
+ * Use Case H: Implementado; Totalmente documentado; Testes Implementados..
+ * Use Case I: Implementado; Totalmente documentado; Testes Implementados..
+ * Use Case J: Implementado; Totalmente documentado; sem testes.
+ * Use Case K: Implementado; Totalmente documentado; POSSÍVEIS BUGS; testes parciais.
 
  ## TODO
 
- * Documentar por completo os use cases: G, H, I, J e K.
- * **[CRÍTICO]** Implementar testes (completos) para os use cases: G, H, I, J e K.
- * Finalizar os desenhos (IDs, SSDs, etc) e colocar as imagens nos docs.
+ * **[CRÍTICO]** Implementar testes (completos) para os use cases: G, J e K.
  * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Fazer relatório.
  * **[CRÍTICO]** Fazer um script test.sh que corra os testes dentro de um container docker e testa-los na base de dados Postgres.
  * **[CRÍTICO]** Entregar projeto.
 

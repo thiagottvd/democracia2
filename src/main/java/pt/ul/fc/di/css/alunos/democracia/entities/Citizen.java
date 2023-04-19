@@ -5,6 +5,7 @@ import static jakarta.persistence.InheritanceType.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.lang.NonNull;
@@ -76,5 +77,19 @@ public class Citizen {
   @NonNull
   public Integer getCc() {
     return cc;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Citizen citizen = (Citizen) o;
+    return Objects.equals(id, citizen.id)
+        && Objects.equals(cc, citizen.cc)
+        && Objects.equals(name, citizen.name);
+  }
+
+  public void removeDelegateTheme(DelegateTheme dt) {
+    this.delegateThemes.remove(dt);
   }
 }

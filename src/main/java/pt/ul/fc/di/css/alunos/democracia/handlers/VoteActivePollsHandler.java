@@ -14,6 +14,11 @@ import pt.ul.fc.di.css.alunos.democracia.entities.*;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 
+/**
+ * Use case J.
+ *
+ * <p>Handler that handles votes.
+ */
 @Component
 public class VoteActivePollsHandler {
   private final PollCatalog pollCatalog;
