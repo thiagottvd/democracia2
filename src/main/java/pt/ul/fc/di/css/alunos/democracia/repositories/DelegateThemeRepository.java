@@ -22,6 +22,15 @@ public interface DelegateThemeRepository extends JpaRepository<DelegateTheme, Lo
   @Query("SELECT dt FROM DelegateTheme dt")
   List<DelegateTheme> getAllDTs();
 
+  /**
+   * Retrieves a DelegateTheme object from the database using its ID.
+   *
+   * <p>This method is intended to be used only for JUnit testing purposes and should not be used in
+   * production code.
+   *
+   * @param id The ID of the DelegateTheme object to retrieve.
+   * @return The DelegateTheme object with the specified ID.
+   */
   @Query("SELECT dt FROM DelegateTheme dt WHERE dt.id = :id")
   DelegateTheme getDT(@Param("id") Long id);
 }

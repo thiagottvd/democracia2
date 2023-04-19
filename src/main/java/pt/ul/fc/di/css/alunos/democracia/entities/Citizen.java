@@ -32,7 +32,7 @@ public class Citizen {
     // Empty constructor required by JPA.
   }
 
-  public Citizen(@NonNull String name, Integer cc) {
+  public Citizen(@NonNull String name, @NonNull Integer cc) {
     this.name = name;
     this.cc = cc;
   }

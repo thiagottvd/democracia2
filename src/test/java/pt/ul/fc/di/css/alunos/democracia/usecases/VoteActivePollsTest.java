@@ -1,7 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -31,7 +30,6 @@ public class VoteActivePollsTest {
 
   @BeforeEach
   public void init() {
-    MockitoAnnotations.openMocks(this);
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
     ThemeCatalog themeCatalog = new ThemeCatalog(themeRepository);
     DelegateThemeCatalog dtCatalog = new DelegateThemeCatalog(dtRepository);

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -28,7 +27,6 @@ public class ClosePollsUseCaseTest {
 
   @BeforeEach
   public void init() {
-    MockitoAnnotations.openMocks(this);
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
     PollCatalog pollCatalog = new PollCatalog(pollRepository);
     closePollsHandler = new ClosePollsHandler(pollCatalog, citizenCatalog);

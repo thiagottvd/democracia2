@@ -7,11 +7,24 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ConsultBillsHandler;
 
+/**
+ * Use case G.
+ *
+ * <p>Service class that that retrieves a list of all open bills and retrieves the details of a
+ * specific bill calling the appropriate handler {@link ConsultBillsHandler}.
+ */
 @Service
 public class ConsultBillsService {
 
   private final ConsultBillsHandler consultBillsHandler;
 
+  /**
+   * Constructor for the ConsultBillsService class. It takes a ConsultBillsHandler object as
+   * parameter and sets it as an attribute.
+   *
+   * @param consultBIllsHandler the handler responsible for retrieving a list of all open bills and
+   *     retrieving the details of a specific bill.
+   */
   @Autowired
   public ConsultBillsService(ConsultBillsHandler consultBIllsHandler) {
     this.consultBillsHandler = consultBIllsHandler;

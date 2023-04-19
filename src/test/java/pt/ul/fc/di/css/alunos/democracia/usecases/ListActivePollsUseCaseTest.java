@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -24,7 +23,7 @@ import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 
 /**
  * This class contains the test cases for the use case D. The class tests the system behaviour when
- * retrieving active polls and verifies the output type. It uses Mockito and JUnit 5.
+ * retrieving active polls and verifies the output type. It uses JUnit 5.
  */
 @DataJpaTest
 public class ListActivePollsUseCaseTest {
@@ -38,7 +37,6 @@ public class ListActivePollsUseCaseTest {
   /** Initializes the objects needed for each test case. */
   @BeforeEach
   public void init() {
-    MockitoAnnotations.openMocks(this);
     pollCatalog = new PollCatalog(pollRepository);
     listActivePollsHandler = new ListActivePollsHandler(pollCatalog);
     listActivePollsService = new ListActivePollsService(listActivePollsHandler);
@@ -57,7 +55,7 @@ public class ListActivePollsUseCaseTest {
     Poll p = new Poll(b);
     entityManager.persist(p);
 
-    // Getting the active polls list
+    // Getting the active polls list (only one persisted)
     List<PollDTO> activePolls = listActivePollsService.getActivePolls();
 
     // Verifying that the list is not empty

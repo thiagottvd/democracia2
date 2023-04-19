@@ -21,7 +21,8 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 /**
  * Use case I.
  *
- * <p>Handler that chooses a delegate for a citizen in a theme.
+ * <p>Handler that retrieves a list of delegates selects a delegate and a list of themes, and It
+ * also selects a delegate for a given theme by a citizen (voter).
  */
 @Component
 public class ChooseDelegateHandler {
@@ -30,6 +31,13 @@ public class ChooseDelegateHandler {
   private final DelegateThemeCatalog dtCatalog;
   private final CitizenCatalog citizenCatalog;
 
+  /**
+   * Constructs a new instance of the ChooseDelegateHandler class with the specified dependencies.
+   *
+   * @param themeCatalog the to use for retrieving themes.
+   * @param dtCatalog the to use for retrieving delegate themes.
+   * @param citizenCatalog the to use for retrieving citizens.
+   */
   @Autowired
   public ChooseDelegateHandler(
       ThemeCatalog themeCatalog, DelegateThemeCatalog dtCatalog, CitizenCatalog citizenCatalog) {
@@ -39,9 +47,9 @@ public class ChooseDelegateHandler {
   }
 
   /**
-   * Fetches delegates from database
+   * Fetches delegates from database.
    *
-   * @return list of DelegateDTOs
+   * @return a list of DelegateDTOs.
    */
   public List<DelegateDTO> getDelegates() {
     List<Delegate> delegates = citizenCatalog.getDelegates();
@@ -51,9 +59,9 @@ public class ChooseDelegateHandler {
   }
 
   /**
-   * Fetches themes from database
+   * Fetches themes from database.
    *
-   * @return list of ThemeDTOs
+   * @return a list of ThemeDTOs.
    */
   public List<ThemeDTO> getThemes() {
     List<Theme> themes = themeCatalog.getThemes();
@@ -63,13 +71,17 @@ public class ChooseDelegateHandler {
   }
 
   /**
-   * Chooses delegate for a citizen in a certain theme using the DelegateTheme class. -> removes old
-   * delegate representation if new choosen delegate is choosen in the same theme as the old one to
-   * avoid multiple representation in the same field a.k.a multiple votes for 1 individual
+   * Selects a delegate for a given theme by a citizen (voter). If a delegate has already been
+   * chosen for the theme, the voter's vote is added to the existing delegate theme, to avoid
+   * multiple representation in the same field, i.e., multiple votes for one individual. If no
+   * delegate has been chosen for the theme, a new delegate theme is created and added to {@code
+   * DelegateThemeCatalog} which is a catalog for storing DelegateTheme objects.
    *
-   * @param delegateCc Delegate identification
-   * @param themeDesignation Theme identification
-   * @param voterCc Citizen who is choosing DelegateTheme identification
+   * @param delegateCc Delegate identification.
+   * @param themeDesignation Theme identification.
+   * @param voterCc Citizen who is choosing DelegateTheme identification.
+   * @throws CitizenNotFoundException if the delegate or voter are not found in the catalog.
+   * @throws ThemeNotFoundException if the specified theme is not found in the catalog.
    */
   public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
       throws ApplicationException {
@@ -85,12 +97,12 @@ public class ChooseDelegateHandler {
     }
     Optional<Citizen> c = citizenCatalog.getCitizenByCc(voterCc);
     if (c.isEmpty()) {
-      throw new CitizenNotFoundException("Citizen with cc" + c.get().getCc() + " not found.");
+      throw new CitizenNotFoundException("Citizen with cc" + voterCc + " not found.");
     }
 
     List<DelegateTheme> dt_list = dtCatalog.getAll();
 
-    // Removes old delegates that have the same theme as the one choosen;
+    // Removes old delegates that have the same theme as the one chosen;
     removeOldDelegateTheme(t, c.get());
 
     boolean exists = false;
@@ -111,12 +123,13 @@ public class ChooseDelegateHandler {
   }
 
   /**
-   * Method that finds if there is a current delegate(DelegateTheme) representing the citizen in the
-   * given theme. Removes citizen from dt.voters list and dt from citizen.delegateThemes list if it
-   * finds.
+   * Removes the delegate theme (i.e., the representation of a citizen by a delegate in a particular
+   * theme) for the given citizen in the specified theme, if it exists. This method removes the
+   * citizen from the voters list of the delegate theme, and removes the delegate theme from the
+   * delegate themes list of the citizen.
    *
-   * @param citizen Citizen that is replacing delegate
-   * @param t Theme in which delegate is going to be replaced
+   * @param citizen The citizen for whom the delegate theme needs to be removed.
+   * @param t The theme for which the delegate theme needs to be removed.
    */
   private void removeOldDelegateTheme(Theme t, Citizen citizen) {
     List<DelegateTheme> dt_list = citizen.getDelegateThemes();

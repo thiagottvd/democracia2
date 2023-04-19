@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -41,7 +40,6 @@ public class ChooseDelegateUseCaseTest {
 
   @BeforeEach
   public void init() {
-    MockitoAnnotations.openMocks(this);
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
     ThemeCatalog themeCatalog = new ThemeCatalog(themeRepository);
     DelegateThemeCatalog dtCatalog = new DelegateThemeCatalog(dtRepository);

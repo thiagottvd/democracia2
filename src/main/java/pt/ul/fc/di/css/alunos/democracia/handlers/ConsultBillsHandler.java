@@ -14,13 +14,18 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
 /**
  * Use case G.
  *
- * <p>Handler that returns bill details.
+ * <p>Handler that retrieves a list of all open bills and retrieves the details of a specific bill.
  */
 @Component
 public class ConsultBillsHandler {
 
   private final BillCatalog billCatalog;
 
+  /**
+   * Constructs a ConsultBillsHandler instance with a BillCatalog.
+   *
+   * @param billCatalog the catalog of bills.
+   */
   @Autowired
   public ConsultBillsHandler(BillCatalog billCatalog) {
     this.billCatalog = billCatalog;

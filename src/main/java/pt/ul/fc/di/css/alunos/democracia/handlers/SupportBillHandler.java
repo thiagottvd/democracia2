@@ -98,8 +98,10 @@ public class SupportBillHandler {
   }
 
   /**
-   * Sets the value of the {@code CREATION_POLL_TRIGGER_VALUE} constant. {@warning} This method is
-   * intended to be used only for JUnit testing purposes and should not be used in production code.
+   * Sets the value of the {@code CREATION_POLL_TRIGGER_VALUE} constant.
+   *
+   * <p>This method is intended to be used only for JUnit testing purposes and should not be used in
+   * production code.
    *
    * @param newValue the new value of the {@code CREATION_POLL_TRIGGER_VALUE} constant to be set.
    */

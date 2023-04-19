@@ -7,7 +7,6 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -42,8 +41,6 @@ public class SupportBillUseCaseTest {
 
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
-
     pollCatalog = new PollCatalog(pollRepository);
     billCatalog = new BillCatalog(billRepository);
     citizenCatalog = new CitizenCatalog(citizenRepository);
