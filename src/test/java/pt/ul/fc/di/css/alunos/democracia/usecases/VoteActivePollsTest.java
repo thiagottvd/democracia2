@@ -22,6 +22,7 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
 
+/** VoteActivePollsTest is a test class for the VoteActivePollsService class. */
 @DataJpaTest
 public class VoteActivePollsTest {
 
@@ -31,6 +32,13 @@ public class VoteActivePollsTest {
   private PollCatalog pollCatalog;
   private VoteActivePollsService voteActivePollsService;
 
+  /**
+   * Initializes the VoteActivePollsService instance by creating and configuring the necessary
+   * objects, such as CitizenCatalog, PollCatalog, VoteActivePollsHandler, and
+   * VoteActivePollsService. This method is annotated with @BeforeEach, indicating that it will be
+   * executed before each test method is invoked. By doing so, it ensures that the
+   * VoteActivePollsService instance is properly initialized before each test.
+   */
   @BeforeEach
   public void init() {
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
@@ -122,6 +130,7 @@ public class VoteActivePollsTest {
     }
   }
 
+  /** Tests vote method validation. */
   @Test
   public void testVoteValidation() {
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), new Delegate("d", 2), null);
@@ -148,6 +157,7 @@ public class VoteActivePollsTest {
                 p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.NEGATIVE));
   }
 
+  /** Tests checkDelegateVote method validation. */
   @Test
   public void testCheckDelegateVoteValidation() {
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), new Delegate("d", 2), null);
@@ -170,6 +180,10 @@ public class VoteActivePollsTest {
                 p.getAssociatedBill().getTitle(), voter.getCc()));
   }
 
+  /**
+   * Unit test for ensuring that a CitizenAlreadyVotedException is thrown when a citizen or delegate
+   * tries to vote more than once on the same poll.
+   */
   @Test
   public void testVoteMoreThanOnce() throws ApplicationException {
     Delegate d = new Delegate("d", 99);
@@ -181,12 +195,18 @@ public class VoteActivePollsTest {
     Citizen voter = new Citizen("c", 1);
     entityManager.persist(voter);
 
+    // citizen first vote
     voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.NEGATIVE);
+
+    // assert that a CitizenAlreadyVotedException is thrown when the citizen tries to vote again
     assertThrows(
         CitizenAlreadyVotedException.class,
         () ->
             voteActivePollsService.vote(
                 p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.POSITIVE));
+
+    /* assert that a CitizenAlreadyVotedException is thrown when the delegate tries to
+    vote again (he has a POSITIVE vote by default) */
     assertThrows(
         CitizenAlreadyVotedException.class,
         () ->
@@ -194,8 +214,13 @@ public class VoteActivePollsTest {
                 p.getAssociatedBill().getTitle(), d.getCc(), VoteType.NEGATIVE));
   }
 
+  /**
+   * Tests that a citizen and a delegate can vote on a poll, and that the poll correctly counts the
+   * votes.
+   */
   @Test
   public void testVote() throws ApplicationException {
+    // Set up needed data
     Delegate d = new Delegate("d", 99);
     entityManager.persist(d);
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d, null);
@@ -203,30 +228,36 @@ public class VoteActivePollsTest {
     Poll p = new Poll(b);
     entityManager.persist(p);
 
+    /* Test that the poll starts with no negative votes, one positive vote from the delegate, and
+    the delegate is recorded as a public voter */
     assertEquals(0, p.getNumNegativeVotes());
     assertEquals(1, p.getNumPositiveVotes());
     assertTrue(p.getPublicVoters().containsKey(d));
 
     List<Citizen> voters = new ArrayList<>();
 
+    // Cast votes from six citizens, alternating between positive and negative votes
     for (int i = 0; i < 6; i++) {
       Citizen voter = new Citizen(String.valueOf(i), i);
       voters.add(voter);
-      VoteType vt = VoteType.POSITIVE;
+      VoteType voteType = VoteType.POSITIVE;
       entityManager.persist(voter);
 
       if (i % 2 == 0) {
-        vt = VoteType.NEGATIVE;
+        voteType = VoteType.NEGATIVE;
       }
 
-      voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), vt);
+      // call method under test
+      voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), voteType);
     }
 
+    // Test that the poll now has three negative votes and four positive votes (as expected)
     assertEquals(3, p.getNumNegativeVotes());
     assertEquals(4, p.getNumPositiveVotes());
 
     assertTrue(p.getPublicVoters().containsKey(d));
 
+    // Test that all six voters are recorded as private voters
     for (int i = 0; i < 6; i++) {
       assertEquals(p.getPrivateVoters().get(i), voters.get(i));
     }
@@ -234,11 +265,15 @@ public class VoteActivePollsTest {
     Delegate d2 = new Delegate("d2", 100);
     entityManager.persist(d2);
 
+    // check if delegate can also vote
     voteActivePollsService.vote(p.getAssociatedBill().getTitle(), d2.getCc(), VoteType.NEGATIVE);
     assertTrue(p.getPublicVoters().containsKey(d2));
     assertEquals(4, p.getNumNegativeVotes());
   }
 
+  /**
+   * Test case for finding the delegate for a specific theme and checking the vote of a delegate.
+   */
   @Test
   public void testFindDelegateForTheme() throws ApplicationException {
     // Create and persist needed data
@@ -266,14 +301,17 @@ public class VoteActivePollsTest {
     Poll p = new Poll(b);
     entityManager.persist(p);
 
+    // Set delegate theme for voter and make delegate vote on poll
     voter.addDelegateTheme(dt);
     voteActivePollsService.vote(
         p.getAssociatedBill().getTitle(), delegate.getCc(), VoteType.NEGATIVE);
 
+    // Check that delegate's vote was properly registered
     VoteType actualVoteType =
         voteActivePollsService.checkDelegateVote(p.getAssociatedBill().getTitle(), voter.getCc());
-
     assertEquals(VoteType.NEGATIVE, actualVoteType);
+
+    // Check that a citizen with no delegates returns null when checking vote
     assertNull(
         voteActivePollsService.checkDelegateVote(
             p.getAssociatedBill().getTitle(), voterWithNoDelegates.getCc()));
