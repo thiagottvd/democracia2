@@ -30,24 +30,24 @@ public class VoteActivePollsService {
   /**
    * Checks a Delegate vote.
    *
-   * @param pollDTO The pollDTO with the title to search for the actual Poll.
+   * @param pollTitle The poll title to search for the actual Poll.
    * @param voterCc The Citizen cc.
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(PollDTO pollDTO, Integer voterCc) throws ApplicationException {
-    return voteActivePollsHandler.checkDelegateVote(pollDTO, voterCc);
+  public VoteType checkDelegateVote(String pollTitle, Integer voterCc) throws ApplicationException {
+    return voteActivePollsHandler.checkDelegateVote(pollTitle, voterCc);
   }
 
   /**
    * Vote on a Poll using the Citizen cc and VoteType.
    *
-   * @param pollDTO The pollDTO with the title to search for the actual Poll.
+   * @param pollTitle The title to search for the actual Poll.
    * @param voterCc The Citizen cc.
    * @param option The VoteType of the Citizen.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public void vote(PollDTO pollDTO, Integer voterCc, VoteType option) throws ApplicationException {
-    voteActivePollsHandler.vote(pollDTO, voterCc, option);
+  public void vote(String pollTitle, Integer voterCc, VoteType option) throws ApplicationException {
+    voteActivePollsHandler.vote(pollTitle, voterCc, option);
   }
 }

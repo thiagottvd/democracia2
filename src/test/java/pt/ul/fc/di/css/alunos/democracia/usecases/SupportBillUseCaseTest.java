@@ -106,7 +106,7 @@ public class SupportBillUseCaseTest {
    * @throws ApplicationException if there is an error in the application
    */
   @Test
-  public void testSupportBillMoreThanOneVote() throws ApplicationException {
+  public void testSupportBillMoreThanOnce() throws ApplicationException {
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     Citizen c = new Citizen("Thiago", 123);
     billRepository.save(b);

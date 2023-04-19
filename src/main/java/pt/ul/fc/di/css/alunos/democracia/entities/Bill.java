@@ -28,7 +28,7 @@ public class Bill {
 
   @OneToMany
   @Cascade(CascadeType.ALL)
-  private List<Citizen> supporters = new ArrayList<>();
+  private final List<Citizen> supporters = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private LocalDate expirationDate;

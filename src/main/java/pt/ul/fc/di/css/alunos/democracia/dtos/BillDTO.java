@@ -6,7 +6,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 /** A Data Transfer Object (DTO) representing a bill. */
 public class BillDTO {
 
-  private Long id;
+  private final Long id;
   private final String title;
   private String description;
   private int numSupporters;

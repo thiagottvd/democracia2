@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadyVotedException;
 
 @Entity
 public class Poll {
@@ -33,7 +34,8 @@ public class Poll {
   @Enumerated(
       EnumType
           .STRING) // Indicates that the VoteType enum should be stored as a string in the database.
-  private Map<Delegate, VoteType> publicVoters = new HashMap<>();
+  @Cascade(CascadeType.ALL)
+  private final Map<Delegate, VoteType> publicVoters = new HashMap<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @NonNull
@@ -42,7 +44,7 @@ public class Poll {
   @Enumerated(EnumType.STRING)
   private PollStatus status;
 
-  @OneToMany private List<Citizen> privateVoters = new ArrayList<>();
+  @OneToMany private final List<Citizen> privateVoters = new ArrayList<>();
 
   @OneToOne(mappedBy = "associatedPoll")
   @Cascade(CascadeType.ALL)
@@ -58,14 +60,11 @@ public class Poll {
     this.closingDate = associatedBill.getExpirationDate();
     this.status = PollStatus.ACTIVE;
     addPublicVoter(this.associatedBill.getDelegate(), VoteType.POSITIVE);
+    associatedBill.setPoll(this);
   }
 
   public Long getId() {
     return id;
-  }
-
-  public Bill getBill() {
-    return associatedBill;
   }
 
   public List<Citizen> getPrivateVoters() {
@@ -101,25 +100,40 @@ public class Poll {
     this.status = status;
   }
 
-  public void addPrivateVoter(Citizen citizen, VoteType voteType) {
+  public void addVoter(Citizen citizen, VoteType option) throws CitizenAlreadyVotedException {
+    if (hasVoted(citizen)) {
+      throw new CitizenAlreadyVotedException(
+          "Citizen with cc " + citizen.getCc() + " has already voted in this poll.");
+    }
+    if (citizen.getClass() == Delegate.class) {
+      addPublicVoter((Delegate) citizen, option);
+    } else {
+      addPrivateVoter(citizen, option);
+    }
+  }
 
+  // TODO javadoc. OBS: adicionar no javadoc que o metodo e publico pois eh utilizado em testes.
+  public void addPrivateVoter(Citizen citizen, VoteType voteType) {
     if (voteType == VoteType.POSITIVE) {
       incPositiveVotes();
     } else {
       incNegativeVotes();
     }
-
     privateVoters.add(citizen);
   }
 
+  // TODO javadoc. OBS: adicionar no javadoc que o metodo e publico pois eh utilizado em testes.
   public void addPublicVoter(Delegate delegate, VoteType voteType) {
-
     if (voteType == VoteType.POSITIVE) {
       incPositiveVotes();
     } else {
       incNegativeVotes();
     }
     publicVoters.put(delegate, voteType);
+  }
+
+  private boolean hasVoted(Citizen citizen) {
+    return privateVoters.contains(citizen) || publicVoters.containsKey(citizen);
   }
 
   public VoteType getPublicVote(Delegate delegate) {

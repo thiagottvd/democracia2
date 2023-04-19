@@ -45,7 +45,7 @@ public class ClosePollsUseCaseTest {
     Theme medicos = em.persist(new Theme("medicos", profissionalSaude));
     Theme hospital = em.persist(new Theme("hospital", saude));
     Theme remedios = em.persist(new Theme("remedios", hospital));
-    Theme macas = em.persist(new Theme("macas", hospital));
+    em.persist(new Theme("macas", hospital));
 
     // Creating a poll with a bill as the subject
     Poll poll =
@@ -63,7 +63,7 @@ public class ClosePollsUseCaseTest {
     // Creating citizens who did not vote
     Citizen c3 = em.persist(new Citizen("c3", 57));
     Citizen c4 = em.persist(new Citizen("c4", 58));
-    Citizen c5 = em.persist(new Citizen("c5", 59));
+    em.persist(new Citizen("c5", 59));
 
     // Adding public voters and their votes to the poll
     poll.addPublicVoter(deleg1, VoteType.NEGATIVE);

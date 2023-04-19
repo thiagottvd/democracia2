@@ -96,7 +96,6 @@ public class ListActivePollsUseCaseTest {
       Bill b = new Bill(String.valueOf(i + 1), String.valueOf(i), null, LocalDate.now(), d, t);
       entityManager.persist(b);
       Poll p = new Poll(b);
-      b.setPoll(p);
       entityManager.persist(p);
 
       // Alternate between setting the Poll status to APPROVED and REJECTED. It does it 25 times.

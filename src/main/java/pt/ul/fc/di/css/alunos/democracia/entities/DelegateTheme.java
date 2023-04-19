@@ -35,7 +35,6 @@ public class DelegateTheme {
   }
 
   public void addVoter(Citizen citizen) {
-
     voters.add(citizen);
   }
 

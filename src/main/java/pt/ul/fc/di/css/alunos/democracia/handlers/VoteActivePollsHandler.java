@@ -13,6 +13,8 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidVoteTypeException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.PollNotFoundException;
 
 /**
  * Use case J.
@@ -44,81 +46,91 @@ public class VoteActivePollsHandler {
   public List<PollDTO> getActivePolls() {
     List<Poll> activePolls = pollCatalog.getPollsByStatusType(PollStatus.ACTIVE);
     return activePolls.stream()
-        .map(poll -> new PollDTO(poll.getBill().getTitle()))
+        .map(poll -> new PollDTO(poll.getAssociatedBill().getTitle()))
         .collect(Collectors.toList());
   }
 
   /**
    * Checks a Delegate vote.
    *
-   * @param pollDTO The pollDTO with the title to search for the actual Poll.
+   * @param pollTitle The title to search for the actual Poll.
    * @param voterCc The Citizen cc.
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(PollDTO pollDTO, Integer voterCc) throws ApplicationException {
-    Citizen citizen = validateCitizen(voterCc).get();
-    Poll poll = validatePoll(pollDTO);
+  public VoteType checkDelegateVote(String pollTitle, Integer voterCc) throws ApplicationException {
+    Citizen citizen = validateCitizen(voterCc);
+    Poll poll = validatePoll(pollTitle);
     Theme theme = poll.getAssociatedBill().getTheme();
     List<DelegateTheme> delegateThemesList = citizen.getDelegateThemes();
-    Delegate delegate = null;
-    boolean hasFoundDelegate = false;
-    while (theme != null && !hasFoundDelegate) {
+    Delegate delegate = findDelegateForTheme(theme, delegateThemesList);
+    return delegate != null ? poll.getPublicVote(delegate) : null;
+  }
+
+  /**
+   * Searches the list of delegate themes for the first delegate that can vote on the given theme.
+   *
+   * @param theme The theme to search for.
+   * @param delegateThemesList The list of delegate themes to search in.
+   * @return The first delegate that can vote on the theme, or null if no delegate is found.
+   */
+  private Delegate findDelegateForTheme(Theme theme, List<DelegateTheme> delegateThemesList) {
+    for (Theme currentTheme = theme;
+        currentTheme != null;
+        currentTheme = currentTheme.getParentTheme()) {
       for (DelegateTheme delegateTheme : delegateThemesList) {
-        if (delegateTheme.checkTheme(theme)) {
-          delegate = delegateTheme.getDelegate();
-          hasFoundDelegate = true;
-          break;
+        if (delegateTheme.checkTheme(currentTheme)) {
+          return delegateTheme.getDelegate();
         }
       }
-      theme = theme.getParentTheme();
     }
-    return delegate != null ? poll.getPublicVote(delegate) : null;
+    return null;
   }
 
   /**
    * Vote on a Poll using the Citizen cc and VoteType.
    *
-   * @param pollDTO The pollDTO with the title to search for the actual Poll.
+   * @param pollTitle The title to search for the actual Poll.
    * @param voterCc The Citizen cc.
    * @param option The VoteType of the Citizen.
-   * @throws ApplicationException If no Poll or Citizen are found.
+   * @throws ApplicationException If no Poll or Citizen are found or if the vote type is invalid.
    */
-  public void vote(PollDTO pollDTO, Integer voterCc, VoteType option) throws ApplicationException {
-    if (option == null) {
-      throw new ApplicationException("The vote type is invalid.");
+  public void vote(String pollTitle, Integer voterCc, VoteType option) throws ApplicationException {
+    if (option == null
+        || (!option.equals(VoteType.POSITIVE) && !option.equals(VoteType.NEGATIVE))) {
+      throw new InvalidVoteTypeException("The vote type is invalid.");
     }
-    Citizen citizen = validateCitizen(voterCc).get();
-    Poll poll = validatePoll(pollDTO);
-    poll.addPrivateVoter(citizen, option);
+    Citizen citizen = validateCitizen(voterCc);
+    Poll poll = validatePoll(pollTitle);
+    poll.addVoter(citizen, option);
   }
 
   /**
-   * Aux method to validate the Citizen.
+   * Aux method to validate if the Citizen exists, and if so returns the citizen.
    *
    * @param voterCc The given Citizen cc.
    * @return The Citizen if found.
-   * @throws CitizenNotFoundException If no Citizen is found.
+   * @throws CitizenNotFoundException If the citizen is not found.
    */
-  private Optional<Citizen> validateCitizen(Integer voterCc) throws CitizenNotFoundException {
+  private Citizen validateCitizen(Integer voterCc) throws CitizenNotFoundException {
     Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(voterCc);
     if (citizen.isEmpty()) {
       throw new CitizenNotFoundException("Citizen with id: " + voterCc + " not found.");
     }
-    return citizen;
+    return citizen.get();
   }
 
   /**
-   * Aux method to validate the Poll.
+   * Aux method to validate if the Poll exists, and if so returns the poll.
    *
-   * @param pollDTO The pollDTO with the title used to search the actual Poll.
+   * @param pollTitle The title used to search the actual Poll.
    * @return The Poll if found.
-   * @throws ApplicationException If no Poll is found.
+   * @throws PollNotFoundException If the poll is not found.
    */
-  private Poll validatePoll(PollDTO pollDTO) throws ApplicationException {
-    Poll poll = pollCatalog.getPollByTitle(pollDTO.getTitle());
+  private Poll validatePoll(String pollTitle) throws PollNotFoundException {
+    Poll poll = pollCatalog.getPollByTitle(pollTitle);
     if (poll == null) {
-      throw new ApplicationException("Poll with title: " + pollDTO.getTitle() + " not found.");
+      throw new PollNotFoundException("Poll with title: " + pollTitle + " not found.");
     }
     return poll;
   }

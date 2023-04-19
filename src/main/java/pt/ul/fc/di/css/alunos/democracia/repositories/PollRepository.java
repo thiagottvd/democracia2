@@ -23,17 +23,6 @@ public interface PollRepository extends JpaRepository<Poll, Long> {
   @Query("SELECT p FROM Poll p WHERE p.status = :statusType")
   List<Poll> findAllPolls(@Param("statusType") PollStatus statusType);
 
-  // TODO remover essa query?
-  //  /**
-  //   * Updates the status of polls that have passed their closing date.
-  //   *
-  //   * @param statusType the new status to be set for expired polls.
-  //   */
-  //  @Transactional
-  //  @Modifying(clearAutomatically = true)
-  //  @Query("UPDATE Poll p SET p.status = :statusType WHERE p.closingDate < CURRENT_DATE")
-  //  void closePolls(@Param("statusType") PollStatus statusType);
-
   /**
    * Retrieves a list of all expired polls.
    *

@@ -39,7 +39,7 @@ public class ListActivePollsHandler {
   public List<PollDTO> getActivePolls() {
     List<Poll> activePolls = pollCatalog.getPollsByStatusType(PollStatus.ACTIVE);
     return activePolls.stream()
-        .map(poll -> new PollDTO(poll.getBill().getTitle()))
+        .map(poll -> new PollDTO(poll.getAssociatedBill().getTitle()))
         .collect(Collectors.toList());
   }
 }

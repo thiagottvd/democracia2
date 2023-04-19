@@ -22,7 +22,7 @@ public class Citizen {
 
   @ManyToMany(mappedBy = "voters")
   @Cascade(CascadeType.ALL)
-  private List<DelegateTheme> delegateThemes = new ArrayList<>();
+  private final List<DelegateTheme> delegateThemes = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -59,6 +59,7 @@ public class Citizen {
       delegateThemes.add(dt);
     }
   }
+
   /**
    * Returns the citizen name.
    *
