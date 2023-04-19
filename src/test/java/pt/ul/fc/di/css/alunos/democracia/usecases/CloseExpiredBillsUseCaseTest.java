@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia;
+package pt.ul.fc.di.css.alunos.democracia.usecases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
