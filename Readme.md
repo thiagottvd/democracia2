@@ -20,7 +20,6 @@
 
  * **[CRÍTICO]** Implementar testes (completos) para o use case: K.
  * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Fazer um script test.sh que corra os testes dentro de um container docker e testa-los na base de dados Postgres.
  * **[CRÍTICO]** Entregar projeto.
 
 ## Dependências
