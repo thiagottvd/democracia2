@@ -33,22 +33,32 @@ public class SupportBillUseCaseTest {
   @Autowired private CitizenRepository citizenRepository;
   @Autowired private PollRepository pollRepository;
 
+  private SupportBillHandler supportBillHandler;
   private SupportBillService supportBillService;
 
+  /**
+   * Sets up the necessary dependencies for testing the SupportBillService class. Initializes a
+   * PollCatalog, BillCatalog, and CitizenCatalog with their corresponding repositories. Creates a
+   * new SupportBillHandler instance with the initialized catalogs and sets the creation poll
+   * trigger value to 5 for testing purposes. Finally, creates a new SupportBillService instance
+   * with the created SupportBillHandler.
+   */
   @BeforeEach
   public void setUp() {
     PollCatalog pollCatalog = new PollCatalog(pollRepository);
     BillCatalog billCatalog = new BillCatalog(billRepository);
     CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
 
-    SupportBillHandler supportBillHandler =
-        new SupportBillHandler(billCatalog, citizenCatalog, pollCatalog);
-    // Set the creation poll trigger value to 5 for testing purposes
-    supportBillHandler.setCreationPollTriggerValue(5);
+    supportBillHandler = new SupportBillHandler(billCatalog, citizenCatalog, pollCatalog);
 
     supportBillService = new SupportBillService(supportBillHandler);
   }
 
+  /**
+   * Test case to verify that attempting to support a non-existent bill should result in an
+   * ApplicationException being thrown. Also verifies that the specific exception thrown is a
+   * BillNotFoundException.
+   */
   @Test
   @DisplayName("Supporting a non-existent bill should throw exception")
   public void testSupportNonExistentBill() {
@@ -56,8 +66,14 @@ public class SupportBillUseCaseTest {
     assertThrows(BillNotFoundException.class, () -> supportBillService.supportBill(1L, 1));
   }
 
+  /**
+   * Tests that attempting to support a bill with a non-existent citizen should throw an exception.
+   *
+   * <p>This test creates a new bill and attempts to support it with a non-existent citizen ID. The
+   * test expects that an ApplicationException will be thrown, and that the cause of the exception
+   * will be a CitizenNotFoundException.
+   */
   @Test
-  @DisplayName("Supporting a bill with a non-existent citizen should throw exception")
   public void testSupportBillWithNonExistentCitizen() {
     Bill testBill = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     billRepository.save(testBill);
@@ -66,12 +82,13 @@ public class SupportBillUseCaseTest {
         ApplicationException.class, () -> supportBillService.supportBill(testBill.getId(), 1));
     assertThrows(
         CitizenNotFoundException.class, () -> supportBillService.supportBill(testBill.getId(), 1));
-
-    billRepository.delete(testBill);
   }
 
+  /**
+   * Tests the supportBill method of the SupportBillService class when supporting a bill with an
+   * existing citizen.
+   */
   @Test
-  @DisplayName("Supporting a bill with an existing citizen should succeed")
   public void testSupportBillWithExistingCitizen() {
     Bill testBill = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     billRepository.save(testBill);
@@ -80,11 +97,14 @@ public class SupportBillUseCaseTest {
     citizenRepository.save(testCitizen);
 
     assertDoesNotThrow(() -> supportBillService.supportBill(testBill.getId(), testCitizen.getCc()));
-
-    billRepository.delete(testBill);
-    citizenRepository.delete(testCitizen);
   }
 
+  /**
+   * Tests the behavior of the SupportBillService when trying to support a bill that has already
+   * been supported by the same citizen.
+   *
+   * @throws ApplicationException if there is an error in the application
+   */
   @Test
   public void testSupportBillMoreThanOneVote() throws ApplicationException {
     Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
@@ -110,6 +130,10 @@ public class SupportBillUseCaseTest {
     assertEquals(2, b.getNumSupporters());
   }
 
+  /**
+   * This method tests the functionality of the SupportBillService by verifying the correct update
+   * of the number of supporters for bills, when citizens decide to support them.
+   */
   @Test
   public void testSupportBill() throws ApplicationException {
     // Create bills and citizens to use in the test
@@ -162,8 +186,15 @@ public class SupportBillUseCaseTest {
     assertEquals(b3.getNumSupporters(), 2);
   }
 
+  /**
+   * This method tests the creation of a poll associated with a bill, after the bill reaches the
+   * required number of supporters.
+   */
   @Test
   public void testSupportBillPollCreation() throws ApplicationException {
+    // Set the creation poll trigger value to 5 for testing purposes
+    supportBillHandler.setCreationPollTriggerValue(5);
+
     // create a delegate and a theme for the bill
     Delegate d = new Delegate("a", 40);
     Theme t = new Theme("s", null);
