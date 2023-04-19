@@ -11,6 +11,7 @@ import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadyVotedException;
 
+/** Class that represents a poll. */
 @Entity
 public class Poll {
 
@@ -55,6 +56,11 @@ public class Poll {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Constructs a Poll object with the given Bill object.
+   *
+   * @param associatedBill the bill associated with this poll.
+   */
   public Poll(Bill associatedBill) {
     this.associatedBill = associatedBill;
     this.closingDate = associatedBill.getExpirationDate();
@@ -63,43 +69,89 @@ public class Poll {
     associatedBill.setPoll(this);
   }
 
+  /**
+   * Returns the ID of this poll.
+   *
+   * @return the ID of this poll.
+   */
   public Long getId() {
     return id;
   }
 
+  /**
+   * Returns the list of private voters in this poll.
+   *
+   * <p>This method is public for testing purposes.
+   *
+   * @return the list of private voters in this poll.
+   */
   public List<Citizen> getPrivateVoters() {
     return privateVoters;
   }
 
+  /**
+   * Returns the current status of the poll.
+   *
+   * @return the current status of the poll.
+   */
   public PollStatus getStatus() {
     return status;
   }
 
+  /**
+   * Returns the bill associated with this poll.
+   *
+   * @return the bill associated with this poll.
+   */
   @NonNull
   public Bill getAssociatedBill() {
     return associatedBill;
   }
 
+  /**
+   * Returns the number of negative votes in this poll.
+   *
+   * @return the number of negative votes in this poll.
+   */
   public int getNumNegativeVotes() {
     return numNegativeVotes;
   }
 
+  /**
+   * Returns the number of positive votes in this poll.
+   *
+   * @return the number of positive votes in this poll.
+   */
   public int getNumPositiveVotes() {
     return numPositiveVotes;
   }
 
+  /** Increases the number of positive votes in this poll by 1. */
   public void incPositiveVotes() {
     numPositiveVotes++;
   }
 
+  /** Increments the number of negative votes in the poll by 1. */
   public void incNegativeVotes() {
     numNegativeVotes++;
   }
 
+  /**
+   * Sets the status of the poll to the given status.
+   *
+   * @param status the new status of the poll
+   */
   public void setStatus(PollStatus status) {
     this.status = status;
   }
 
+  /**
+   * Adds a voter to the poll, either as a public or private voter, depending on the citizen's type.
+   *
+   * @param citizen the citizen who wants to vote.
+   * @param option the citizen's vote option.
+   * @throws CitizenAlreadyVotedException if the citizen has already voted in this poll.
+   */
   public void addVoter(Citizen citizen, VoteType option) throws CitizenAlreadyVotedException {
     if (hasVoted(citizen)) {
       throw new CitizenAlreadyVotedException(
@@ -112,7 +164,14 @@ public class Poll {
     }
   }
 
-  // TODO javadoc. OBS: adicionar no javadoc que o metodo e publico pois eh utilizado em testes.
+  /**
+   * Adds a private voter to the poll and increments the respective vote count.
+   *
+   * <p>This method is public for testing purposes.
+   *
+   * @param citizen the citizen who wants to vote privately.
+   * @param voteType the citizen's vote option.
+   */
   public void addPrivateVoter(Citizen citizen, VoteType voteType) {
     if (voteType == VoteType.POSITIVE) {
       incPositiveVotes();
@@ -122,7 +181,14 @@ public class Poll {
     privateVoters.add(citizen);
   }
 
-  // TODO javadoc. OBS: adicionar no javadoc que o metodo e publico pois eh utilizado em testes.
+  /**
+   * Adds a public voter to the poll and increments the respective vote count.
+   *
+   * <p>This method is public for testing purposes.
+   *
+   * @param delegate the delegate who wants to vote publicly.
+   * @param voteType the delegate's vote option.
+   */
   public void addPublicVoter(Delegate delegate, VoteType voteType) {
     if (voteType == VoteType.POSITIVE) {
       incPositiveVotes();
@@ -132,23 +198,52 @@ public class Poll {
     publicVoters.put(delegate, voteType);
   }
 
+  /**
+   * Checks if a given citizen has already voted in this poll.
+   *
+   * @param citizen the citizen to check if has already voted.
+   * @return true if the citizen has already voted, false otherwise.
+   */
   private boolean hasVoted(Citizen citizen) {
     return privateVoters.contains(citizen) || publicVoters.containsKey(citizen);
   }
 
-  public VoteType getPublicVote(Delegate delegate) {
+  /**
+   * Returns the vote option of the given delegate in this poll.
+   *
+   * @param delegate the delegate whose vote option should be returned.
+   * @return the vote option of the given delegate.
+   */
+  public VoteType getDelegateVote(Delegate delegate) {
     return publicVoters.get(delegate);
   }
 
+  /**
+   * Returns the closing date of this poll.
+   *
+   * <p>This method is public for testing purposes.
+   *
+   * @return the closing date of this poll.
+   */
   @NonNull
   public LocalDate getClosingDate() {
     return closingDate;
   }
 
+  /**
+   * Returns the map of public voters in this poll.
+   *
+   * @return the map of public voters in this poll.
+   */
   public Map<Delegate, VoteType> getPublicVoters() {
     return publicVoters;
   }
 
+  /**
+   * Returns a list with all the voters in this poll, both private and public.
+   *
+   * @return a list with all the voters in this poll.
+   */
   public List<Citizen> getAllVoters() {
     ArrayList<Citizen> voters = new ArrayList<>();
     voters.addAll(this.getPrivateVoters());

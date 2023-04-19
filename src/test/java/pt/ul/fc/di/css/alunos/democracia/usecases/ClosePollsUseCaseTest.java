@@ -17,6 +17,7 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.ClosePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 
+/** ClosePollsUseCaseTest is a test class for the ClosePollsHandler class. */
 @DataJpaTest
 public class ClosePollsUseCaseTest {
   @Autowired private TestEntityManager em;

@@ -25,6 +25,7 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
 
+/** SupportBillUseCaseTest is a test class for the SupportBillService class. */
 @DataJpaTest
 public class SupportBillUseCaseTest {
 

@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.lang.NonNull;
 
+/** Represents a theme. */
 @Entity
 public class Theme {
   @Id @GeneratedValue private Long id;
@@ -21,30 +22,40 @@ public class Theme {
     // Empty constructor required by JPA.
   }
 
-  /*
-     Theme class constructor.
-     @param designation The theme designation.
-     @param parentTheme This theme parentTheme.
-  */
+  /**
+   * Creates a new Theme object with the given designation and parent theme.
+   *
+   * @param designation the name or title of the theme.
+   * @param parentTheme the parent theme of the theme.
+   */
   public Theme(@NonNull String designation, Theme parentTheme) {
     this.designation = designation;
     this.parentTheme = parentTheme;
   }
 
+  /**
+   * Returns the unique identifier of this theme.
+   *
+   * @return the unique identifier of this theme
+   */
   public Long getId() {
     return id;
   }
 
-  /*
-     Returns the parent theme.
-  */
+  /**
+   * Returns the parent theme of this theme.
+   *
+   * @return the parent theme of this theme.
+   */
   public Theme getParentTheme() {
     return this.parentTheme;
   }
 
-  /*
-     Returns the theme designation.
-  */
+  /**
+   * Returns the designation of this theme.
+   *
+   * @return the designation of this theme
+   */
   @NonNull
   public String getDesignation() {
     return this.designation;

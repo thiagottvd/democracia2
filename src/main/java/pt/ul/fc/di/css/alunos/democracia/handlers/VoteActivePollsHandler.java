@@ -64,7 +64,7 @@ public class VoteActivePollsHandler {
     Theme theme = poll.getAssociatedBill().getTheme();
     List<DelegateTheme> delegateThemesList = citizen.getDelegateThemes();
     Delegate delegate = findDelegateForTheme(theme, delegateThemesList);
-    return delegate != null ? poll.getPublicVote(delegate) : null;
+    return delegate != null ? poll.getDelegateVote(delegate) : null;
   }
 
   /**

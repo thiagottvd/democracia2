@@ -10,6 +10,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.lang.NonNull;
 
+/** Represents a citizen (voter). */
 @Entity
 @Inheritance(strategy = TABLE_PER_CLASS)
 public class Citizen {
@@ -32,18 +33,32 @@ public class Citizen {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Represents a citizen with a name and a citizen card number (cc).
+   *
+   * @param name the name of the citizen (non-null).
+   * @param cc the citizen card number (non-null).
+   */
   public Citizen(@NonNull String name, @NonNull Integer cc) {
     this.name = name;
     this.cc = cc;
   }
 
+  /**
+   * Returns the list of DelegateThemes objects associated with this citizen.
+   *
+   * @return the list of DelegateThemes objects associated with this citizen.
+   */
   public List<DelegateTheme> getDelegateThemes() {
     return delegateThemes;
   }
 
-  /*
-   Checks if the chosen DelegateTheme already represents this citizen
-  */
+  /**
+   * Adds a delegate theme to the list of themes that this citizen represents, if not already
+   * represented.
+   *
+   * @param dt The delegate theme to add.
+   */
   public void addDelegateTheme(DelegateTheme dt) {
     boolean alreadyRepresents = false;
     for (int i = 0; i < delegateThemes.size() && !alreadyRepresents; i++) {
@@ -90,7 +105,12 @@ public class Citizen {
         && Objects.equals(name, citizen.name);
   }
 
-  public void removeDelegateTheme(DelegateTheme dt) {
-    this.delegateThemes.remove(dt);
+  /**
+   * Removes a delegate theme from the list of delegate themes.
+   *
+   * @param delegateTheme the delegate theme to remove.
+   */
+  public void removeDelegateTheme(DelegateTheme delegateTheme) {
+    this.delegateThemes.remove(delegateTheme);
   }
 }

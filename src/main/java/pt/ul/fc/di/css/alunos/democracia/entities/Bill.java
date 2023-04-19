@@ -13,6 +13,7 @@ import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 
+/** Represents a Bill. */
 @Entity
 public class Bill {
 
@@ -52,6 +53,18 @@ public class Bill {
     // Empty constructor required by JPA.
   }
 
+  /**
+   * Represents a bill proposal and its relevant information, including the title, description, pdf
+   * file data, expiration date, delegate who proposed it, theme it is related to, and a list of
+   * supporters.
+   *
+   * @param title the title of the bill.
+   * @param description a description of the bill.
+   * @param fileData the pdf file data of the bill.
+   * @param expirationDate the date the bill will expire.
+   * @param delegate the delegate who proposed the bill.
+   * @param theme the theme the bill is related to.
+   */
   public Bill(
       String title,
       String description,
@@ -68,18 +81,23 @@ public class Bill {
     supporters.add(delegate);
   }
 
-  /*
-   Returns a boolean indicating if a voter is supporting this Bill.
-   @param voter The citizen to check.
-  */
+  /**
+   * Checks if the given citizen supports this bill.
+   *
+   * @param voter the citizen to check if they support the bill.
+   * @return true if the citizen supports the bill; false otherwise.
+   */
   public boolean supportsBill(Citizen voter) {
     return supporters.contains(voter);
   }
 
-  /*
-   Adds a new voter to the supporters list if he hasn't voted yet.
-   @param voter The citizen to add.
-  */
+  /**
+   * Adds a supporter vote to the bill if the voter has not voted yet and if the bill is not closed.
+   *
+   * @param voter the citizen who is voting for the bill.
+   * @throws CitizenAlreadySupportsBillException if the citizen already supports the bill.
+   * @throws VoteInClosedBillException if the bill is already closed and no more votes are allowed.
+   */
   public void addSupporterVote(Citizen voter)
       throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
     if (supportsBill(voter)) {
@@ -102,46 +120,74 @@ public class Bill {
     numSupporters++;
   }
 
+  /**
+   * Sets the status of the bill.
+   *
+   * @param status The status of the bill to be set.
+   */
   public void setStatus(BillStatus status) {
     this.status = status;
   }
 
+  /**
+   * Sets the poll associated with the bill.
+   *
+   * @param associatedPoll The poll associated with the bill.
+   */
   public void setPoll(Poll associatedPoll) {
     this.associatedPoll = associatedPoll;
   }
 
+  /**
+   * Gets the ID of the bill.
+   *
+   * @return The ID of the bill.
+   */
   public Long getId() {
     return id;
   }
 
-  /*
-   Returns the Bill title.
-  */
+  /**
+   * Returns the title of the bill.
+   *
+   * @return the title of the bill
+   */
   public String getTitle() {
     return title;
   }
 
-  /*
-   Returns the Bill expiration date.
-  */
+  /**
+   * Returns the status of the bill.
+   *
+   * @return the status of the bill
+   */
   public BillStatus getStatus() {
     return status;
   }
 
+  /**
+   * Returns the expiration date of the bill.
+   *
+   * @return the expiration date of the bill
+   */
   public LocalDate getExpirationDate() {
     return expirationDate;
   }
 
-  /*
-   Returns the number of supporters in this Bill.
-  */
+  /**
+   * Returns the number of citizens who support this bill.
+   *
+   * @return the number of supporters of this bill
+   */
   public int getNumSupporters() {
     return supporters.size();
   }
 
-  /*
-   Returns the Bill theme.
-  */
+  /**
+   * Returns the theme of this bill.
+   *
+   * @return the theme of this bill.
+   */
   public Theme getTheme() {
     return theme;
   }
@@ -155,10 +201,20 @@ public class Bill {
     return description;
   }
 
+  /**
+   * Returns the delegate associated with this bill.
+   *
+   * @return The delegate associated with this bill.
+   */
   public Delegate getDelegate() {
     return delegate;
   }
 
+  /**
+   * Returns the poll associated with this bill, if any.
+   *
+   * @return The poll associated with this bill, or null if there is no poll associated.
+   */
   public Poll getPoll() {
     return associatedPoll;
   }
