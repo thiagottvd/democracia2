@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia.usecases;
+package pt.ul.fc.di.css.alunos.democracia;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
