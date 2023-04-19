@@ -33,19 +33,16 @@ public class SupportBillUseCaseTest {
   @Autowired private CitizenRepository citizenRepository;
   @Autowired private PollRepository pollRepository;
 
-  private BillCatalog billCatalog;
-  private CitizenCatalog citizenCatalog;
-  private PollCatalog pollCatalog;
-  private SupportBillHandler supportBillHandler;
   private SupportBillService supportBillService;
 
   @BeforeEach
   public void setUp() {
-    pollCatalog = new PollCatalog(pollRepository);
-    billCatalog = new BillCatalog(billRepository);
-    citizenCatalog = new CitizenCatalog(citizenRepository);
+    PollCatalog pollCatalog = new PollCatalog(pollRepository);
+    BillCatalog billCatalog = new BillCatalog(billRepository);
+    CitizenCatalog citizenCatalog = new CitizenCatalog(citizenRepository);
 
-    supportBillHandler = new SupportBillHandler(billCatalog, citizenCatalog, pollCatalog);
+    SupportBillHandler supportBillHandler =
+        new SupportBillHandler(billCatalog, citizenCatalog, pollCatalog);
     // Set the creation poll trigger value to 5 for testing purposes
     supportBillHandler.setCreationPollTriggerValue(5);
 
@@ -178,12 +175,12 @@ public class SupportBillUseCaseTest {
     billRepository.save(b);
 
     // assert that the bill does not have a poll associated with it
-    assertEquals(b.getPoll(), null);
+    assertNull(b.getPoll());
 
     // for 4 citizens, support the bill and assert that the number of supporters
     // has increased and that the bill status is OPEN
     for (int i = 1; i < 5; i++) {
-      assertEquals(b.getPoll(), null);
+      assertNull(b.getPoll());
       assertEquals(b.getNumSupporters(), i);
       assertEquals(BillStatus.OPEN, b.getStatus());
       Citizen c = new Citizen(String.valueOf(i), i);

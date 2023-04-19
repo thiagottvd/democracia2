@@ -15,6 +15,7 @@ import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.ThemeCatalog;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
+import pt.ul.fc.di.css.alunos.democracia.entities.Citizen;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -45,7 +46,6 @@ public class ProposeBillUseCaseTest {
   private BillCatalog billCatalog;
   private ThemeCatalog themeCatalog;
   private CitizenCatalog citizenCatalog;
-  private ProposeBillHandler proposeBillHandler;
   private ProposeBillService proposeBillService;
 
   /**
@@ -57,7 +57,8 @@ public class ProposeBillUseCaseTest {
     billCatalog = new BillCatalog(billRepository);
     themeCatalog = new ThemeCatalog(themeRepository);
     citizenCatalog = new CitizenCatalog(citizenRepository);
-    proposeBillHandler = new ProposeBillHandler(themeCatalog, billCatalog, citizenCatalog);
+    ProposeBillHandler proposeBillHandler =
+        new ProposeBillHandler(themeCatalog, billCatalog, citizenCatalog);
     proposeBillService = new ProposeBillService(proposeBillHandler);
   }
 
@@ -190,7 +191,8 @@ public class ProposeBillUseCaseTest {
       assertArrayEquals(String.valueOf(i).getBytes(), b.getFileData());
       assertEquals(localDate, b.getExpirationDate());
       assertEquals(themeCatalog.getTheme(String.valueOf(i)), b.getTheme());
-      assertEquals(citizenCatalog.getCitizenByCc(i).get(), b.getDelegate());
+      Citizen expectedDelegate = citizenCatalog.getCitizenByCc(i).orElse(null);
+      assertEquals(expectedDelegate, b.getDelegate());
     }
   }
 }

@@ -31,14 +31,13 @@ public class ListActivePollsUseCaseTest {
   @Autowired private TestEntityManager entityManager;
   @Autowired private PollRepository pollRepository;
   private PollCatalog pollCatalog;
-  private ListActivePollsHandler listActivePollsHandler;
   private ListActivePollsService listActivePollsService;
 
   /** Initializes the objects needed for each test case. */
   @BeforeEach
   public void init() {
     pollCatalog = new PollCatalog(pollRepository);
-    listActivePollsHandler = new ListActivePollsHandler(pollCatalog);
+    ListActivePollsHandler listActivePollsHandler = new ListActivePollsHandler(pollCatalog);
     listActivePollsService = new ListActivePollsService(listActivePollsHandler);
   }
 

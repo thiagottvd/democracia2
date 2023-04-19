@@ -35,7 +35,6 @@ public class ConsultBillsUseCaseTest {
   @Autowired private TestEntityManager entityManager;
   @Autowired private BillRepository billRepository;
   private BillCatalog billCatalog;
-  private ConsultBillsHandler consultBillsHandler;
   private ConsultBillsService consultBillsService;
 
   /**
@@ -46,7 +45,7 @@ public class ConsultBillsUseCaseTest {
   @BeforeEach
   public void init() {
     billCatalog = new BillCatalog(billRepository);
-    consultBillsHandler = new ConsultBillsHandler(billCatalog);
+    ConsultBillsHandler consultBillsHandler = new ConsultBillsHandler(billCatalog);
     consultBillsService = new ConsultBillsService(consultBillsHandler);
   }
 
@@ -124,7 +123,7 @@ public class ConsultBillsUseCaseTest {
 
     // Check that all returned bills have an OPEN status
     for (BillDTO bill : expectedBills) {
-      Bill b = billCatalog.getBill(bill.getId()).get();
+      Bill b = billCatalog.getBill(bill.getId()).orElse(null);
       assertNotNull(b);
       assertEquals(BillStatus.OPEN, b.getStatus());
     }

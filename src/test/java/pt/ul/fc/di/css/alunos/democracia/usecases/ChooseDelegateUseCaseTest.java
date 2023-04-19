@@ -35,7 +35,6 @@ public class ChooseDelegateUseCaseTest {
   @Autowired private ThemeRepository themeRepository;
   @Autowired private DelegateThemeRepository dtRepository;
 
-  private ChooseDelegateHandler chooseDelegateHandler;
   private ChooseDelegateService chooseDelegateService;
 
   @BeforeEach
@@ -44,7 +43,8 @@ public class ChooseDelegateUseCaseTest {
     ThemeCatalog themeCatalog = new ThemeCatalog(themeRepository);
     DelegateThemeCatalog dtCatalog = new DelegateThemeCatalog(dtRepository);
 
-    chooseDelegateHandler = new ChooseDelegateHandler(themeCatalog, dtCatalog, citizenCatalog);
+    ChooseDelegateHandler chooseDelegateHandler =
+        new ChooseDelegateHandler(themeCatalog, dtCatalog, citizenCatalog);
     chooseDelegateService = new ChooseDelegateService(chooseDelegateHandler);
   }
 

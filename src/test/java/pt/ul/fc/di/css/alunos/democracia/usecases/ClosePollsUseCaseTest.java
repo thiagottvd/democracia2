@@ -13,7 +13,6 @@ import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ClosePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
@@ -33,7 +32,7 @@ public class ClosePollsUseCaseTest {
   }
 
   @Test
-  void assignVotesAndClosePollsTest() throws ApplicationException {
+  void assignVotesAndClosePollsTest() {
     // Creating proposer and delegates
     Delegate proposer = em.persist(new Delegate("proposer", 0));
     Delegate deleg1 = em.persist(new Delegate("d1", 1));
