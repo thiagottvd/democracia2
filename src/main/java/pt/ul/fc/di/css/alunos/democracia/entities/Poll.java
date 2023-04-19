@@ -126,6 +126,7 @@ public class Poll {
     return publicVoters.get(delegate);
   }
 
+  @NonNull
   public LocalDate getClosingDate() {
     return closingDate;
   }
