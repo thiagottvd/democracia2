@@ -1,29 +1,43 @@
 package pt.ul.fc.di.css.alunos.democracia.catalogs;
 
+import java.util.List;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
 
-import java.util.List;
-
+/**
+ * The ThemeCatalog class is responsible for managing themes by providing operations to retrieve,
+ * save and close them. It uses a ThemeRepository to perform the database operations.
+ */
 @Component
 public class ThemeCatalog {
-    private final ThemeRepository themeRepository;
+  private final ThemeRepository themeRepository;
 
-    public ThemeCatalog(ThemeRepository themeRepository){ this.themeRepository = themeRepository; }
+  /**
+   * Constructs a ThemeCatalog instance with the specified ThemeRepository instance.
+   *
+   * @param themeRepository the ThemeRepository instance to use for performing database operations.
+   */
+  public ThemeCatalog(ThemeRepository themeRepository) {
+    this.themeRepository = themeRepository;
+  }
 
-    /*
-        Returns a list of all the themes available in the DB.
-     */
-    public List<Theme> getThemes(){
-        return themeRepository.getAllThemes();
-    }
+  /**
+   * Return a list of all themes.
+   *
+   * @return a list of all themes.
+   */
+  public List<Theme> getThemes() {
+    return themeRepository.getAllThemes();
+  }
 
-    /*
-        Returns the corresponding theme from the DB.
-        @param theme The theme to retrieve.
-     */
-    public Theme getTheme(String designation){
-        return themeRepository.findThemeByDesignation(designation);
-    }
+  /*
+   * Returns a theme given its designation.
+   *
+   * @param designation The theme designation.
+   * @return a theme given its designation.
+   */
+  public Theme getTheme(String designation) {
+    return themeRepository.findThemeByDesignation(designation);
+  }
 }
