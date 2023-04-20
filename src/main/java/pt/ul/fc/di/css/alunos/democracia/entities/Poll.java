@@ -21,20 +21,11 @@ public class Poll {
 
   private int numNegativeVotes = 0;
 
-  @ElementCollection // Indicates that publicVoters is a collection of simple or embeddable types.
-  @CollectionTable(
-      name = "public_voters") // Specifies the name of the table that will hold the collection
-  // elements. In this case, the table name is "public_voters".
-  @MapKeyJoinColumn(
-      name = "delegate_id") // Specifies the name of the foreign key column that references the
-  // Delegate entity. The column name is "delegate_id".
-  @Column(
-      name =
-          "vote_type") // Specifies the name of the column that holds the VoteType enum value. The
-  // column name is "vote_type".
-  @Enumerated(
-      EnumType
-          .STRING) // Indicates that the VoteType enum should be stored as a string in the database.
+  @ElementCollection
+  @CollectionTable(name = "public_voters")
+  @MapKeyJoinColumn(name = "delegate_id")
+  @Column(name = "vote_type")
+  @Enumerated(EnumType.STRING)
   @Cascade(CascadeType.ALL)
   private final Map<Delegate, VoteType> publicVoters = new HashMap<>();
 
