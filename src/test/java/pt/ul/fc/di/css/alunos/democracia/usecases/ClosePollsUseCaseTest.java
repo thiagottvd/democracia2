@@ -64,7 +64,6 @@ public class ClosePollsUseCaseTest {
   public void assignVotesAndClosePollsTest() {
     // Creating and persisting proposer and delegates
     Delegate proposer = em.persist(new Delegate("proposer", 0));
-    Delegate proposer2 = em.persist(new Delegate("proposer", 222));
     Delegate deleg1 = em.persist(new Delegate("d1", 1));
     Delegate deleg2 = em.persist(new Delegate("d2", 2));
     Delegate deleg3 = em.persist(new Delegate("d3", 3));
@@ -88,7 +87,7 @@ public class ClosePollsUseCaseTest {
     Bill economiaBill =
         em.persist(
             new Bill(
-                "economiaBill", "desc", null, LocalDate.now().minusDays(1), proposer2, impostos));
+                "economiaBill", "desc", null, LocalDate.now().minusDays(1), proposer, impostos));
 
     // Creating and persisting polls with a bill as the subject
     Poll saudePoll = em.persist(new Poll(saudeBill));

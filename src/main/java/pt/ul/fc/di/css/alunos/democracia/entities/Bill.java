@@ -27,7 +27,7 @@ public class Bill {
 
   @Lob private byte[] fileData;
 
-  @OneToMany
+  @ManyToMany
   @Cascade(CascadeType.ALL)
   private final List<Citizen> supporters = new ArrayList<>();
 

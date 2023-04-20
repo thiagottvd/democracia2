@@ -115,6 +115,38 @@ public class ProposeBillUseCaseTest {
   }
 
   /**
+   * Tests if a delegate can propose multiple bills.
+   *
+   * @throws ApplicationException if any problems happens while proposing a bill
+   */
+  @Test
+  public void proposeMultipleBills() throws ApplicationException {
+    Delegate proposer = entityManager.persist(new Delegate("proposer", 52));
+
+    // delegate 'proposer' is proposes multiple bills.
+    for (int i = 0; i < 5; i++) {
+      Theme theme = new Theme(String.valueOf(i), null);
+      entityManager.persist(theme);
+      proposeBillService.proposeBill(
+          String.valueOf(i),
+          String.valueOf(i),
+          null,
+          LocalDate.now(),
+          theme.getDesignation(),
+          proposer.getCc());
+    }
+
+    // checking if everything worked as supposed
+    List<Bill> openBills = billCatalog.getOpenBills();
+    assertEquals(5, openBills.size());
+
+    for (Bill b : openBills) {
+      assertEquals(1, b.getNumSupporters());
+      assertEquals(proposer, b.getDelegate());
+    }
+  }
+
+  /**
    * This test method verifies the input validation of the proposeBill() method of the
    * ProposeBillService class. It performs the following steps: Creates a new theme and persists it
    * using EntityManager. Calls the proposeBill() method of ProposeBillService with only the theme
@@ -155,6 +187,8 @@ public class ProposeBillUseCaseTest {
    *
    * <p>Specifically, this test verifies that 50 bills are added to the system, and that the title,
    * description, file data, expiration date, theme, and delegate of each bill are correctly set.
+   *
+   * @throws ApplicationException if any problems happens while proposing a bill
    */
   @Test
   public void testProposeBill() throws ApplicationException {

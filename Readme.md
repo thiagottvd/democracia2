@@ -14,11 +14,10 @@
  * Use Case H: Implementado; Totalmente documentado; Testes Implementados.
  * Use Case I: Implementado; Totalmente documentado; Testes Implementados.
  * Use Case J: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case K: Implementado; Totalmente documentado; POSSÍVEIS BUGS; testes parciais.
+ * Use Case K: Implementado; Totalmente documentado; Testes Implementados.
 
  ## TODO
 
- * **[CRÍTICO]** Implementar testes (completos) para o use case: K.
  * Verificar se o mapeamento está o melhor possível.
  * **[CRÍTICO]** Entregar projeto.
 
