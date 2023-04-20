@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
@@ -19,19 +20,20 @@ public class Bill {
 
   @Id @GeneratedValue private Long id;
 
-  private String title;
+  @NonNull private String title;
 
-  private String description;
+  @NonNull private String description;
 
   private int numSupporters = 1;
 
-  @Lob private byte[] fileData;
+  @Lob @NonNull private byte[] fileData;
 
   @ManyToMany
   @Cascade(CascadeType.ALL)
   private final List<Citizen> supporters = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  @NonNull
   private LocalDate expirationDate;
 
   @Enumerated(EnumType.STRING)
@@ -39,13 +41,15 @@ public class Bill {
 
   @OneToOne
   @Cascade(CascadeType.ALL)
+  @NonNull
   private Theme theme;
 
   @OneToOne
   @Cascade(CascadeType.ALL)
+  @NonNull
   private Delegate delegate;
 
-  @OneToOne
+  @OneToOne(mappedBy = "associatedBill")
   @Cascade(CascadeType.ALL)
   private Poll associatedPoll;
 
@@ -66,12 +70,12 @@ public class Bill {
    * @param theme the theme the bill is related to.
    */
   public Bill(
-      String title,
-      String description,
-      byte[] fileData,
-      LocalDate expirationDate,
-      Delegate delegate,
-      Theme theme) {
+      @NonNull String title,
+      @NonNull String description,
+      @NonNull byte[] fileData,
+      @NonNull LocalDate expirationDate,
+      @NonNull Delegate delegate,
+      @NonNull Theme theme) {
     this.title = title;
     this.description = description;
     this.fileData = fileData;
@@ -152,6 +156,7 @@ public class Bill {
    *
    * @return the title of the bill
    */
+  @NonNull
   public String getTitle() {
     return title;
   }
@@ -170,6 +175,7 @@ public class Bill {
    *
    * @return the expiration date of the bill
    */
+  @NonNull
   public LocalDate getExpirationDate() {
     return expirationDate;
   }
@@ -188,6 +194,7 @@ public class Bill {
    *
    * @return the theme of this bill.
    */
+  @NonNull
   public Theme getTheme() {
     return theme;
   }
@@ -197,6 +204,7 @@ public class Bill {
    *
    * @return the bill description.
    */
+  @NonNull
   public String getDescription() {
     return description;
   }
@@ -206,6 +214,7 @@ public class Bill {
    *
    * @return The delegate associated with this bill.
    */
+  @NonNull
   public Delegate getDelegate() {
     return delegate;
   }

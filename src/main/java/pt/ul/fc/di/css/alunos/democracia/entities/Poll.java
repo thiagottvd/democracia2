@@ -47,7 +47,7 @@ public class Poll {
 
   @OneToMany private final List<Citizen> privateVoters = new ArrayList<>();
 
-  @OneToOne(mappedBy = "associatedPoll")
+  @OneToOne
   @Cascade(CascadeType.ALL)
   @NonNull
   private Bill associatedBill;
