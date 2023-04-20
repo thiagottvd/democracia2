@@ -12,7 +12,7 @@ import org.springframework.lang.NonNull;
 
 /** Represents a citizen (voter). */
 @Entity
-@Inheritance(strategy = TABLE_PER_CLASS)
+@Inheritance(strategy = SINGLE_TABLE)
 public class Citizen {
   @Id @GeneratedValue private long id;
   @NonNull private String name;
