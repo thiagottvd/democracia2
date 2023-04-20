@@ -15,8 +15,10 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 
 /**
- * Handles the use case H: the support of bills by citizens and the creation of polls for bills that
- * have reached a certain number of supporters.
+ * Handles use case H.
+ *
+ * <p>Handles the support of bills by citizens and the creation of polls for bills that have reached
+ * a certain number of supporters.
  */
 @Component
 public class SupportBillHandler {

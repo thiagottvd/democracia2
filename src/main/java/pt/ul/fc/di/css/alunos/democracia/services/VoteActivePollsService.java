@@ -8,6 +8,12 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.VoteActivePollsHandler;
 
+/**
+ * Use case J.
+ *
+ * <p>Service class for that deals with vote operations. It delegates the operations to the {@link
+ * VoteActivePollsHandler}.
+ */
 @Service
 public class VoteActivePollsService {
 

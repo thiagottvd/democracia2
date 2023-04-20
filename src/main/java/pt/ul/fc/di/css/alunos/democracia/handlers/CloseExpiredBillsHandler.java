@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 
 /**
- * Use case F.
+ * Handles use case F.
  *
  * <p>Handler that closes all expired bills.
  */

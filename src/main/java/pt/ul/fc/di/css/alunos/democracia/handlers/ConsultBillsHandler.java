@@ -12,7 +12,7 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
 
 /**
- * Use case G.
+ * Handles use case G.
  *
  * <p>Handler that retrieves a list of all open bills and retrieves the details of a specific bill.
  */

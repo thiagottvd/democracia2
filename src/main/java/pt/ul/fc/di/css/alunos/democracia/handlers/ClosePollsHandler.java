@@ -9,7 +9,7 @@ import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
 
 /**
- * Use case K.
+ * Handles use case K.
  *
  * <p>Handles the closure of expired polls and distributes votes from citizens that had active
  * representation

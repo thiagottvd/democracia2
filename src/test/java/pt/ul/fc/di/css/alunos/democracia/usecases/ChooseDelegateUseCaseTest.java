@@ -26,6 +26,7 @@ import pt.ul.fc.di.css.alunos.democracia.repositories.DelegateThemeRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ChooseDelegateService;
 
+/** ChooseDelegateUseCaseTest is a test class for the ChooseDelegateService class. */
 @DataJpaTest
 public class ChooseDelegateUseCaseTest {
 

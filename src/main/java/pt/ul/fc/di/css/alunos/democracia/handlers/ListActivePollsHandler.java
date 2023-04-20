@@ -10,7 +10,7 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 
 /**
- * Use case D.
+ * Handles use case D.
  *
  * <p>Handler that retrieves a list of the current active polls and converts them to a list of
  * {@link PollDTO} objects.

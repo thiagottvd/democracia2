@@ -25,10 +25,6 @@ public class Citizen {
   @Cascade(CascadeType.ALL)
   private final List<DelegateTheme> delegateThemes = new ArrayList<>();
 
-  public Long getId() {
-    return id;
-  }
-
   protected Citizen() {
     // Empty constructor required by JPA.
   }
@@ -42,6 +38,15 @@ public class Citizen {
   public Citizen(@NonNull String name, @NonNull Integer cc) {
     this.name = name;
     this.cc = cc;
+  }
+
+  /**
+   * Returns the citizen id number.
+   *
+   * @return the citizen id number.
+   */
+  public Long getId() {
+    return id;
   }
 
   /**

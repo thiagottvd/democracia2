@@ -17,7 +17,7 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
 /**
- * Use case E.
+ * Handles use case E.
  *
  * <p>Handler that proposes a bill and retrieves a list of all themes converting them to a list of
  * {@link ThemeDTO} objects.

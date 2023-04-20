@@ -5,7 +5,9 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.SupportBillHandler;
 
 /**
- * Service class for supporting a bill by a citizen. It delegates the operation to the {@link
+ * Use case H.
+ *
+ * <p>Service class for supporting a bill by a citizen. It delegates the operation to the {@link
  * SupportBillHandler}.
  */
 @Service

@@ -19,7 +19,7 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
 /**
- * Use case I.
+ * Handles use case I.
  *
  * <p>Handler that retrieves a list of delegates, a list of themes, and it also selects a delegate
  * for a given theme by a citizen (voter).

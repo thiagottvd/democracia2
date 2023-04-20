@@ -17,7 +17,7 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidVoteTypeException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.PollNotFoundException;
 
 /**
- * Use case J.
+ * Handles use case J.
  *
  * <p>Handler that handles votes.
  */
