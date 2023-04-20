@@ -14,9 +14,9 @@ public class DelegateTheme {
 
   @Id @GeneratedValue private Long id;
 
-  @OneToOne private Theme theme;
+  @ManyToOne private Theme theme;
 
-  @OneToOne private Delegate delegate;
+  @ManyToOne private Delegate delegate;
 
   @ManyToMany private List<Citizen> voters;
 
