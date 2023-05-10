@@ -45,9 +45,8 @@ public class RestBillController {
    * Retrieves the details of the bill with the specified ID.
    *
    * @param billID the bill id.
-   * @return a ResponseEntity containing the details of the bill, or a BadRequest response if the
-   *     bill is not found.
-   * @throws RuntimeException if an ApplicationException is thrown.
+   * @return a ResponseEntity containing the details of the bill, or a BAD_REQUEST response if the
+   *     bill is not found, or a INTERNAL_SERVER_ERROR response if an internal server error occurs.
    */
   @GetMapping("/bills/{billID}")
   ResponseEntity<?> getBillDetails(@PathVariable Long billID) {
@@ -57,7 +56,7 @@ public class RestBillController {
     } catch (BillNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (ApplicationException e) {
-      throw new RuntimeException(e);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -66,12 +65,11 @@ public class RestBillController {
    *
    * @param billId the ID of the bill to support.
    * @param cc the citizen card number of the citizen who wants to support the bill.
-   * @return a ResponseEntity representing the status of the operation or a BadRequest response if
-   *     the bill is not found or the citizen is not found.
-   * @throws RuntimeException if an ApplicationException is thrown.
+   * @return a ResponseEntity representing the status of the operation, or a BAD_REQUEST response if
+   *     the bill is not found or the citizen is not found, or a INTERNAL_SERVER_ERROR response if
+   *     an internal server error occurs.
    */
-  // @PatchMapping("/bills/support/{billId}")
-  @PutMapping("/bills/support/{billId}")
+  @PatchMapping("/bills/support/{billId}")
   ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
     try {
       supportBillService.supportBill(billId, cc);
@@ -79,7 +77,7 @@ public class RestBillController {
     } catch (BillNotFoundException | CitizenNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (ApplicationException e) {
-      throw new RuntimeException(e);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
