@@ -66,7 +66,9 @@ public class SupportBillHandler {
       throw new CitizenNotFoundException("The citizen with cc \"" + cc + "\" was not found.");
     }
 
-    bill.get().addSupporterVote(citizen.get());
+    Bill b = bill.get();
+    b.addSupporterVote(citizen.get());
+    billCatalog.saveBill(b);
 
     checkNumOfSupports(bill.get());
   }
