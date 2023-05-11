@@ -45,7 +45,7 @@ public class RestBillController {
    * @return a list of all open bills.
    */
   @GetMapping("/bills/open")
-  List<BillDTO> getOpenBills() {
+  public List<BillDTO> getOpenBills() {
     return consultBillsService.getOpenBills();
   }
 
@@ -57,7 +57,7 @@ public class RestBillController {
    *     bill is not found, or a INTERNAL_SERVER_ERROR response if an internal server error occurs.
    */
   @GetMapping("/bills/{billID}")
-  ResponseEntity<?> getBillDetails(@PathVariable Long billID) {
+  public ResponseEntity<?> getBillDetails(@PathVariable Long billID) {
     try {
       BillDTO billDTO = consultBillsService.getBillDetails(billID);
       return ResponseEntity.ok().body(billDTO);
@@ -78,7 +78,7 @@ public class RestBillController {
    *     an internal server error occurs.
    */
   @PatchMapping("/bills/support/{billId}")
-  ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
+  public ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
     try {
       supportBillService.supportBill(billId, cc);
       return ResponseEntity.ok().build();
