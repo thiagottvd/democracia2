@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}" lang="pt-PT">
+
+<body>
+<section>
+    <h2>Projectos de Lei em Votação:</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Título</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${activePolls.isEmpty()}">
+            <td colspan="1">Não há projectos de lei em votação neste momento.</td>
+        </tr>
+        <tr th:each="activePoll : ${activePolls}">
+            <td><a th:text="${activePoll.title}"></a></td>
+<!--            <td><a th:href="@{/polls/{pollId}(pollId=${activePoll.id})}" th:text="${activePoll.title}"></a></td>-->
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+
+</html>

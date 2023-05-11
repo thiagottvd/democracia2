@@ -46,7 +46,7 @@ public class VoteActivePollsHandler {
   public List<PollDTO> getActivePolls() {
     List<Poll> activePolls = pollCatalog.getPollsByStatusType(PollStatus.ACTIVE);
     return activePolls.stream()
-        .map(poll -> new PollDTO(poll.getAssociatedBill().getTitle()))
+        .map(poll -> new PollDTO(poll.getId(), poll.getAssociatedBill().getTitle()))
         .collect(Collectors.toList());
   }
 
