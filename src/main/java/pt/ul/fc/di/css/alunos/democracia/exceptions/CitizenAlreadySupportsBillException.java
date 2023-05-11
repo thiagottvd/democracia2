@@ -1,14 +1,10 @@
 package pt.ul.fc.di.css.alunos.democracia.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 /**
  * The CitizenAlreadySupportsBillException is an exception that is thrown when a citizen is trying
  * to support a bill that they have already supported. It is a subclass of ApplicationException,
  * which is itself a subclass of Exception.
  */
-@ResponseStatus(HttpStatus.CONFLICT)
 public class CitizenAlreadySupportsBillException extends ApplicationException {
 
   /**

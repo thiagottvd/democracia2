@@ -1,6 +1,5 @@
 package pt.ul.fc.di.css.alunos.democracia.controllers;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,6 @@ public class RestBillController {
    *     an internal server error occurs.
    */
   @PatchMapping("/bills/support/{billId}")
-  @ExceptionHandler(CitizenAlreadyVotedException.class)
   ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
     try {
       supportBillService.supportBill(billId, cc);
@@ -80,11 +78,11 @@ public class RestBillController {
     } catch (BillNotFoundException | CitizenNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (CitizenAlreadySupportsBillException | VoteInClosedBillException e) {
-      Map<String, String> responseBody = new HashMap<>();
-      responseBody.put("message", e.getMessage());
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
-      return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).body(responseBody);
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .headers(headers)
+          .body(Map.of("message", e.getMessage()));
     } catch (ApplicationException e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

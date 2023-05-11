@@ -1,10 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 /** Exception class for application-level errors. */
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class ApplicationException extends Exception {
 
   /**
