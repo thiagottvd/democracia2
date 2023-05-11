@@ -58,12 +58,13 @@ public class SupportBillHandler {
   public void supportBill(Long billId, Integer cc) throws ApplicationException {
     Optional<Bill> bill = billCatalog.getBill(billId);
     if (bill.isEmpty()) {
-      throw new BillNotFoundException("The bill \"" + billId + "\" was not found.");
+      throw new BillNotFoundException("The bill with id " + billId + " was not found.");
     }
 
     Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(cc);
     if (citizen.isEmpty()) {
-      throw new CitizenNotFoundException("The citizen with cc \"" + cc + "\" was not found.");
+      throw new CitizenNotFoundException(
+          "The citizen with citizen card number " + cc + " was not found.");
     }
 
     Bill b = bill.get();

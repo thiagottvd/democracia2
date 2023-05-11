@@ -15,7 +15,7 @@
  * Use Case I: Implementado; Totalmente documentado; Testes implementados.
  * Use Case J: Implementado; Totalmente documentado; Testes implementados.
  * Use Case K: Implementado; Totalmente documentado; Testes implementados.
- * API REST: RestBillController: Implementado; Parcialmente documentado; Testes implementados.
+ * API REST: RestBillController: Implementado; Totalmente documentado; Testes implementados.
              RestPollController: TODO; TODO; TODO.
  ## TODO
 
