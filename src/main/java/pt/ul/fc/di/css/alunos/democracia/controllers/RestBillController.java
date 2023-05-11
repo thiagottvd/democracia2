@@ -1,14 +1,16 @@
 package pt.ul.fc.di.css.alunos.democracia.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.*;
 import pt.ul.fc.di.css.alunos.democracia.services.ConsultBillsService;
 import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
 
@@ -70,12 +72,19 @@ public class RestBillController {
    *     an internal server error occurs.
    */
   @PatchMapping("/bills/support/{billId}")
+  @ExceptionHandler(CitizenAlreadyVotedException.class)
   ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
     try {
       supportBillService.supportBill(billId, cc);
       return ResponseEntity.ok().build();
     } catch (BillNotFoundException | CitizenNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } catch (CitizenAlreadySupportsBillException | VoteInClosedBillException e) {
+      Map<String, String> responseBody = new HashMap<>();
+      responseBody.put("message", e.getMessage());
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).body(responseBody);
     } catch (ApplicationException e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,9 +1,13 @@
 package pt.ul.fc.di.css.alunos.democracia.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * The VoteInClosedBillException is an exception that is thrown when a vote is attempted on a closed
  * bill. It is a subclass of ApplicationException, which is itself a subclass of Exception.
  */
+@ResponseStatus(HttpStatus.CONFLICT)
 public class VoteInClosedBillException extends ApplicationException {
 
   /**
@@ -13,16 +17,5 @@ public class VoteInClosedBillException extends ApplicationException {
    */
   public VoteInClosedBillException(String message) {
     super(message);
-  }
-
-  /**
-   * Constructs a new VoteInClosedBillException with the specified error message and a reference to
-   * the lower-level exception that caused this exception.
-   *
-   * @param message the error message to be associated with the exception.
-   * @param e the lower-level exception that caused this exception to be thrown.
-   */
-  public VoteInClosedBillException(String message, Exception e) {
-    super(message, e);
   }
 }

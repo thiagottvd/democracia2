@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.apirest;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,13 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import pt.ul.fc.di.css.alunos.democracia.controllers.RestBillController;
 import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.*;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ConsultBillsService;
 import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
@@ -150,5 +151,176 @@ public class RestBillControllerUseCaseTest {
     // Verify that the service method was called
     verify(consultBillsServiceMock, times(1)).getBillDetails(billID);
     verifyNoMoreInteractions(consultBillsServiceMock);
+  }
+
+  @Test
+  public void testSupportBillSuccess() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to not throw any exceptions
+    doNothing().when(supportBillServiceMock).supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc.perform(request).andExpect(status().isOk());
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
+  }
+
+  @Test
+  public void testSupportBillWhenBillNotFound() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to throw a BillNotFoundException
+    doThrow(new BillNotFoundException("The bill \"" + billId + "\" was not found."))
+        .when(supportBillServiceMock)
+        .supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
+  }
+
+  @Test
+  public void testSupportBillCitizenNotFound() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to throw a CitizenNotFoundException
+    doThrow(new CitizenNotFoundException("The citizen with CC \"" + cc + "\" was not found."))
+        .when(supportBillServiceMock)
+        .supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc.perform(request).andExpect(status().isBadRequest());
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
+  }
+
+  @Test
+  public void testSupportBillApplicationException() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to throw an ApplicationException
+    doThrow(new ApplicationException("An error occurred while supporting the bill."))
+        .when(supportBillServiceMock)
+        .supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc.perform(request).andExpect(status().isInternalServerError());
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
+  }
+
+  // CitizenAlreadySupportsBillException, VoteInClosedBillException
+  @Test
+  public void testSupportBillTwice() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to throw an CitizenAlreadySupportsBillException
+    doThrow(
+            new CitizenAlreadySupportsBillException(
+                "The citizen with cc " + cc + " already supports bill with id " + billId + "."))
+        .when(supportBillServiceMock)
+        .supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc
+        .perform(request)
+        .andExpect(status().isConflict())
+        .andExpect(
+            jsonPath("$.message")
+                .value(
+                    "The citizen with cc "
+                        + cc
+                        + " already supports bill with id "
+                        + billId
+                        + "."));
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
+  }
+
+  @Test
+  public void testSupportBillWhenClosed() throws Exception {
+    Long billId = 1L;
+    Integer cc = 123456789;
+
+    // Set up the mock service to throw an VoteInClosedBillException
+    doThrow(
+            new VoteInClosedBillException(
+                "The citizen with cc "
+                    + cc
+                    + " can not vote for bill with id "
+                    + billId
+                    + " because it is closed."))
+        .when(supportBillServiceMock)
+        .supportBill(billId, cc);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/bills/support/" + billId)
+            .contentType("application/json")
+            .content(cc.toString());
+
+    // Perform the API call and check the response
+    mockMvc
+        .perform(request)
+        .andExpect(status().isConflict())
+        .andExpect(
+            jsonPath("$.message")
+                .value(
+                    "The citizen with cc "
+                        + cc
+                        + " can not vote for bill with id "
+                        + billId
+                        + " because it is closed."));
+
+    // Verify that the service method was called
+    verify(supportBillServiceMock, times(1)).supportBill(billId, cc);
+    verifyNoMoreInteractions(supportBillServiceMock);
   }
 }
