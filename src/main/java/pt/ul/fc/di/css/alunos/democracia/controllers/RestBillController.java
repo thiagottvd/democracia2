@@ -40,9 +40,12 @@ public class RestBillController {
   }
 
   /**
-   * Retrieves a list of all open bills.
+   * Retrieves a list of all open bills, returning only their ID and title. Other fields are either
+   * empty or initialized with default values.
    *
-   * @return a list of all open bills.
+   * @return a list of all open bills, represented as a list of BillDTO objects containing only the
+   *     ID and title of each bill. Other fields are either empty or initialized with default
+   *     values.
    */
   @GetMapping("/bills/open")
   public List<BillDTO> getOpenBills() {
