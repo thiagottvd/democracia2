@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia.controllers;
+package pt.ul.fc.di.css.alunos.democracia.controllers.rest;
 
 import java.util.List;
 import java.util.Map;
