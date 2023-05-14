@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}" lang="pt-PT">
+
+<body>
+<section>
+  <h2>Detalhes do Projeto de Lei:</h2>
+
+  <table>
+    <tr>
+      <th>ID:</th>
+      <td th:text="${bill.id}"></td>
+    </tr>
+    <tr>
+      <th>Título:</th>
+      <td th:text="${bill.title}"></td>
+    </tr>
+    <tr>
+      <th>Descrição:</th>
+      <td th:text="${bill.description}"></td>
+    </tr>
+    <tr>
+      <th style="white-space: nowrap;">Número de Apoiadores:</th>
+      <td th:text="${bill.numSupporters}"></td>
+    </tr>
+    <tr>
+      <th style="white-space: nowrap;">Conteúdo Principal:</th>
+      <td>
+        <a th:href="@{/bills/{id}/pdf(id=${bill.id})}">Abrir PDF</a>
+      </td>
+    </tr>
+    <tr>
+      <th style="white-space: nowrap;">Data de Expiração:</th>
+      <td th:text="${bill.expirationDate}"></td>
+    </tr>
+    <tr>
+      <th>Tema:</th>
+      <td th:text="${bill.themeDesignation}"></td>
+    </tr>
+    <tr>
+      <th>Autor:</th>
+      <td th:text="${bill.delegateName}"></td>
+    </tr>
+  </table>
+
+</section>
+</body>
+
+</html>

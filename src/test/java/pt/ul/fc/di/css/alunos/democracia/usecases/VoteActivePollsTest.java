@@ -51,13 +51,14 @@ public class VoteActivePollsTest {
 
   /** Test case to test the output type (should be PollDTO). */
   @Test
-  public void testOutputType() {
+  public void testOutputType() throws InvalidDateException {
     // Creating and persisting test data
+    byte[] bytes = {0x1};
     Delegate d = new Delegate("d", 1);
     entityManager.persist(d);
     Theme t = new Theme("t", null);
     entityManager.persist(t);
-    Bill b = new Bill("b", "b", null, LocalDate.now(), d, t);
+    Bill b = new Bill("bill", "desc", bytes, LocalDate.now(), d, t);
     entityManager.persist(b);
     Poll p = new Poll(b);
     entityManager.persist(p);
@@ -92,16 +93,17 @@ public class VoteActivePollsTest {
    * active Poll is equal to "ACTIVE".
    */
   @Test
-  public void testGetActivePolls() {
+  public void testGetActivePolls() throws InvalidDateException {
     boolean approvedType = false;
+    byte[] bytes = {0x1};
 
     // Loop through 50 times to create and persist test data
-    for (int i = 0; i < 50; i++) {
+    for (int i = 100; i < 150; i++) {
       Delegate d = new Delegate(String.valueOf(i), i);
       entityManager.persist(d);
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
-      Bill b = new Bill(String.valueOf(i + 1), String.valueOf(i), null, LocalDate.now(), d, t);
+      Bill b = new Bill(String.valueOf(i + 1), String.valueOf(i), bytes, LocalDate.now(), d, t);
       entityManager.persist(b);
       Poll p = new Poll(b);
       entityManager.persist(p);
@@ -126,14 +128,19 @@ public class VoteActivePollsTest {
 
     // Ensure that each PollDTO in the list has a status of ACTIVE.
     for (PollDTO pollDTO : activePolls) {
-      assertEquals(PollStatus.ACTIVE, pollCatalog.getPollByTitle(pollDTO.getTitle()).getStatus());
+      assertEquals(
+          PollStatus.ACTIVE,
+          pollCatalog.getPollByTitle(pollDTO.getTitle()).orElseThrow().getStatus());
     }
   }
 
   /** Tests vote method validation. */
   @Test
-  public void testVoteValidation() {
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), new Delegate("d", 2), null);
+  public void testVoteValidation() throws InvalidDateException {
+    byte[] bytes = {0x1};
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), new Delegate("d", 2), t);
     entityManager.persist(b);
     Poll p = new Poll(b);
 
@@ -142,25 +149,30 @@ public class VoteActivePollsTest {
 
     assertThrows(
         PollNotFoundException.class,
-        () -> voteActivePollsService.vote(null, voter.getCc(), VoteType.POSITIVE));
+        () -> voteActivePollsService.vote(null, voter.getCitizenCardNumber(), VoteType.POSITIVE));
 
     entityManager.persist(p);
     assertThrows(
         InvalidVoteTypeException.class,
-        () -> voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), null));
+        () ->
+            voteActivePollsService.vote(
+                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), null));
 
     entityManager.remove(voter);
     assertThrows(
         CitizenNotFoundException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.NEGATIVE));
+                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.NEGATIVE));
   }
 
   /** Tests checkDelegateVote method validation. */
   @Test
-  public void testCheckDelegateVoteValidation() {
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), new Delegate("d", 2), null);
+  public void testCheckDelegateVoteValidation() throws InvalidDateException {
+    byte[] bytes = {0x1};
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), new Delegate("d", 2), t);
     entityManager.persist(b);
     Poll p = new Poll(b);
 
@@ -169,7 +181,7 @@ public class VoteActivePollsTest {
 
     assertThrows(
         PollNotFoundException.class,
-        () -> voteActivePollsService.checkDelegateVote(null, voter.getCc()));
+        () -> voteActivePollsService.checkDelegateVote(null, voter.getCitizenCardNumber()));
 
     entityManager.persist(p);
     entityManager.remove(voter);
@@ -177,7 +189,7 @@ public class VoteActivePollsTest {
         CitizenNotFoundException.class,
         () ->
             voteActivePollsService.checkDelegateVote(
-                p.getAssociatedBill().getTitle(), voter.getCc()));
+                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber()));
   }
 
   /**
@@ -186,9 +198,12 @@ public class VoteActivePollsTest {
    */
   @Test
   public void testVoteMoreThanOnce() throws ApplicationException {
+    byte[] bytes = {0x1};
     Delegate d = new Delegate("d", 99);
     entityManager.persist(d);
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d, null);
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
     entityManager.persist(b);
     Poll p = new Poll(b);
     entityManager.persist(p);
@@ -196,14 +211,15 @@ public class VoteActivePollsTest {
     entityManager.persist(voter);
 
     // citizen first vote
-    voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.NEGATIVE);
+    voteActivePollsService.vote(
+        p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.NEGATIVE);
 
     // assert that a CitizenAlreadyVotedException is thrown when the citizen tries to vote again
     assertThrows(
         CitizenAlreadyVotedException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), voter.getCc(), VoteType.POSITIVE));
+                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.POSITIVE));
 
     /* assert that a CitizenAlreadyVotedException is thrown when the delegate tries to
     vote again (he has a POSITIVE vote by default) */
@@ -211,7 +227,7 @@ public class VoteActivePollsTest {
         CitizenAlreadyVotedException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), d.getCc(), VoteType.NEGATIVE));
+                p.getAssociatedBill().getTitle(), d.getCitizenCardNumber(), VoteType.NEGATIVE));
   }
 
   /**
@@ -221,9 +237,12 @@ public class VoteActivePollsTest {
   @Test
   public void testVote() throws ApplicationException {
     // Set up needed data
+    byte[] bytes = {0x1};
     Delegate d = new Delegate("d", 99);
     entityManager.persist(d);
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d, null);
+    Theme t = new Theme("t", null);
+    entityManager.persist(t);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
     entityManager.persist(b);
     Poll p = new Poll(b);
     entityManager.persist(p);
@@ -248,7 +267,8 @@ public class VoteActivePollsTest {
       }
 
       // call method under test
-      voteActivePollsService.vote(p.getAssociatedBill().getTitle(), voter.getCc(), voteType);
+      voteActivePollsService.vote(
+          p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), voteType);
     }
 
     // Test that the poll now has three negative votes and four positive votes (as expected)
@@ -266,7 +286,8 @@ public class VoteActivePollsTest {
     entityManager.persist(d2);
 
     // check if delegate can also vote
-    voteActivePollsService.vote(p.getAssociatedBill().getTitle(), d2.getCc(), VoteType.NEGATIVE);
+    voteActivePollsService.vote(
+        p.getAssociatedBill().getTitle(), d2.getCitizenCardNumber(), VoteType.NEGATIVE);
     assertTrue(p.getPublicVoters().containsKey(d2));
     assertEquals(4, p.getNumNegativeVotes());
   }
@@ -295,7 +316,8 @@ public class VoteActivePollsTest {
     Citizen voterWithNoDelegates = new Citizen("c", 33);
     entityManager.persist(voterWithNoDelegates);
 
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), proposer, theme);
+    byte[] bytes = {0x1};
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), proposer, theme);
     entityManager.persist(b);
 
     Poll p = new Poll(b);
@@ -304,16 +326,17 @@ public class VoteActivePollsTest {
     // Set delegate theme for voter and make delegate vote on poll
     voter.addDelegateTheme(dt);
     voteActivePollsService.vote(
-        p.getAssociatedBill().getTitle(), delegate.getCc(), VoteType.NEGATIVE);
+        p.getAssociatedBill().getTitle(), delegate.getCitizenCardNumber(), VoteType.NEGATIVE);
 
     // Check that delegate's vote was properly registered
     VoteType actualVoteType =
-        voteActivePollsService.checkDelegateVote(p.getAssociatedBill().getTitle(), voter.getCc());
+        voteActivePollsService.checkDelegateVote(
+            p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber());
     assertEquals(VoteType.NEGATIVE, actualVoteType);
 
     // Check that a citizen with no delegates returns null when checking vote
     assertNull(
         voteActivePollsService.checkDelegateVote(
-            p.getAssociatedBill().getTitle(), voterWithNoDelegates.getCc()));
+            p.getAssociatedBill().getTitle(), voterWithNoDelegates.getCitizenCardNumber()));
   }
 }

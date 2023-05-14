@@ -17,6 +17,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ListActivePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
@@ -43,13 +44,14 @@ public class ListActivePollsUseCaseTest {
 
   /** Test case to test the output type (should be PollDTO). */
   @Test
-  public void testOutputType() {
+  public void testOutputType() throws InvalidDateException {
     // Creating and persisting test data
+    byte[] bytes = {0x1, 0x49};
     Delegate d = new Delegate("d", 1);
     entityManager.persist(d);
     Theme t = new Theme("t", null);
     entityManager.persist(t);
-    Bill b = new Bill("b", "b", null, LocalDate.now(), d, t);
+    Bill b = new Bill("bill", "desc", bytes, LocalDate.now(), d, t);
     entityManager.persist(b);
     Poll p = new Poll(b);
     entityManager.persist(p);
@@ -84,16 +86,16 @@ public class ListActivePollsUseCaseTest {
    * active Poll is equal to "ACTIVE".
    */
   @Test
-  public void testGetActivePolls() {
+  public void testGetActivePolls() throws InvalidDateException {
     boolean approvedType = false;
-
+    byte[] bytes = {0x1};
     // Loop through 50 times to create and persist test data
-    for (int i = 0; i < 50; i++) {
+    for (int i = 100; i < 150; i++) {
       Delegate d = new Delegate(String.valueOf(i), i);
       entityManager.persist(d);
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
-      Bill b = new Bill(String.valueOf(i + 1), String.valueOf(i), null, LocalDate.now(), d, t);
+      Bill b = new Bill(String.valueOf(i), "desc", bytes, LocalDate.now(), d, t);
       entityManager.persist(b);
       Poll p = new Poll(b);
       entityManager.persist(p);
@@ -118,7 +120,9 @@ public class ListActivePollsUseCaseTest {
 
     // Ensure that each PollDTO in the list has a status of ACTIVE.
     for (PollDTO pollDTO : activePolls) {
-      assertEquals(PollStatus.ACTIVE, pollCatalog.getPollByTitle(pollDTO.getTitle()).getStatus());
+      assertEquals(
+          PollStatus.ACTIVE,
+          pollCatalog.getPollByTitle(pollDTO.getTitle()).orElseThrow().getStatus());
     }
   }
 }

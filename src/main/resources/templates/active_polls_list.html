@@ -3,7 +3,7 @@
 
 <body>
 <section>
-    <h2>Projectos de Lei em Votação:</h2>
+    <h2>Projetos de Lei em Votação:</h2>
     <table>
         <thead>
         <tr>
@@ -12,7 +12,7 @@
         </thead>
         <tbody>
         <tr th:if="${activePolls.isEmpty()}">
-            <td colspan="1">Não há projectos de lei em votação neste momento.</td>
+            <td colspan="1">Não há projetos de lei em votação neste momento.</td>
         </tr>
         <tr th:each="activePoll : ${activePolls}">
             <td><a th:text="${activePoll.title}"></a></td>

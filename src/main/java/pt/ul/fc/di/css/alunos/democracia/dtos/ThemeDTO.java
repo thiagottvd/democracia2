@@ -1,8 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.dtos;
 
-/*
- * A data transfer object (DTO) representing a theme.
- */
+/** A data transfer object (DTO) representing a theme. */
 public class ThemeDTO {
   private final String designation;
 

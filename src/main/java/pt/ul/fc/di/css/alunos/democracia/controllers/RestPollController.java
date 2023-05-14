@@ -12,7 +12,7 @@ import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
 
-@RestController()
+@RestController
 @RequestMapping("api")
 public class RestPollController {
 

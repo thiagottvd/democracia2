@@ -9,7 +9,7 @@ public class PollDTO {
   /**
    * Constructs a new PollDTO with the given title.
    *
-   * @param id
+   * @param id the poll ID.
    * @param title the title of the poll.
    */
   public PollDTO(Long id, String title) {

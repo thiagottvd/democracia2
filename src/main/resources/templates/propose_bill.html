@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}" lang="pt-PT">
+
+<body>
+<section>
+    <h2>Apresentar Projeto de Lei:</h2>
+
+    <div style="color: red" class="error" th:text="${error}"></div><br />
+
+    <form action="#" th:action="@{/bills}" th:object="${bill}" method="post" enctype="multipart/form-data">
+        <label th:for="title">Título:</label>
+        <label>
+            <input name="title" th:field="*{title}" />
+        </label>
+
+        <label th:for="description">Descrição:</label>
+        <label>
+            <textarea name="description" th:field="*{description}" rows="3"></textarea>
+        </label>
+
+        <label th:for="file">Ficheiro PDF:</label>
+        <input type="file" name="file"/><br />
+
+        <label th:for="expirationDate">Data de Expiração:</label>
+        <label>
+            <input type="date" name="expirationDate" th:field="*{expirationDate}" required/>
+        </label><br />
+
+        <label for="themeDesignation">Designação do Tema:</label><br />
+        <select name="themeDesignation" id="themeDesignation" th:field="*{themeDesignation}" required>
+            <option value="">Selecione um tema</option>
+            <th:block th:each="theme : ${themes}">
+                <option th:value="${theme}" th:text="${theme}"></option>
+            </th:block>
+        </select><br />
+
+        <input type="submit" value="Apresentar Projeto" />
+    </form>
+
+</section>
+</body>
+
+</html>

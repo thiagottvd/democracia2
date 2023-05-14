@@ -28,12 +28,13 @@ public class BillCatalog {
   }
 
   /**
-   * Saves the specified bill to the database.
+   * Saves the specified bill to the database and retrieves it.
    *
    * @param bill the bill to save.
+   * @return the saved bill object.
    */
-  public void saveBill(Bill bill) {
-    billRepository.save(bill);
+  public Bill saveBill(Bill bill) {
+    return billRepository.save(bill);
   }
 
   /**

@@ -57,13 +57,15 @@ public class ChooseDelegateService {
    * delegate has been chosen for the theme, a new delegate theme is created and added to {@code
    * DelegateThemeCatalog} which is a catalog for storing DelegateTheme objects.
    *
-   * @param delegateCc Delegate identification.
+   * @param delegateCitizenCardNumber Delegate identification.
    * @param themeDesignation Theme identification.
-   * @param voterCc Citizen who is choosing DelegateTheme identification.
+   * @param voterCitizenCardNumber Citizen who is choosing DelegateTheme identification.
    * @throws ApplicationException if an unexpected error occurs while selecting the delegate.
    */
-  public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
+  public void chooseDelegate(
+      Integer delegateCitizenCardNumber, String themeDesignation, Integer voterCitizenCardNumber)
       throws ApplicationException {
-    chooseDelegateHandler.chooseDelegate(delegateCc, themeDesignation, voterCc);
+    chooseDelegateHandler.chooseDelegate(
+        delegateCitizenCardNumber, themeDesignation, voterCitizenCardNumber);
   }
 }

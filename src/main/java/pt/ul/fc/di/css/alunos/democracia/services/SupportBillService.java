@@ -29,10 +29,10 @@ public class SupportBillService {
    * Supports a bill with the given ID by a citizen with the given citizen card number.
    *
    * @param billId the ID of the bill to be supported.
-   * @param cc the citizen card number of the citizen who supports the bill.
+   * @param citizenCardNumber the citizen card number of the citizen who supports the bill.
    * @throws ApplicationException if an error occurs during the support operation.
    */
-  public void supportBill(Long billId, Integer cc) throws ApplicationException {
-    supportBillHandler.supportBill(billId, cc);
+  public void supportBill(Long billId, Integer citizenCardNumber) throws ApplicationException {
+    supportBillHandler.supportBill(billId, citizenCardNumber);
   }
 }

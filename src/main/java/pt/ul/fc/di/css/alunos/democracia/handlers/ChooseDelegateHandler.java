@@ -54,7 +54,7 @@ public class ChooseDelegateHandler {
   public List<DelegateDTO> getDelegates() {
     List<Delegate> delegates = citizenCatalog.getDelegates();
     return delegates.stream()
-        .map(delegate -> new DelegateDTO(delegate.getName(), delegate.getCc()))
+        .map(delegate -> new DelegateDTO(delegate.getName(), delegate.getCitizenCardNumber()))
         .collect(Collectors.toList());
   }
 
@@ -77,48 +77,52 @@ public class ChooseDelegateHandler {
    * delegate has been chosen for the theme, a new delegate theme is created and added to {@code
    * DelegateThemeCatalog} which is a catalog for storing DelegateTheme objects.
    *
-   * @param delegateCc Delegate identification.
+   * @param delegateCitizenCardNumber Delegate identification.
    * @param themeDesignation Theme identification.
-   * @param voterCc Citizen who is choosing DelegateTheme identification.
+   * @param voterCitizenCardNumber Citizen who is choosing DelegateTheme identification.
    * @throws CitizenNotFoundException if the delegate or voter are not found in the catalog.
    * @throws ThemeNotFoundException if the specified theme is not found in the catalog.
    */
-  public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
+  public void chooseDelegate(
+      Integer delegateCitizenCardNumber, String themeDesignation, Integer voterCitizenCardNumber)
       throws ApplicationException {
 
-    Delegate d = citizenCatalog.getDelegate(delegateCc);
-    if (d == null) {
-      throw new CitizenNotFoundException("Delegate with cc" + delegateCc + " not found.");
+    Optional<Delegate> delegate =
+        citizenCatalog.getDelegateByCitizenCardNumber(delegateCitizenCardNumber);
+    if (delegate.isEmpty()) {
+      throw new CitizenNotFoundException(
+          "Delegate with citizen card number " + delegateCitizenCardNumber + " was not found.");
     }
-    Theme t = themeCatalog.getTheme(themeDesignation);
-    if (t == null) {
+    Optional<Theme> theme = themeCatalog.getTheme(themeDesignation);
+    if (theme.isEmpty()) {
       throw new ThemeNotFoundException(
           "Theme with designation " + themeDesignation + " not found.");
     }
-    Optional<Citizen> c = citizenCatalog.getCitizenByCc(voterCc);
+    Optional<Citizen> c = citizenCatalog.getCitizenByCitizenCardNumber(voterCitizenCardNumber);
     if (c.isEmpty()) {
-      throw new CitizenNotFoundException("Citizen with cc" + voterCc + " not found.");
+      throw new CitizenNotFoundException(
+          "Citizen with citizen card number " + voterCitizenCardNumber + " was not found.");
     }
 
-    List<DelegateTheme> dt_list = dtCatalog.getAll();
+    List<DelegateTheme> dtList = dtCatalog.getAll();
 
     // Removes old delegates that have the same theme as the one chosen;
-    removeOldDelegateTheme(t, c.get());
+    removeOldDelegateTheme(theme.get(), c.get());
 
     boolean exists = false;
-    for (int i = 0; i < dt_list.size() && !exists; i++) {
-      DelegateTheme dt = dt_list.get(i);
-      if (dt.checkDelegateTheme(d, t)) {
+    for (int i = 0; i < dtList.size() && !exists; i++) {
+      DelegateTheme dt = dtList.get(i);
+      if (dt.checkDelegateTheme(delegate.get(), theme.get())) {
         exists = true;
         dt.addVoter(c.get());
         c.get().addDelegateTheme(dt);
       }
     }
     if (!exists) {
-      DelegateTheme dt = new DelegateTheme(d, t);
+      DelegateTheme dt = new DelegateTheme(delegate.get(), theme.get());
       dt.addVoter(c.get());
       c.get().addDelegateTheme(dt);
-      dtCatalog.addDT(dt);
+      dtCatalog.saveDelegateTheme(dt);
     }
   }
 

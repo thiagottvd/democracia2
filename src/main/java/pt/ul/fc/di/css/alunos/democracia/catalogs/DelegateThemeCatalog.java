@@ -17,10 +17,11 @@ public class DelegateThemeCatalog {
   /**
    * Constructs a DelegateThemeCatalog instance with the specified DelegateThemeRepository instance.
    *
-   * @param dtRepo the DelegateThemeRepository instance to use for performing database operations.
+   * @param dtRepository the DelegateThemeRepository instance to use for performing database
+   *     operations.
    */
-  public DelegateThemeCatalog(DelegateThemeRepository dtRepo) {
-    this.dtRepository = dtRepo;
+  public DelegateThemeCatalog(DelegateThemeRepository dtRepository) {
+    this.dtRepository = dtRepository;
   }
 
   /**
@@ -37,7 +38,7 @@ public class DelegateThemeCatalog {
    *
    * @param dt The DelegateThem object to save.
    */
-  public void addDT(DelegateTheme dt) {
+  public void saveDelegateTheme(DelegateTheme dt) {
     dtRepository.save(dt);
   }
 }

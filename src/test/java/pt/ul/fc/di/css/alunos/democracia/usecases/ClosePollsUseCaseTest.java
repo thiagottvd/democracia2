@@ -13,6 +13,7 @@ import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ClosePollsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
@@ -37,19 +38,18 @@ public class ClosePollsUseCaseTest {
    * representing non-voters.
    */
   @Test
-  public void testClosePollsWithNoRepresentativesForCitizen() {
+  public void testClosePollsWithNoRepresentativesForCitizen() throws InvalidDateException {
     // Creating and persisting needed data
+    byte[] bytes = {0x1};
     Delegate proposer = em.persist(new Delegate("proposer", 0));
     Theme saude = em.persist(new Theme("saude", null));
     Theme hospital = em.persist(new Theme("hospital", saude));
     Theme remedios = em.persist(new Theme("remedios", hospital));
     em.persist(new Citizen("c1", 55));
-    Poll poll =
-        em.persist(
-            new Poll(
-                new Bill(
-                    "bTitle", "desc", null, LocalDate.now().minusDays(1), proposer, remedios)));
-
+    Bill bill = new Bill("bTitle", "desc", bytes, LocalDate.now(), proposer, remedios);
+    bill.setDate(LocalDate.now().minusDays(1));
+    em.persist(bill);
+    Poll poll = em.persist(new Poll(bill));
     // Calling the method being tested
     closePollsHandler.closePolls();
 
@@ -61,7 +61,7 @@ public class ClosePollsUseCaseTest {
 
   /** Tests all behaviour of the use case main scenario. */
   @Test
-  public void assignVotesAndClosePollsTest() {
+  public void assignVotesAndClosePollsTest() throws InvalidDateException {
     // Creating and persisting proposer and delegates
     Delegate proposer = em.persist(new Delegate("proposer", 0));
     Delegate deleg1 = em.persist(new Delegate("d1", 1));
@@ -81,13 +81,14 @@ public class ClosePollsUseCaseTest {
     Theme gastos = em.persist(new Theme("gastos", orcamento));
 
     // Creating and persisting bills for each theme
-    Bill saudeBill =
-        em.persist(
-            new Bill("saudeBill", "desc", null, LocalDate.now().minusDays(1), proposer, remedios));
+    byte[] bytes = {0x1};
+    Bill saudeBill = new Bill("saudeBill", "desc", bytes, LocalDate.now(), proposer, remedios);
+    saudeBill.setDate(LocalDate.now().minusDays(1));
+    em.persist(saudeBill);
     Bill economiaBill =
-        em.persist(
-            new Bill(
-                "economiaBill", "desc", null, LocalDate.now().minusDays(1), proposer, impostos));
+        new Bill("economiaBill", "desc", bytes, LocalDate.now(), proposer, impostos);
+    economiaBill.setDate(LocalDate.now().minusDays(1));
+    em.persist(economiaBill);
 
     // Creating and persisting polls with a bill as the subject
     Poll saudePoll = em.persist(new Poll(saudeBill));
