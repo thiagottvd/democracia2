@@ -53,7 +53,8 @@ public class SupportBillHandler {
    *
    * @param billId the ID of the bill to support.
    * @param citizenCardNumber the citizen card number of the citizen who wants to support the bill.
-   * @throws ApplicationException if the bill or the citizen are not found.
+   * @throws BillNotFoundException if the bill is not found.
+   * @throws CitizenNotFoundException if the citizen is not found.
    */
   public void supportBill(Long billId, Integer citizenCardNumber) throws ApplicationException {
     Optional<Bill> bill = billCatalog.getBill(billId);

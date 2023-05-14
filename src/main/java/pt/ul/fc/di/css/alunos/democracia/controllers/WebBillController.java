@@ -17,14 +17,17 @@ import org.springframework.web.multipart.MultipartFile;
 import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.BillNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.services.ConsultBillsService;
 import pt.ul.fc.di.css.alunos.democracia.services.ProposeBillService;
+import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
 
 /**
  * The WebBillController class is a controller that handles HTTP requests related to bills. It
  * generates and returns an HTML webpage to the client, and exposes endpoints for proposing bills,
- * consulting bills, and viewing the details of a specific bill.
+ * consulting bills, viewing the details of a specific bill, and supporting a specific bill.
  */
 @Controller
 public class WebBillController {
@@ -32,6 +35,7 @@ public class WebBillController {
   private static final String PROPOSE_BILL_VIEW = "propose_bill";
   private static final String BILL_DETAILS_VIEW = "bill_details";
   private static final String BILL_NOT_FOUND_VIEW = "error/bill_404";
+  private static final String CITIZEN_NOT_FOUND_VIEW = "error/citizen_404";
   private static final String PDF_READING_ERROR_VIEW = "error/pdf_500";
   private static final String REDIRECT_TO_BILL_DETAIL_VIEW = "redirect:/bills/";
   private static final String TITLE_FIELD = "title";
@@ -47,22 +51,29 @@ public class WebBillController {
   private static final String GENERIC_ERROR = "Ocorreu um erro inesperado.";
   private static final String FILE_MAX_CAPACITY_ERROR =
       "A capacidade máxima do ficheiro PDF é de 10MB.";
+  private static final String SUPPORT_BILL_SUCCESS = "Sucesso ao apoiar o Projeto de Lei!";
 
   private final Logger logger = LoggerFactory.getLogger(WebPollController.class);
   private final ProposeBillService proposeBillService;
   private final ConsultBillsService consultBillsService;
+  private final SupportBillService supportBillService;
 
   /**
-   * Constructs a new WebBillController with the given ProposeBillService and ConsultBillsService.
+   * Constructs a new WebBillController with the given ProposeBillService, ConsultBillsService and
+   * SupportBillService.
    *
    * @param proposeBillService the ProposeBillService to use for proposing new bills.
    * @param consultBillsService the ConsultBillsService to use for consulting existing bills.
+   * @param supportBillService the SupportBillService to use for supporting a bill.
    */
   @Autowired
   public WebBillController(
-      ProposeBillService proposeBillService, ConsultBillsService consultBillsService) {
+      ProposeBillService proposeBillService,
+      ConsultBillsService consultBillsService,
+      SupportBillService supportBillService) {
     this.proposeBillService = proposeBillService;
     this.consultBillsService = consultBillsService;
+    this.supportBillService = supportBillService;
   }
 
   /**
@@ -70,10 +81,8 @@ public class WebBillController {
    * new bill. Populates the model with the bill data and a list of available themes to be displayed
    * on the form.
    *
-   * <p>Returns the Thymeleaf template for the page where a bill can be proposed.
-   *
    * @param model the model to be used by Thymeleaf to render the view.
-   * @return the Thymeleaf template for the proposal bill page.
+   * @return the filled HTML page for the proposal bill page.
    */
   @GetMapping("/bills/propose")
   public String proposeBill(final Model model) {
@@ -95,8 +104,8 @@ public class WebBillController {
    * @param bDTO the BillDTO object containing the bill data from the form.
    * @param bindingResult the result of the validation process for the BillDTO object.
    * @param file the PDF file containing the bill main content.
-   * @return the Thymeleaf template for the proposal bill page in case of errors, or a redirect to
-   *     the bill detail view in case of success.
+   * @return the HTML for the proposal bill page in case of errors, or a redirect to the bill detail
+   *     view in case of success.
    */
   @PostMapping("/bills")
   public String proposeBillAction(
@@ -139,8 +148,8 @@ public class WebBillController {
    *
    * @param model the model to be used by Thymeleaf to render the view.
    * @param billId the ID of the bill to retrieve.
-   * @return the Thymeleaf template for the bill detail view, or a template for a not-found page if
-   *     the bill doesn't exist.
+   * @return the filled HTML page for the bill detail view, or a HTML for a not-found page if the
+   *     bill doesn't exist.
    */
   @GetMapping("/bills/{billId}")
   public String getBillDetails(final Model model, @PathVariable Long billId) {
@@ -181,6 +190,65 @@ public class WebBillController {
       return PDF_READING_ERROR_VIEW;
     }
     return null;
+  }
+
+  /**
+   * Handles the GET request for supporting a bill with a given ID. It fetches the details of the
+   * bill with the specified ID and adds it to the model. It then calls the supportBillAction method
+   * to handle the actual support action.
+   *
+   * @param model The model object to which the bill details are added.
+   * @param billId The ID of the bill to be supported.
+   * @return the filled HTML page for the bill detail view, or an HTML for a not-found page if the
+   *     bill doesn't exist.
+   */
+  @GetMapping(value = "/bills/{billId}/support")
+  public String supportBill(final Model model, @PathVariable Long billId) {
+    try {
+      BillDTO billDTO = consultBillsService.getBillDetails(billId);
+      model.addAttribute("bill", billDTO);
+      return supportBillAction(model, billId);
+    } catch (ApplicationException e) {
+      return BILL_NOT_FOUND_VIEW;
+    }
+  }
+
+  /**
+   * Handles the PATCH request for supporting a bill with a given ID. It calls the supportBill
+   * method of the service layer to perform the support action, and if it is successful, it updates
+   * the number of supporters, update the bill details and adds a success message to the model;
+   * otherwise, it returns an error page (if the bill or the voter are not found) or adds an error
+   * message and updates de page.
+   *
+   * @param model The model object to which the bill details and success/error messages are added.
+   * @param billId The ID of the bill to be supported.
+   * @return the filled HTML page for the bill detail view, or an HTML for a not-found page if the
+   *     bill or citizen doesn't exist.
+   */
+  @PatchMapping(value = "/bills/{billId}/support")
+  public String supportBillAction(Model model, @PathVariable Long billId) {
+    // TODO: The user citizen card number is a mock, it should be the citizen card number of the
+    // user who's authenticated.
+    int userCitizenCardNumber = 1;
+    try {
+      supportBillService.supportBill(billId, userCitizenCardNumber);
+    } catch (BillNotFoundException e) {
+      return BILL_NOT_FOUND_VIEW;
+    } catch (CitizenNotFoundException e) {
+      return CITIZEN_NOT_FOUND_VIEW;
+    } catch (ApplicationException e) {
+      model.addAttribute("error", e.getMessage());
+      return BILL_DETAILS_VIEW;
+    }
+    try {
+      // update number of supporters
+      BillDTO billDTO = consultBillsService.getBillDetails(billId);
+      model.addAttribute("bill", billDTO);
+    } catch (ApplicationException e) {
+      return BILL_NOT_FOUND_VIEW;
+    }
+    model.addAttribute("success", SUPPORT_BILL_SUCCESS);
+    return BILL_DETAILS_VIEW;
   }
 
   /**
