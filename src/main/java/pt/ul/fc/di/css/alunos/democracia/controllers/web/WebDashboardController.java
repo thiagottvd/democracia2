@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia.controllers;
+package pt.ul.fc.di.css.alunos.democracia.controllers.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

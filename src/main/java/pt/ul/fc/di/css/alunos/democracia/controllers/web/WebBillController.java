@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia.controllers;
+package pt.ul.fc.di.css.alunos.democracia.controllers.web;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
