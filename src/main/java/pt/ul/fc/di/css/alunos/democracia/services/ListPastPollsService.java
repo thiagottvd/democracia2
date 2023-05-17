@@ -11,7 +11,7 @@ import java.util.List;
  * Use case C.
  *
  * <p>Service class that retrieves a list of the polls that are inactive (rejected or approved polls)
- * calling the appropriate handler {@link listPastPollsHandler} to retrieve the inactive polls and converting
+ * calling the appropriate handler {@link ListPastPollsHandler} to retrieve the inactive polls and converting
  * them into a list of PollDTO objects.
  */
 @Service
@@ -23,7 +23,7 @@ public class ListPastPollsService {
      * Constructor for the ListPastPollsService class. It takes a ListPastPollsHandler object as
      * parameter and sets it as an attribute.
      *
-     * @param ListPastPollsHandler the handler responsible for retrieving the inactive polls.
+     * @param listPastPollsHandler the handler responsible for retrieving the inactive polls.
      */
     @Autowired
     public ListPastPollsService(ListPastPollsHandler listPastPollsHandler) {

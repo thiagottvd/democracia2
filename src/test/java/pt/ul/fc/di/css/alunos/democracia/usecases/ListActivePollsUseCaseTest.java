@@ -23,7 +23,8 @@ import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 
 /**
  * This class contains the test cases for the use case D. The class tests the system behaviour when
- * retrieving active polls and verifies the output type. It uses JUnit 5.
+ * retrieving active polls and verifies the output type, system behaviour when there is no inactive
+ *  * polls, and if the use main testing. It uses JUnit 5.
  */
 @DataJpaTest
 public class ListActivePollsUseCaseTest {
@@ -70,10 +71,10 @@ public class ListActivePollsUseCaseTest {
     // Given an empty database
 
     // When calling the method to retrieve active polls
-    List<PollDTO> activeBills = listActivePollsService.getActivePolls();
+    List<PollDTO> activePolls = listActivePollsService.getActivePolls();
 
     // Then the returned list should be empty
-    assertEquals(0, activeBills.size());
+    assertEquals(0, activePolls.size());
   }
 
   /**

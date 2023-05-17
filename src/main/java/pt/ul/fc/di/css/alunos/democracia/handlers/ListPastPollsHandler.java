@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
-import pt.ul.fc.di.css.alunos.democracia.entities.Poll;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,9 +38,9 @@ public class ListPastPollsHandler {
      * @return a list of inactive polls.
      */
     public List<PollDTO> getInactivePolls() {
-        List<Poll> inactivePolls = pollCatalog.getPollsByStatusType(PollStatus.REJECTED);
-        inactivePolls.addAll(pollCatalog.getPollsByStatusType(PollStatus.APPROVED));
-        return inactivePolls.stream()
+        List<PollStatus> inactiveStatusTypes = Arrays.asList(PollStatus.REJECTED, PollStatus.APPROVED);
+        return inactiveStatusTypes.stream()
+                .flatMap(statusType -> pollCatalog.getPollsByStatusType(statusType).stream())
                 .map(poll -> new PollDTO(poll.getAssociatedBill().getTitle()))
                 .collect(Collectors.toList());
     }
