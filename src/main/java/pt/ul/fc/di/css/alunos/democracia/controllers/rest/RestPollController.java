@@ -37,15 +37,15 @@ public class RestPollController {
     return listActivePollsService.getActivePolls();
   }
 
-  @GetMapping("/polls/{pollId}/public-voters/{delegateId}")
+  @GetMapping("/polls/{pollId}/public-voters/{delegateId}/vote}")
   public ResponseEntity<?> getDelegateVoteForPoll(
       @PathVariable Long pollId, @PathVariable Long delegateId) {
     // TODO
     return handleException(HttpStatus.NOT_IMPLEMENTED, "This method is not yet implemented.");
   }
 
-  @PatchMapping("/polls/{pollId}/private-voters")
-  public ResponseEntity<?> vote(@PathVariable Long pollId) {
+  @PatchMapping("/polls/{pollId}/vote")
+  public ResponseEntity<?> vote(@PathVariable Long pollId, @RequestBody Integer citizenCardNumber) {
     // TODO
     return handleException(HttpStatus.NOT_IMPLEMENTED, "This method is not yet implemented.");
   }

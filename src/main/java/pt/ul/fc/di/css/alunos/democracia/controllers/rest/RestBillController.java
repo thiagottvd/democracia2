@@ -80,7 +80,7 @@ public class RestBillController {
    *     the bill is not found or the citizen is not found, or a INTERNAL_SERVER_ERROR response if
    *     an internal server error occurs.
    */
-  @PatchMapping("/bills/support/{billId}")
+  @PatchMapping("/bills/{billId}/support")
   public ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
     try {
       supportBillService.supportBill(billId, cc);
