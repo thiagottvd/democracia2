@@ -87,9 +87,6 @@ public class WebBillController {
   @GetMapping("/bills/propose")
   public String proposeBill(final Model model) {
     BillDTO billDTO = new BillDTO();
-    // TODO: It is a mock, it must be the citizen card number of the user who is proposing the bill.
-    // billDTO.setDelegateCitizenCardNumber(1);
-    // logger.debug(billDTO.getDelegateCitizenCardNumber().toString());
     model.addAttribute("bill", billDTO);
     model.addAttribute(
         "themes", proposeBillService.getThemes().stream().map(ThemeDTO::getDesignation));
@@ -114,6 +111,9 @@ public class WebBillController {
       BindingResult bindingResult,
       @RequestParam("file") MultipartFile file) {
 
+    // The user citizen card number is a mock, because authentication is not yet implemented.
+    int userCitizenCardNumber = 1;
+
     if (file.isEmpty() || !Objects.equals(file.getContentType(), MediaType.APPLICATION_PDF_VALUE)) {
       setupModelOnErrorForProposeBillAction(model, "fileData");
       return PROPOSE_BILL_VIEW;
@@ -133,7 +133,7 @@ public class WebBillController {
               file.getBytes(),
               bDTO.getExpirationDate(),
               bDTO.getThemeDesignation(),
-              1);
+                  userCitizenCardNumber);
       logger.debug("INFO: Bill proposed. Reference added to the database.");
       return REDIRECT_TO_BILL_DETAIL_VIEW + billDTO.getId();
     } catch (ApplicationException | IOException e) {
@@ -171,7 +171,7 @@ public class WebBillController {
    * @param response the HttpServletResponse object used to write the PDF content to the response.
    * @return nothing.
    */
-  @GetMapping(value = "/bills/{billId}/pdf")
+  @GetMapping("/bills/{billId}/pdf")
   public String displayPDF(@PathVariable Long billId, HttpServletResponse response) {
     BillDTO billDTO;
     try {
@@ -202,7 +202,7 @@ public class WebBillController {
    * @return the filled HTML page for the bill detail view, or an HTML for a not-found page if the
    *     bill doesn't exist.
    */
-  @GetMapping(value = "/bills/{billId}/support")
+  @GetMapping("/bills/{billId}/support")
   public String supportBill(final Model model, @PathVariable Long billId) {
     try {
       BillDTO billDTO = consultBillsService.getBillDetails(billId);
@@ -225,10 +225,9 @@ public class WebBillController {
    * @return the filled HTML page for the bill detail view, or an HTML for a not-found page if the
    *     bill or citizen doesn't exist.
    */
-  @PatchMapping(value = "/bills/{billId}/support")
+  @PatchMapping("/bills/{billId}/support")
   public String supportBillAction(Model model, @PathVariable Long billId) {
-    // TODO: The user citizen card number is a mock, it should be the citizen card number of the
-    // user who's authenticated.
+    // The user citizen card number is a mock, because authentication is not yet implemented.
     int userCitizenCardNumber = 1;
     try {
       supportBillService.supportBill(billId, userCitizenCardNumber);

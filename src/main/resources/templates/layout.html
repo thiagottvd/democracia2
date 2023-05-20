@@ -22,9 +22,8 @@
     <ol>
       <li><a th:href="@{/polls/active}">Projetos de Lei em Votação</a></li>
       <li><a th:href="@{/bills/propose}">Apresentar Projeto de Lei</a></li>
-      <!--      <li><a th:href="@{/bills/open}">Consultar Projetos de Lei</a></li>-->
-      <!--      <li><a th:href="@{/bills/support}">Apoiar Projetos de Lei</a></li>-->
-      <!--      <li><a th:href="@{/delegates/choose}">Escolher Delegado</a></li>-->
+<!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
+      <li><a th:href="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}">Escolher Delegado</a></li>
       <!--      <li><a th:href="@{/polls/vote}">Votar em Projetos de Lei</a></li>-->
     </ol>
   </div>
