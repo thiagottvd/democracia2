@@ -53,7 +53,7 @@ public class ConsultBillsHandler {
   public BillDTO getBillDetails(Long billId) throws ApplicationException {
     Optional<Bill> bill = billCatalog.getBill(billId);
     if (bill.isEmpty()) {
-      throw new BillNotFoundException("The bill \"" + billId + "\" was not found.");
+      throw new BillNotFoundException("The bill with id " + billId + " was not found.");
     }
     return new BillDTO(bill.get());
   }

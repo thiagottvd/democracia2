@@ -38,7 +38,8 @@ public class VoteActivePollsService {
    *
    * @param pollTitle The poll title to search for the actual Poll.
    * @param voterCc The Citizen cc.
-   * @return The Delegate vote in the form of a string.
+   * @return The Delegate vote in the form of a string. Returns null if there was no valid delegate
+   *     found for citizen
    * @throws ApplicationException If no Poll or Citizen are found.
    */
   public VoteType checkDelegateVote(String pollTitle, Integer voterCc) throws ApplicationException {

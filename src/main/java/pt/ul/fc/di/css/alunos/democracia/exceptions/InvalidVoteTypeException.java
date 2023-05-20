@@ -14,15 +14,4 @@ public class InvalidVoteTypeException extends ApplicationException {
   public InvalidVoteTypeException(String message) {
     super(message);
   }
-
-  /**
-   * Constructs a new InvalidVoteTypeException with the specified error message and a reference to
-   * the lower-level exception that caused this exception.
-   *
-   * @param message the error message to be associated with the exception.
-   * @param e the lower-level exception that caused this exception to be thrown.
-   */
-  public InvalidVoteTypeException(String message, Exception e) {
-    super(message, e);
-  }
 }

@@ -7,15 +7,16 @@
 
 ## O que já foi feito
 
- * Use Case D: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case E: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case F: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case G: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case H: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case I: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case J: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case K: Implementado; Totalmente documentado; Testes Implementados.
-
+ * Use Case D: Implementado; totalmente documentado; testes implementados.
+ * Use Case E: Implementado; totalmente documentado; testes implementados.
+ * Use Case F: Implementado; totalmente documentado; testes implementados.
+ * Use Case G: Implementado; totalmente documentado; testes implementados.
+ * Use Case H: Implementado; totalmente documentado; testes implementados.
+ * Use Case I: Implementado; totalmente documentado; testes implementados.
+ * Use Case J: Implementado; totalmente documentado; testes implementados.
+ * Use Case K: Implementado; totalmente documentado; testes implementados.
+ * API REST: RestBillController: Implementado; totalmente documentado; testes implementados.
+             RestPollController: Parcialmente implementado; parcialmente documentado; TODO.
  ## TODO
 
  * Verificar se o mapeamento está o melhor possível.

@@ -268,4 +268,15 @@ public class Bill {
   public byte[] getFileData() {
     return fileData;
   }
+
+  /**
+   * This method must only be used for testing purposes.
+   *
+   * <p>Sets the ID of the Bill.
+   *
+   * @param id the ID to set for the Bill
+   */
+  public void setId(Long id) {
+    this.id = id;
+  }
 }
