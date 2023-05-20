@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.*;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
 
@@ -37,15 +40,27 @@ public class RestPollController {
     return listActivePollsService.getActivePolls();
   }
 
-  @GetMapping("/polls/{pollId}/public-voters/{delegateId}/vote}")
+  @GetMapping("/polls/{pollTitle}/delegate-vote-type}")
   public ResponseEntity<?> getDelegateVoteForPoll(
-      @PathVariable Long pollId, @PathVariable Long delegateId) {
-    // TODO
-    return handleException(HttpStatus.NOT_IMPLEMENTED, "This method is not yet implemented.");
+      @PathVariable String pollTitle, @RequestBody Integer citizenCardNumber) {
+
+    try {
+      VoteType voteType =
+          this.voteActivePollsService.checkDelegateVote(pollTitle, citizenCardNumber);
+      return ResponseEntity.ok().body(voteType);
+
+    } catch (PollNotFoundException | CitizenNotFoundException e) {
+      return handleException(HttpStatus.NOT_FOUND, e.getMessage());
+    } catch (ApplicationException e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  @PatchMapping("/polls/{pollId}/vote")
-  public ResponseEntity<?> vote(@PathVariable Long pollId, @RequestBody Integer citizenCardNumber) {
+  @PatchMapping("/polls/{pollTitle}/vote/{voteType}")
+  public ResponseEntity<?> vote(
+      @PathVariable String pollTitle,
+      @PathVariable VoteType voteType,
+      @RequestBody Integer citizenCardNumber) {
     // TODO
     return handleException(HttpStatus.NOT_IMPLEMENTED, "This method is not yet implemented.");
   }
