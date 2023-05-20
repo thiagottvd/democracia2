@@ -40,7 +40,7 @@ public class RestPollController {
     return listActivePollsService.getActivePolls();
   }
 
-  @GetMapping("/polls/{pollTitle}/delegate-vote-type}")
+  @GetMapping("/polls/{pollTitle}/delegate-vote-type")
   public ResponseEntity<?> getDelegateVoteForPoll(
       @PathVariable String pollTitle, @RequestBody Integer citizenCardNumber) {
 
@@ -61,8 +61,16 @@ public class RestPollController {
       @PathVariable String pollTitle,
       @PathVariable VoteType voteType,
       @RequestBody Integer citizenCardNumber) {
-    // TODO
-    return handleException(HttpStatus.NOT_IMPLEMENTED, "This method is not yet implemented.");
+    try {
+      this.voteActivePollsService.vote(pollTitle, citizenCardNumber, voteType);
+      return ResponseEntity.ok().build();
+    } catch (PollNotFoundException | CitizenNotFoundException e) {
+      return handleException(HttpStatus.NOT_FOUND, e.getMessage());
+    } catch (InvalidVoteTypeException e) {
+      return handleException(HttpStatus.CONFLICT, e.getMessage());
+    } catch (ApplicationException e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /**
