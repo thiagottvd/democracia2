@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.MenuController">
+   <children>
+      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" text="Menu" textAlignment="CENTER">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Separator prefWidth="200.0" />
+      <VBox alignment="CENTER" maxHeight="500.0" prefHeight="500.0" prefWidth="100.0">
+         <children>
+            <Button fx:id="listActivePollsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleListActivePollsButton" text="1. Listar as Votações em Curso" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="consultBillsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleConsultBillsButton" text="2. Consultar Projetos de Lei" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="voteActivePollsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleVoteActivePollsButton" text="3. Votar numa proposta." textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </VBox>
+   </children>
+</VBox>
