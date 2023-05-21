@@ -22,22 +22,21 @@ public class MenuController {
 
     @FXML
     void handleListActivePollsButton(ActionEvent event) {
-        setup("/com/example/democracia_desktop/active_polls_list.fxml", listActivePollsButton);
+        setupStage("/com/example/democracia_desktop/active_polls_list.fxml", listActivePollsButton);
     }
 
     @FXML
     void handleConsultBillsButton(ActionEvent event) {
-        // TODO
-        //setup("/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
+        setupStage("/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
     }
 
     @FXML
     void handleVoteActivePollsButton(ActionEvent event) {
         // TODO
-        //setup("/com/example/democracia_desktop/vote_active_polls.fxml", voteActivePollsButton);
+        //setupStage("/com/example/democracia_desktop/vote_active_polls.fxml", voteActivePollsButton);
     }
 
-    private void setup(String resource, Button button) {
+    private void setupStage(String resource, Button button) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
             Stage stage = (Stage) button.getScene().getWindow();
