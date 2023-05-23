@@ -5,22 +5,8 @@
 * Ivo Estrela   fc51051
 * Thiago Duarte fc53636
 
-## O que já foi feito
-
- * Use Case D: Implementado; totalmente documentado; testes implementados.
- * Use Case E: Implementado; totalmente documentado; testes implementados.
- * Use Case F: Implementado; totalmente documentado; testes implementados.
- * Use Case G: Implementado; totalmente documentado; testes implementados.
- * Use Case H: Implementado; totalmente documentado; testes implementados.
- * Use Case I: Implementado; totalmente documentado; testes implementados.
- * Use Case J: Implementado; totalmente documentado; testes implementados.
- * Use Case K: Implementado; totalmente documentado; testes implementados.
- * API REST: RestBillController: Implementado; totalmente documentado; testes implementados.
-             RestPollController: Parcialmente implementado; parcialmente documentado; TODO.
  ## TODO
-
- * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Entregar projeto.
+* API REST: Corrigir bugs do caso de uso 'Votar numa proposta.'; verificar se a semântica está de acordo com a semântica rest; testar.
 
 ## Dependências
 
