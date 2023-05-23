@@ -7,20 +7,8 @@
 
 ## O que já foi feito
 
- * Use Case D: Implementado; totalmente documentado; testes implementados.
- * Use Case E: Implementado; totalmente documentado; testes implementados.
- * Use Case F: Implementado; totalmente documentado; testes implementados.
- * Use Case G: Implementado; totalmente documentado; testes implementados.
- * Use Case H: Implementado; totalmente documentado; testes implementados.
- * Use Case I: Implementado; totalmente documentado; testes implementados.
- * Use Case J: Implementado; totalmente documentado; testes implementados.
- * Use Case K: Implementado; totalmente documentado; testes implementados.
- * API REST: RestBillController: Implementado; totalmente documentado; testes implementados.
-             RestPollController: Parcialmente implementado; parcialmente documentado; TODO.
  ## TODO
-
- * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Entregar projeto.
+* WEB APP (SSR): Integrar caso de uso 'Votar numa proposta'; melhorar UI/Service do caso de uso 'Escolher Delegado'; verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; testar.
 
 ## Dependências
 
