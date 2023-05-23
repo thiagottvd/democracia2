@@ -1,6 +1,5 @@
 package com.example.democracia_desktop.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,7 +14,7 @@ public class AuthenticationController {
     private Button enterButton;
 
     @FXML
-    void handleEnterButton(ActionEvent event) {
+    void handleEnterButton() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/menu.fxml"));
             Stage stage = (Stage) enterButton.getScene().getWindow();

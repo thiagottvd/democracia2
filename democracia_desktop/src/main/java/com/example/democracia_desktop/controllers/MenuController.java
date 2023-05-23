@@ -1,6 +1,5 @@
 package com.example.democracia_desktop.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,17 +20,17 @@ public class MenuController {
     private Button voteActivePollsButton;
 
     @FXML
-    void handleListActivePollsButton(ActionEvent event) {
+    void handleListActivePollsButton() {
         setupStage("/com/example/democracia_desktop/active_polls_list.fxml", listActivePollsButton);
     }
 
     @FXML
-    void handleConsultBillsButton(ActionEvent event) {
+    void handleConsultBillsButton() {
         setupStage("/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
     }
 
     @FXML
-    void handleVoteActivePollsButton(ActionEvent event) {
+    void handleVoteActivePollsButton() {
         // TODO
         //setupStage("/com/example/democracia_desktop/vote_active_polls.fxml", voteActivePollsButton);
     }

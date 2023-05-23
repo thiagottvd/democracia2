@@ -3,7 +3,6 @@ package com.example.democracia_desktop.controllers;
 import com.example.democracia_desktop.models.BillModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,7 +29,7 @@ public class ConsultBillsController {
     private ListView<BillModel> openBillsList;
 
     @FXML
-    void handleBackButton(ActionEvent event) {
+    void handleBackButton() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/menu.fxml"));
             Stage stage = (Stage) backButton.getScene().getWindow();
@@ -44,7 +43,7 @@ public class ConsultBillsController {
     }
 
     @FXML
-    void handleBillDetailsButton(ActionEvent event) {
+    void handleBillDetailsButton() {
         BillModel selectedItem = openBillsList.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Long selectedItemId = openBillsList.getSelectionModel().getSelectedItem().getId();

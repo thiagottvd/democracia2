@@ -4,7 +4,6 @@ import com.example.democracia_desktop.models.BillModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,13 +12,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
-import java.util.List;
 
 public class ConsultBillDetailsController {
 
@@ -42,9 +43,6 @@ public class ConsultBillDetailsController {
     private TextField numSupportersTextField;
 
     @FXML
-    private Button openFileButton;
-
-    @FXML
     private TextField themeTextField;
 
     @FXML
@@ -53,27 +51,24 @@ public class ConsultBillDetailsController {
     private byte[] fileData;
 
     @FXML
-    void handleBackButton(ActionEvent event) {
-        setupStage("/com/example/democracia_desktop/consult_bills.fxml", backButton);
+    void handleBackButton() {
+        setupStage(backButton);
     }
 
     @FXML
-    void handleOpenFileButton(ActionEvent event) {
+    void handleOpenFileButton() {
+        File tempFile;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/pdf.fxml"));
-            Stage currentStage = (Stage) openFileButton.getScene().getWindow();
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-
-            PdfController controller = fxmlLoader.getController();
-            controller.setFileData(fileData);
-
-            Stage newStage = new Stage();
-            newStage.setTitle("Democracia 2.0");
-            newStage.setScene(scene);
-            newStage.initOwner(currentStage);
-            newStage.show();
+            tempFile = File.createTempFile(".pdf", "tempFile");
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(fileData);
+            }
+            openFile(tempFile);
+            tempFile.deleteOnExit();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to create or write to temporary PDF file", e);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while opening the file", e);
         }
     }
 
@@ -125,9 +120,9 @@ public class ConsultBillDetailsController {
         return null;
     }
 
-    private void setupStage(String resource, Button button) {
+    private void setupStage(Button button) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/consult_bills.fxml"));
             Stage stage = (Stage) button.getScene().getWindow();
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("Democracia 2.0");
@@ -138,5 +133,17 @@ public class ConsultBillDetailsController {
         }
     }
 
+    // https://stackoverflow.com/questions/53065887/opening-a-pdf-in-a-javafx-aplication
+    public static void openFile(File file) {
+        if (Desktop.isDesktopSupported()) {
+            new Thread(() -> {
+                try {
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
 }
 

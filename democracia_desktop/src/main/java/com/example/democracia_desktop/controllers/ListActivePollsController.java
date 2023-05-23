@@ -2,25 +2,21 @@ package com.example.democracia_desktop.controllers;
 
 
 import com.example.democracia_desktop.models.PollModel;
-import javafx.event.ActionEvent;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.io.IOException;
 import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-import javafx.stage.Stage;
-
-import java.util.stream.Collectors;
 
 public class ListActivePollsController {
 
@@ -31,7 +27,7 @@ public class ListActivePollsController {
     private Button backButton;
 
     @FXML
-    void handleBackButton(ActionEvent event) {
+    void handleBackButton() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/menu.fxml"));
             Stage stage = (Stage) backButton.getScene().getWindow();
@@ -65,10 +61,11 @@ public class ListActivePollsController {
     private void updateActivePollsList(String responseBody) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<PollModel> activePolls = objectMapper.readValue(responseBody, new TypeReference<List<PollModel>>() {});
+            List<PollModel> activePolls = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
             List<String> pollTitles = activePolls.stream()
                     .map(PollModel::getTitle)
-                    .collect(Collectors.toList());
+                    .toList();
             activePollsList.getItems().addAll(pollTitles);
         } catch (IOException e) {
             e.printStackTrace();
