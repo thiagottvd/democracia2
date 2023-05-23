@@ -5,22 +5,8 @@
 * Ivo Estrela   fc51051
 * Thiago Duarte fc53636
 
-## O que já foi feito
-
- * Use Case D: Implementado; totalmente documentado; testes implementados.
- * Use Case E: Implementado; totalmente documentado; testes implementados.
- * Use Case F: Implementado; totalmente documentado; testes implementados.
- * Use Case G: Implementado; totalmente documentado; testes implementados.
- * Use Case H: Implementado; totalmente documentado; testes implementados.
- * Use Case I: Implementado; totalmente documentado; testes implementados.
- * Use Case J: Implementado; totalmente documentado; testes implementados.
- * Use Case K: Implementado; totalmente documentado; testes implementados.
- * API REST: RestBillController: Implementado; totalmente documentado; testes implementados.
-             RestPollController: Parcialmente implementado; parcialmente documentado; TODO.
  ## TODO
-
- * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Entregar projeto.
+* DESKTOP APP: Integrar caso de uso 'Votar numa proposta'; melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar.
 
 ## Dependências
 
