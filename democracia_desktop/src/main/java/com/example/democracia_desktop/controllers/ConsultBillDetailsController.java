@@ -4,12 +4,12 @@ import com.example.democracia_desktop.models.BillModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -25,28 +25,28 @@ import java.util.Arrays;
 public class ConsultBillDetailsController {
 
     @FXML
+    private Label delegateLabel;
+
+    @FXML
+    private Label idLabel;
+
+    @FXML
     private Button backButton;
 
     @FXML
-    private TextField delegateTextField;
+    private Label descriptionLabel;
 
     @FXML
-    private TextArea descriptionTextArea;
+    private Label expirationDateLabel;
 
     @FXML
-    private TextField expirationDateTextField;
+    private Label numSupportersLabel;
 
     @FXML
-    private TextField idTextField;
+    private Label themeLabel;
 
     @FXML
-    private TextField numSupportersTextField;
-
-    @FXML
-    private TextField themeTextField;
-
-    @FXML
-    private TextField titleTextField;
+    private Label titleLabel;
 
     private byte[] fileData;
 
@@ -102,14 +102,16 @@ public class ConsultBillDetailsController {
         objectMapper.registerModule(new JavaTimeModule());
         try {
             BillModel billModel = objectMapper.readValue(responseBody, new TypeReference<>() {});
-            idTextField.setText(billModel.getId().toString());
-            titleTextField.setText(billModel.getTitle());
-            descriptionTextArea.setText(billModel.getDescription());
-            numSupportersTextField.setText(String.valueOf(billModel.getNumSupporters()));
-            fileData = Arrays.copyOf(billModel.getFileData(), billModel.getFileData().length);
-            expirationDateTextField.setText(billModel.getExpirationDate().toString());
-            themeTextField.setText(billModel.getThemeDesignation());
-            delegateTextField.setText(billModel.getDelegateName());
+            Platform.runLater(() -> {
+                idLabel.setText(billModel.getId().toString());
+                titleLabel.setText(billModel.getTitle());
+                descriptionLabel.setText(billModel.getDescription());
+                numSupportersLabel.setText(String.valueOf(billModel.getNumSupporters()));
+                fileData = Arrays.copyOf(billModel.getFileData(), billModel.getFileData().length);
+                expirationDateLabel.setText(billModel.getExpirationDate().toString());
+                themeLabel.setText(billModel.getThemeDesignation());
+                delegateLabel.setText(billModel.getDelegateName());
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
