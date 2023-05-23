@@ -54,8 +54,13 @@ public class VoteActivePollsHandler {
    * Checks a Delegate vote.
    *
    * @param pollTitle The title to search for the actual Poll.
+<<<<<<< HEAD
    * @param voterCitizenCardNumber The citizen card number.
    * @return The Delegate vote in the form of a string.
+=======
+   * @param voterCc The Citizen cc.
+   * @return The Delegate vote in the form of a string. Returns null if citizen has no delegate
+>>>>>>> api_rest
    * @throws ApplicationException If no Poll or Citizen are found.
    */
   public VoteType checkDelegateVote(String pollTitle, Integer voterCitizenCardNumber)

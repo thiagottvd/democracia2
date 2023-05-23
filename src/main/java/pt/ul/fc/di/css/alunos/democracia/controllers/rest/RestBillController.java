@@ -1,4 +1,4 @@
-package pt.ul.fc.di.css.alunos.democracia.controllers;
+package pt.ul.fc.di.css.alunos.democracia.controllers.rest;
 
 import java.util.List;
 import java.util.Map;
@@ -40,9 +40,12 @@ public class RestBillController {
   }
 
   /**
-   * Retrieves a list of all open bills.
+   * Retrieves a list of all open bills, returning only their ID and title. Other fields are either
+   * empty or initialized with default values.
    *
-   * @return a list of all open bills.
+   * @return a list of all open bills, represented as a list of BillDTO objects containing only the
+   *     ID and title of each bill. Other fields are either empty or initialized with default
+   *     values.
    */
   @GetMapping("/bills/open")
   public List<BillDTO> getOpenBills() {
@@ -78,9 +81,8 @@ public class RestBillController {
    *     supports the bill or if the bill is closed, or a INTERNAL_SERVER_ERROR response if an
    *     internal server error occurs.
    */
-  @PatchMapping("/bills/support/{billId}")
-  public ResponseEntity<?> supportBill(
-      @PathVariable Long billId, @RequestBody Integer citizenCardNumber) {
+  @PatchMapping("/bills/{billId}/support")
+  public ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer citizenCardNumber) {
     try {
       supportBillService.supportBill(billId, citizenCardNumber);
       return ResponseEntity.ok().build();
