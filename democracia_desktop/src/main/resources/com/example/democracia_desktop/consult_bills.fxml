@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ConsultBillsController">
    <children>
       <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" text="Consultar Projetos de Lei">
@@ -38,7 +37,7 @@
                   <Font size="18.0" />
                </font>
                <HBox.margin>
-                  <Insets left="25.0" />
+                  <Insets />
                </HBox.margin>
             </Button>
             <Button fx:id="billDetailsButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBillDetailsButton" text="Ver Detalhes">
@@ -50,6 +49,9 @@
                </HBox.margin>
             </Button>
          </children>
+         <VBox.margin>
+            <Insets left="25.0" right="25.0" />
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>

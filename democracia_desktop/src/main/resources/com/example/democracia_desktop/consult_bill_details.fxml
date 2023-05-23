@@ -10,7 +10,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ConsultBillDetailsController">
    <children>
-      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" prefHeight="100.0" text="Detalhe do Projeto de Lei">
+      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="88.0" text="Detalhe do Projeto de Lei">
          <font>
             <Font size="30.0" />
          </font>
@@ -20,7 +20,7 @@
          <children>
             <Label text="ID: " style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="idLabel">
@@ -37,7 +37,7 @@
          <children>
             <Label text="Título: " style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="titleLabel">
@@ -54,7 +54,7 @@
          <children>
             <Label text="Descrição: " style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="descriptionLabel">
@@ -74,7 +74,7 @@
                   <Insets />
                </HBox.margin>
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="numSupportersLabel">
@@ -91,7 +91,7 @@
          <children>
             <Label text="Conteúdo Principal:" style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Button fx:id="openFileButton" mnemonicParsing="false" onAction="#handleOpenFileButton" text="Abrir PDF">
@@ -99,7 +99,7 @@
                   <Insets left="15.0" />
                </HBox.margin>
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Button>
          </children>
@@ -114,7 +114,7 @@
                   <Insets />
                </HBox.margin>
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="expirationDateLabel">
@@ -131,7 +131,7 @@
          <children>
             <Label text="Tema: " style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="themeLabel">
@@ -148,7 +148,7 @@
          <children>
             <Label text="Autor: " style="-fx-font-weight: bold;">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="delegateLabel">
@@ -162,13 +162,25 @@
          </VBox.margin>
       </HBox>
       <Separator prefWidth="200.0" />
-      <Button fx:id="backButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" prefHeight="133.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="supportButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleSupportButton" text="Apoiar Projeto">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="520.0" />
+               </HBox.margin>
+            </Button>
+         </children>
          <VBox.margin>
-            <Insets bottom="10.0" left="25.0" top="10.0" />
+            <Insets left="25.0" right="25.0" />
          </VBox.margin>
-      </Button>
+      </HBox>
    </children>
 </VBox>

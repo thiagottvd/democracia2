@@ -1,6 +1,7 @@
 package com.example.democracia_desktop.controllers;
 
 import com.example.democracia_desktop.models.BillModel;
+import com.example.democracia_desktop.models.MessageModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -49,6 +50,11 @@ public class ConsultBillDetailsController {
     private Label titleLabel;
 
     private byte[] fileData;
+    private Long selectedItemId;
+
+    private static final String TYPE_SUCCESS = "Sucesso";
+    private static final String MESSAGE_SUCCESS = "Operação bem-sucedida.";
+    private static final String TYPE_ERROR = "Erro";
 
     @FXML
     void handleBackButton() {
@@ -72,7 +78,38 @@ public class ConsultBillDetailsController {
         }
     }
 
-    private Long selectedItemId;
+    @FXML
+    void handleSupportButton() {
+        // Using a mock citizen card number to represent the session user
+        int citizenCardNumberMock = 1;
+        String apiUrl = "http://localhost:8080/api/bills/" + selectedItemId + "/support";
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl))
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(String.valueOf(citizenCardNumberMock)))
+                .header("Content-Type", "application/json")
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    int statusCode = response.statusCode();
+                    String responseBody = response.body();
+                    if (statusCode == 200) {
+                        return responseBody;
+                    } else {
+                        throw new RuntimeException(responseBody);
+                    }
+                })
+                .thenAccept(responseBody -> {
+                    Platform.runLater(() -> handleMessage(TYPE_SUCCESS, MESSAGE_SUCCESS));
+                    fetchAndDisplayConsultBillDetails();
+                })
+                .exceptionally(ex -> {
+                    String errorMessage = updateMessage(ex.getMessage());
+                    Platform.runLater(() -> handleMessage(TYPE_ERROR, errorMessage));
+                    return null;
+                });
+    }
 
     public void setSelectedItemId(Long selectedItemId) {
         this.selectedItemId = selectedItemId;
@@ -94,7 +131,13 @@ public class ConsultBillDetailsController {
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(this::updateBill)
-                .exceptionally(this::handleError);
+                .exceptionally(ex -> {
+            String errorMessage = ex.getMessage();
+            if (!errorMessage.isEmpty()) {
+                handleMessage(TYPE_ERROR, errorMessage);
+            }
+            return null;
+        });
     }
 
     private void updateBill(String responseBody) {
@@ -117,9 +160,41 @@ public class ConsultBillDetailsController {
         }
     }
 
-    private Void handleError(Throwable throwable) {
-        throwable.printStackTrace();
-        return null;
+    private String updateMessage(String responseBody) {
+        int startIndex = responseBody.indexOf('{');
+        int endIndex = responseBody.lastIndexOf('}');
+        String extractedMessage = null;
+
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            extractedMessage = responseBody.substring(startIndex, endIndex + 1);
+        }
+        MessageModel messageModel;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {
+            messageModel = objectMapper.readValue(extractedMessage, new TypeReference<>() {});
+            if (messageModel != null) {
+                return messageModel.getMessage();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "An error occurred while processing the response.";
+    }
+
+    private void handleMessage(String type, String message) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/message.fxml"));
+            Stage newStage = new Stage();
+            Scene newScene = new Scene(fxmlLoader.load(), 450, 250);
+            MessageController controller = fxmlLoader.getController();
+            controller.setType(type);
+            controller.setMessage(message);
+            newStage.setScene(newScene);
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupStage(Button button) {

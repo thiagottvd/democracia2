@@ -8,10 +8,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.AuthenticationController">
    <children>
-      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" text="Autenticação" textAlignment="CENTER">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="88.0" text="Autenticação" textAlignment="CENTER">
          <font>
             <Font size="30.0" />
          </font>
@@ -29,14 +28,17 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="133.0" prefWidth="200.0">
          <children>
-            <Button fx:id="enterButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="150.0" mnemonicParsing="false" onAction="#handleEnterButton" text="Entrar" textAlignment="CENTER">
+            <Button fx:id="enterButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleEnterButton" text="Entrar">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
          </children>
+         <VBox.margin>
+            <Insets left="25.0" right="25.0" top="23.0" />
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>

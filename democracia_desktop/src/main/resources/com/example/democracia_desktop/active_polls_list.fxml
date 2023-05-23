@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -29,13 +30,17 @@
             <Insets bottom="10.0" left="5.0" />
          </padding>
       </ListView>
-      <Button fx:id="backButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar">
-         <font>
-            <Font size="18.0" />
-         </font>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="backButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleBackButton" text="Voltar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
          <VBox.margin>
-            <Insets left="25.0" top="10.0" />
+            <Insets left="25.0" right="25.0" />
          </VBox.margin>
-      </Button>
+      </HBox>
    </children>
 </VBox>
