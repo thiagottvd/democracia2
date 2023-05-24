@@ -26,3 +26,7 @@ Este comando vai iniciar dois containers:
 ## Correr testes
 
 Deve correr `test.sh`.
+
+## Inserir dados no banco de dados (postgres) para testagem da aplicação.
+
+Deve correr `populate-db.sh`.
