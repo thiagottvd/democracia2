@@ -4,26 +4,26 @@ package pt.ul.fc.di.css.alunos.democracia.dtos;
 public class DelegateDTO {
 
   private final String name;
-  private final Integer cc;
+  private final Integer citizenCardNumber;
 
   /**
-   * Constructs a DelegateDTO object with the given name and ID number.
+   * Constructs a DelegateDTO object with the given name and his citizen card number.
    *
    * @param name the name of the delegate.
-   * @param cc the ID number of the delegate.
+   * @param citizenCardNumber the citizen card number of the delegate.
    */
-  public DelegateDTO(String name, Integer cc) {
+  public DelegateDTO(String name, Integer citizenCardNumber) {
     this.name = name;
-    this.cc = cc;
+    this.citizenCardNumber = citizenCardNumber;
   }
 
   /**
-   * Returns the ID number of the delegate.
+   * Returns the citizen card number of the delegate.
    *
-   * @return the ID number of the delegate.
+   * @return the citizen card number of the delegate.
    */
-  public Integer getCc() {
-    return cc;
+  public Integer getCitizenCardNumber() {
+    return citizenCardNumber;
   }
 
   /**

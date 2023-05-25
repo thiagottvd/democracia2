@@ -21,6 +21,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ConsultBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ConsultBillsService;
@@ -51,13 +52,14 @@ public class ConsultBillsUseCaseTest {
 
   /** Test case to test the output type for getOpenBills method (should be BillDTO). */
   @Test
-  public void testOutputTypeForGetOpenBills() {
+  public void testOutputTypeForGetOpenBills() throws InvalidDateException {
+    byte[] bytes = {0x3, 0x22};
     // Creating and persisting test data
     Delegate d = new Delegate("d", 1);
     entityManager.persist(d);
     Theme t = new Theme("t", null);
     entityManager.persist(t);
-    Bill b = new Bill("b", "b", null, LocalDate.now(), d, t);
+    Bill b = new Bill("bill", "desc", bytes, LocalDate.now(), d, t);
     entityManager.persist(b);
 
     // Getting the open bills (only one persisted)
@@ -93,12 +95,13 @@ public class ConsultBillsUseCaseTest {
    * returned and that the returned {@link BillDTO} objects have the expected properties.
    */
   @Test
-  public void testGetOpenBills() {
+  public void testGetOpenBills() throws InvalidDateException {
     // Initialize test data
     List<BillDTO> actualBillsDTO = new ArrayList<>();
+    byte[] bytes = {0x2, 0x42};
 
     // Create and persisting 10 bills (5 OPEN and 5 CLOSED)
-    for (int i = 0; i < 10; i++) {
+    for (int i = 100; i < 110; i++) {
 
       Delegate d = new Delegate(String.valueOf(i), i);
       entityManager.persist(d);
@@ -106,7 +109,7 @@ public class ConsultBillsUseCaseTest {
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
 
-      Bill b = new Bill(String.valueOf(i), String.valueOf(i), null, LocalDate.now(), d, t);
+      Bill b = new Bill(String.valueOf(i), String.valueOf(i), bytes, LocalDate.now(), d, t);
       entityManager.persist(b);
 
       // Set the status of even numbered bills to CLOSED and add the rest to the actualBillsDTO list

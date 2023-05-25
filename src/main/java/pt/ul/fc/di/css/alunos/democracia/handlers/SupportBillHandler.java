@@ -52,19 +52,20 @@ public class SupportBillHandler {
    * Adds the support of a citizen identified by its citizen card to a given bill.
    *
    * @param billId the ID of the bill to support.
-   * @param cc the citizen card of the citizen who wants to support the bill.
-   * @throws ApplicationException if the bill or the citizen are not found.
+   * @param citizenCardNumber the citizen card number of the citizen who wants to support the bill.
+   * @throws BillNotFoundException if the bill is not found.
+   * @throws CitizenNotFoundException if the citizen is not found.
    */
-  public void supportBill(Long billId, Integer cc) throws ApplicationException {
+  public void supportBill(Long billId, Integer citizenCardNumber) throws ApplicationException {
     Optional<Bill> bill = billCatalog.getBill(billId);
     if (bill.isEmpty()) {
       throw new BillNotFoundException("The bill with id " + billId + " was not found.");
     }
 
-    Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(cc);
+    Optional<Citizen> citizen = citizenCatalog.getCitizenByCitizenCardNumber(citizenCardNumber);
     if (citizen.isEmpty()) {
       throw new CitizenNotFoundException(
-          "The citizen with citizen card number " + cc + " was not found.");
+          "The citizen with citizen card number " + citizenCardNumber + " was not found.");
     }
 
     Bill b = bill.get();
@@ -87,15 +88,11 @@ public class SupportBillHandler {
   }
 
   /**
-   * Creates a new poll for the given bill and sets the bill status to {@code CLOSED}.
+   * Creates a new poll for the given bill and sets the bill status to CLOSED.
    *
    * @param bill the bill for which to create the poll.
    */
   private void createPoll(Bill bill) {
-    /*
-    TODO: com uma data de fecho igual à data de expiração do projecto de
-    lei, com um limite mínimo de 15 dias e um limite máximo de 2 meses
-    */
     Poll poll = new Poll(bill);
     bill.setPoll(poll);
     bill.setStatus(BillStatus.CLOSED);

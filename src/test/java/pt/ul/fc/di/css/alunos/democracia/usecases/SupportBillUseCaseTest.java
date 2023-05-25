@@ -23,6 +23,7 @@ import pt.ul.fc.di.css.alunos.democracia.handlers.SupportBillHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
+import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
 
 /** SupportBillUseCaseTest is a test class for the SupportBillService class. */
@@ -33,6 +34,7 @@ public class SupportBillUseCaseTest {
   @Autowired private BillRepository billRepository;
   @Autowired private CitizenRepository citizenRepository;
   @Autowired private PollRepository pollRepository;
+  @Autowired private ThemeRepository themeRepository;
 
   private SupportBillHandler supportBillHandler;
   private SupportBillService supportBillService;
@@ -75,7 +77,7 @@ public class SupportBillUseCaseTest {
    * will be a CitizenNotFoundException.
    */
   @Test
-  public void testSupportBillWithNonExistentCitizen() {
+  public void testSupportBillWithNonExistentCitizen() throws InvalidDateException {
     Bill testBill = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
     billRepository.save(testBill);
 
@@ -90,14 +92,20 @@ public class SupportBillUseCaseTest {
    * existing citizen.
    */
   @Test
-  public void testSupportBillWithExistingCitizen() {
-    Bill testBill = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
+  public void testSupportBillWithExistingCitizen() throws InvalidDateException {
+    byte[] bytes = {0x1};
+    Theme t = new Theme("t", null);
+    themeRepository.save(t);
+    Delegate d = new Delegate("d", 6);
+    citizenRepository.save(d);
+    Bill testBill = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
     billRepository.save(testBill);
 
     Citizen testCitizen = new Citizen("Thiago", 123);
     citizenRepository.save(testCitizen);
 
-    assertDoesNotThrow(() -> supportBillService.supportBill(testBill.getId(), testCitizen.getCc()));
+    assertDoesNotThrow(
+        () -> supportBillService.supportBill(testBill.getId(), testCitizen.getCitizenCardNumber()));
   }
 
   /**
@@ -108,7 +116,12 @@ public class SupportBillUseCaseTest {
    */
   @Test
   public void testSupportBillMoreThanOnce() throws ApplicationException {
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
+    byte[] bytes = {0x1};
+    Theme t = new Theme("t", null);
+    themeRepository.save(t);
+    Delegate d = new Delegate("d", 6);
+    citizenRepository.save(d);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
     Citizen c = new Citizen("Thiago", 123);
     billRepository.save(b);
     citizenRepository.save(c);
@@ -117,7 +130,7 @@ public class SupportBillUseCaseTest {
     assertEquals(1, b.getNumSupporters());
 
     // Support the bill with a new citizen
-    supportBillService.supportBill(b.getId(), c.getCc());
+    supportBillService.supportBill(b.getId(), c.getCitizenCardNumber());
 
     // Ensure the bill has two supporters
     assertEquals(2, b.getNumSupporters());
@@ -125,7 +138,7 @@ public class SupportBillUseCaseTest {
     // Attempt to support the bill with the same citizen, and assert that it fails
     assertThrows(
         CitizenAlreadySupportsBillException.class,
-        () -> supportBillService.supportBill(b.getId(), c.getCc()));
+        () -> supportBillService.supportBill(b.getId(), c.getCitizenCardNumber()));
 
     // Ensure the bill still has two supporters
     assertEquals(2, b.getNumSupporters());
@@ -138,9 +151,15 @@ public class SupportBillUseCaseTest {
   @Test
   public void testSupportBill() throws ApplicationException {
     // Create bills and citizens to use in the test
-    Bill b1 = new Bill("Bill1", "desc bill1", null, LocalDate.now(), null, null);
-    Bill b2 = new Bill("Bill2", "desc bill2", null, LocalDate.now(), null, null);
-    Bill b3 = new Bill("Bill3", "desc bill3", null, LocalDate.now(), null, null);
+    byte[] bytes = {0x1};
+    Theme t = new Theme("t", null);
+    themeRepository.save(t);
+    Delegate d = new Delegate("d", 6);
+    citizenRepository.save(d);
+
+    Bill b1 = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
+    Bill b2 = new Bill("Bill2", "desc bill2", bytes, LocalDate.now(), d, t);
+    Bill b3 = new Bill("Bill3", "desc bill3", bytes, LocalDate.now(), d, t);
     Citizen c1 = new Citizen("Thiago", 123);
     Citizen c2 = new Citizen("Ivo", 222);
     Citizen c3 = new Citizen("Izuna", 412);
@@ -155,14 +174,14 @@ public class SupportBillUseCaseTest {
     assertEquals(b3.getNumSupporters(), 1);
 
     // Citizen c supports bill b1
-    supportBillService.supportBill(b1.getId(), c1.getCc());
+    supportBillService.supportBill(b1.getId(), c1.getCitizenCardNumber());
     assertEquals(b1.getNumSupporters(), 2);
     assertEquals(b2.getNumSupporters(), 1);
     assertEquals(b3.getNumSupporters(), 1);
 
     // Citizens c2 and c3 support bill b1
-    supportBillService.supportBill(b1.getId(), c2.getCc());
-    supportBillService.supportBill(b1.getId(), c3.getCc());
+    supportBillService.supportBill(b1.getId(), c2.getCitizenCardNumber());
+    supportBillService.supportBill(b1.getId(), c3.getCitizenCardNumber());
 
     // Verify the number of supporters for each bill after new supporters
     assertEquals(b1.getNumSupporters(), 4);
@@ -170,8 +189,8 @@ public class SupportBillUseCaseTest {
     assertEquals(b3.getNumSupporters(), 1);
 
     // Citizens c2 and c3 support bill b2
-    supportBillService.supportBill(b2.getId(), c2.getCc());
-    supportBillService.supportBill(b2.getId(), c3.getCc());
+    supportBillService.supportBill(b2.getId(), c2.getCitizenCardNumber());
+    supportBillService.supportBill(b2.getId(), c3.getCitizenCardNumber());
 
     // Verify the number of supporters for each bill after new supporters
     assertEquals(b1.getNumSupporters(), 4);
@@ -179,7 +198,7 @@ public class SupportBillUseCaseTest {
     assertEquals(b3.getNumSupporters(), 1);
 
     // Citizen c3 supports bill b3
-    supportBillService.supportBill(b3.getId(), c3.getCc());
+    supportBillService.supportBill(b3.getId(), c3.getCitizenCardNumber());
 
     // Verify the number of supporters for each bill after new supporter
     assertEquals(b1.getNumSupporters(), 4);
@@ -193,6 +212,8 @@ public class SupportBillUseCaseTest {
    */
   @Test
   public void testSupportBillPollCreation() throws ApplicationException {
+    byte[] bytes = {0x1};
+
     // Set the creation poll trigger value to 5 for testing purposes
     supportBillHandler.setCreationPollTriggerValue(5);
 
@@ -203,7 +224,7 @@ public class SupportBillUseCaseTest {
     entityManager.persist(t);
 
     // create a new bill with the delegate and theme, and save it to the repository
-    Bill b = new Bill("Bill1", "desc bill1", null, LocalDate.now(), d, t);
+    Bill b = new Bill("Bill1", "desc bill1", bytes, LocalDate.now(), d, t);
     billRepository.save(b);
 
     // assert that the bill does not have a poll associated with it
@@ -217,7 +238,7 @@ public class SupportBillUseCaseTest {
       assertEquals(BillStatus.OPEN, b.getStatus());
       Citizen c = new Citizen(String.valueOf(i), i);
       citizenRepository.save(c);
-      supportBillService.supportBill(b.getId(), c.getCc());
+      supportBillService.supportBill(b.getId(), c.getCitizenCardNumber());
     }
 
     // assert that the bill has 5 supporters (the necessary number to create a poll)
@@ -239,6 +260,6 @@ public class SupportBillUseCaseTest {
     citizenRepository.save(c2);
     assertThrows(
         VoteInClosedBillException.class,
-        () -> supportBillService.supportBill(b.getId(), c2.getCc()));
+        () -> supportBillService.supportBill(b.getId(), c2.getCitizenCardNumber()));
   }
 }

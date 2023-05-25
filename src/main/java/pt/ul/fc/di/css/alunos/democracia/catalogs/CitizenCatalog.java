@@ -29,13 +29,13 @@ public class CitizenCatalog {
   }
 
   /**
-   * Returns a delegate given its cc.
+   * Returns an Optional containing a delegate given their citizen card number.
    *
-   * @param cc the citizen card number.
-   * @return the delegate object, or null if no delegate is found.
+   * @param citizenCardNumber the citizen card number of the delegate to retrieve.
+   * @return an Optional containing the delegate object if found, otherwise an empty Optional.
    */
-  public Delegate getDelegate(Integer cc) {
-    return citizenRepository.findDelegateByCc(cc);
+  public Optional<Delegate> getDelegateByCitizenCardNumber(Integer citizenCardNumber) {
+    return citizenRepository.findDelegateByCitizenCardNumber(citizenCardNumber);
   }
 
   /**
@@ -44,24 +44,24 @@ public class CitizenCatalog {
    * @return a List of all delegates, or an empty List if no delegates are found
    */
   public List<Delegate> getDelegates() {
-    return citizenRepository.getAllDelegates();
+    return citizenRepository.findAllDelegates();
   }
 
   /**
-   * Retrieves a Citizen object from the database based on the provided cc number.
+   * Retrieves a Citizen object from the database based on the provided citizen card number.
    *
-   * @param cc the cc number of the citizen to retrieve.
+   * @param citizenCardNumber the citizen card number of the citizen to retrieve.
    * @return an Optional containing the Citizen object if found, otherwise an empty Optional.
    */
-  public Optional<Citizen> getCitizenByCc(Integer cc) {
-    return citizenRepository.findByCc(cc);
+  public Optional<Citizen> getCitizenByCitizenCardNumber(Integer citizenCardNumber) {
+    return citizenRepository.findByCitizenCardNumber(citizenCardNumber);
   }
 
   /**
-   * Retrieves a list of all Citizen entities that did not vote in a poll.
+   * Retrieves a list of all Citizen objects that did not vote in a poll.
    *
-   * @param voters a list of Citizen entities that voted in a poll.
-   * @return a list of all Citizen entities that did not vote in a poll.
+   * @param voters a list of Citizen objects that voted in a poll.
+   * @return a list of all Citizen objects that did not vote in a poll.
    */
   public List<Citizen> findAllNonVoters(List<Citizen> voters) {
     return citizenRepository.findAllNonVoters(voters);

@@ -122,18 +122,19 @@ public class ProposeBillUseCaseTest {
   @Test
   public void proposeMultipleBills() throws ApplicationException {
     Delegate proposer = entityManager.persist(new Delegate("proposer", 52));
+    byte[] bytes = {0x1};
 
     // delegate 'proposer' is proposes multiple bills.
-    for (int i = 0; i < 5; i++) {
+    for (int i = 100; i < 105; i++) {
       Theme theme = new Theme(String.valueOf(i), null);
       entityManager.persist(theme);
       proposeBillService.proposeBill(
           String.valueOf(i),
           String.valueOf(i),
-          null,
+          bytes,
           LocalDate.now(),
           theme.getDesignation(),
-          proposer.getCc());
+          proposer.getCitizenCardNumber());
     }
 
     // checking if everything worked as supposed
@@ -178,7 +179,9 @@ public class ProposeBillUseCaseTest {
     // ThemeNotFoundException)
     assertThrows(
         ThemeNotFoundException.class,
-        () -> proposeBillService.proposeBill("b", "b", null, LocalDate.now(), null, d.getCc()));
+        () ->
+            proposeBillService.proposeBill(
+                "b", "b", null, LocalDate.now(), null, d.getCitizenCardNumber()));
   }
 
   /**
@@ -197,7 +200,7 @@ public class ProposeBillUseCaseTest {
     LocalDate localDate = LocalDate.now();
 
     // Create and persist necessary data, and call the proposeBill method 50 times
-    for (int i = 0; i < 50; i++) {
+    for (int i = 100; i < 150; i++) {
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
       Delegate d = new Delegate(String.valueOf(i), i);
@@ -210,7 +213,7 @@ public class ProposeBillUseCaseTest {
           String.valueOf(i).getBytes(),
           localDate,
           t.getDesignation(),
-          d.getCc());
+          d.getCitizenCardNumber());
     }
 
     // Verify that 50 bills were added to the system
@@ -218,14 +221,15 @@ public class ProposeBillUseCaseTest {
     assertEquals(50, bills.size());
 
     // Verify the data for each bill in the system
-    for (int i = 0; i < 50; i++) {
-      Bill b = bills.get(i);
+    for (int i = 100; i < 150; i++) {
+      Bill b = bills.get(i - 100);
       assertEquals(String.valueOf(i), b.getTitle());
       assertEquals(String.valueOf(i), b.getDescription());
       assertArrayEquals(String.valueOf(i).getBytes(), b.getFileData());
       assertEquals(localDate, b.getExpirationDate());
-      assertEquals(themeCatalog.getTheme(String.valueOf(i)), b.getTheme());
-      Citizen expectedDelegate = citizenCatalog.getCitizenByCc(i).orElse(null);
+      Theme expectedTheme = themeCatalog.getTheme(String.valueOf(i)).orElse(null);
+      assertEquals(expectedTheme, b.getTheme());
+      Citizen expectedDelegate = citizenCatalog.getCitizenByCitizenCardNumber(i).orElse(null);
       assertEquals(expectedDelegate, b.getDelegate());
     }
   }

@@ -15,7 +15,7 @@ import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
 
-@RestController()
+@RestController
 @RequestMapping("api")
 public class RestPollController {
 
@@ -40,13 +40,11 @@ public class RestPollController {
     return listActivePollsService.getActivePolls();
   }
 
-  @GetMapping("/polls/{pollTitle}/delegate-vote-type")
+  @GetMapping("/polls/{pollId}/delegate-vote-type")
   public ResponseEntity<?> getDelegateVoteForPoll(
-      @PathVariable String pollTitle, @RequestBody Integer citizenCardNumber) {
-
+      @PathVariable Long pollId, @RequestBody Integer citizenCardNumber) {
     try {
-      VoteType voteType =
-          this.voteActivePollsService.checkDelegateVote(pollTitle, citizenCardNumber);
+      VoteType voteType = this.voteActivePollsService.checkDelegateVote(pollId, citizenCardNumber);
       return ResponseEntity.ok().body(voteType);
 
     } catch (PollNotFoundException | CitizenNotFoundException e) {
@@ -56,13 +54,13 @@ public class RestPollController {
     }
   }
 
-  @PatchMapping("/polls/{pollTitle}/vote/{voteType}")
+  @PatchMapping("/polls/{pollId}/vote/{voteType}")
   public ResponseEntity<?> vote(
-      @PathVariable String pollTitle,
+      @PathVariable Long pollId,
       @PathVariable VoteType voteType,
       @RequestBody Integer citizenCardNumber) {
     try {
-      this.voteActivePollsService.vote(pollTitle, citizenCardNumber, voteType);
+      this.voteActivePollsService.vote(pollId, citizenCardNumber, voteType);
       return ResponseEntity.ok().build();
     } catch (PollNotFoundException | CitizenNotFoundException e) {
       return handleException(HttpStatus.NOT_FOUND, e.getMessage());

@@ -1,7 +1,5 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
-import static jakarta.persistence.InheritanceType.*;
-
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +10,14 @@ import org.springframework.lang.NonNull;
 
 /** Represents a citizen (voter). */
 @Entity
-@Inheritance(strategy = SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Citizen {
   @Id @GeneratedValue private long id;
   @NonNull private String name;
 
   @Column(unique = true)
   @NonNull
-  private Integer cc;
+  private Integer citizenCardNumber;
 
   @ManyToMany(mappedBy = "voters")
   @Cascade(CascadeType.ALL)
@@ -30,14 +28,14 @@ public class Citizen {
   }
 
   /**
-   * Represents a citizen with a name and a citizen card number (cc).
+   * Represents a citizen with a name and a citizen card number (citizenCardNumber).
    *
    * @param name the name of the citizen (non-null).
-   * @param cc the citizen card number (non-null).
+   * @param citizenCardNumber the citizen card number (non-null).
    */
-  public Citizen(@NonNull String name, @NonNull Integer cc) {
+  public Citizen(@NonNull String name, @NonNull Integer citizenCardNumber) {
     this.name = name;
-    this.cc = cc;
+    this.citizenCardNumber = citizenCardNumber;
   }
 
   /**
@@ -96,8 +94,8 @@ public class Citizen {
    * @return the citizen card number.
    */
   @NonNull
-  public Integer getCc() {
-    return cc;
+  public Integer getCitizenCardNumber() {
+    return citizenCardNumber;
   }
 
   @Override
@@ -106,7 +104,7 @@ public class Citizen {
     if (o == null || getClass() != o.getClass()) return false;
     Citizen citizen = (Citizen) o;
     return Objects.equals(id, citizen.id)
-        && Objects.equals(cc, citizen.cc)
+        && Objects.equals(citizenCardNumber, citizen.citizenCardNumber)
         && Objects.equals(name, citizen.name);
   }
 
