@@ -54,10 +54,24 @@ public class DelegateThemeCatalog {
     dtRepository.delete(delegateTheme);
   }
 
+  /**
+   * Checks if a DelegateTheme object exists for the given delegate and theme.
+   *
+   * @param delegate The delegate to check.
+   * @param theme The theme to check.
+   * @return true if a delegate theme exists for the given delegate and theme, false otherwise.
+   */
   public boolean delegateThemeExists(Delegate delegate, Theme theme) {
     return dtRepository.findByDelegateAndTheme(delegate, theme).isPresent();
   }
 
+  /**
+   * Retrieves the DelegateTheme object for the given delegate and theme.
+   *
+   * @param delegate The delegate to retrieve the theme for.
+   * @param theme The theme to retrieve the delegate for.
+   * @return An Optional containing the delegate theme if found, or an empty Optional if not found.
+   */
   public Optional<DelegateTheme> getDtByDelegateAndTheme(Delegate delegate, Theme theme) {
     return dtRepository.findByDelegateAndTheme(delegate, theme);
   }

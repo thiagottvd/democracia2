@@ -287,7 +287,7 @@ public class ChooseDelegateUseCaseTest {
     List<DelegateTheme> dt_list = dtRepository.getAllDTs();
     assertEquals(2, dt_list.size());
 
-    // Checking persistance and connections
+    // Checking persistence and connections
     Citizen c2 = new Citizen("Manuel", 5);
     Delegate d3 = new Delegate("Paulina", 4);
     Theme theme3 = new Theme("Climate", null);
@@ -302,8 +302,7 @@ public class ChooseDelegateUseCaseTest {
         d3.getCitizenCardNumber(), theme3.getDesignation(), c2.getCitizenCardNumber());
 
     // Should not create a new DT since there was already one with the same delegate and theme
-    // Size of dtRepo must be 3 even tho there where 4 chooseDelegates that got called
-    List<DelegateTheme> l = dtRepository.getAllDTs();
+    // Size of dtRepo must be 3 even tho there were 4 chooseDelegates that got called
     assertEquals(3, dtRepository.getAllDTs().size());
     assertEquals(
         3, citizenRepository.findByCitizenCardNumber(1).orElseThrow().getDelegateThemes().size());
@@ -430,6 +429,7 @@ public class ChooseDelegateUseCaseTest {
       chooseDelegateService.chooseDelegate(
           d3.getCitizenCardNumber(), theme2.getDesignation(), c1.getCitizenCardNumber());
     } catch (DuplicateDelegateThemeException e) {
+      // Do nothing
     }
 
     assertEquals(5, dtRepository.getAllDTs().size());
