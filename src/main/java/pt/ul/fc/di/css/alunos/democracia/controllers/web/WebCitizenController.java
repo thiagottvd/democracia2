@@ -71,7 +71,7 @@ public class WebCitizenController {
     @PatchMapping("/citizens/{citizenCardNumber}/choose-delegate")
     public String chooseDelegateAction(final Model model, @PathVariable("citizenCardNumber") Integer citizenCardNumber, @RequestParam("delegate") Integer delegate, @RequestParam("theme") String theme) {
         try {
-            chooseDelegateService.chooseDelegate(citizenCardNumber, theme, delegate);
+            chooseDelegateService.chooseDelegate(delegate, theme, citizenCardNumber);
         } catch (CitizenNotFoundException e) {
             return CITIZEN_NOT_FOUND_VIEW;
         } catch (ApplicationException e) {

@@ -43,7 +43,6 @@ public class RestPollController {
   @GetMapping("/polls/{pollTitle}/delegate-vote-type")
   public ResponseEntity<?> getDelegateVoteForPoll(
       @PathVariable String pollTitle, @RequestBody Integer citizenCardNumber) {
-
     try {
       VoteType voteType =
           this.voteActivePollsService.checkDelegateVote(pollTitle, citizenCardNumber);

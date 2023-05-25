@@ -16,6 +16,7 @@ import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.DuplicateDelegateThemeException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 
 /**
@@ -72,7 +73,7 @@ public class ChooseDelegateHandler {
 
   /**
    * Selects a delegate for a given theme by a citizen (voter). If a delegate has already been
-   * chosen for the theme, the voter's vote is added to the existing delegate theme, to avoid
+   * chosen for the theme, the delegate associated with the theme is updated, to avoid
    * multiple representation in the same field, i.e., multiple votes for one individual. If no
    * delegate has been chosen for the theme, a new delegate theme is created and added to {@code
    * DelegateThemeCatalog} which is a catalog for storing DelegateTheme objects.
@@ -82,6 +83,8 @@ public class ChooseDelegateHandler {
    * @param voterCitizenCardNumber Citizen who is choosing DelegateTheme identification.
    * @throws CitizenNotFoundException if the delegate or voter are not found in the catalog.
    * @throws ThemeNotFoundException if the specified theme is not found in the catalog.
+   * @throws DuplicateDelegateThemeException if the citizen already have a delegate associated
+   *                                         with the specified theme.
    */
   public void chooseDelegate(
       Integer delegateCitizenCardNumber, String themeDesignation, Integer voterCitizenCardNumber)
@@ -98,55 +101,72 @@ public class ChooseDelegateHandler {
       throw new ThemeNotFoundException(
           "Theme with designation " + themeDesignation + " not found.");
     }
-    Optional<Citizen> c = citizenCatalog.getCitizenByCitizenCardNumber(voterCitizenCardNumber);
-    if (c.isEmpty()) {
+    Optional<Citizen> voter = citizenCatalog.getCitizenByCitizenCardNumber(voterCitizenCardNumber);
+    if (voter.isEmpty()) {
       throw new CitizenNotFoundException(
           "Citizen with citizen card number " + voterCitizenCardNumber + " was not found.");
     }
 
-    List<DelegateTheme> dtList = dtCatalog.getAll();
+    if (updateDelegateThemeForVoter(delegate.get(), theme.get(), voter.get())) {
+      throw new DuplicateDelegateThemeException(
+              "The delegate associated with the theme " + themeDesignation + " was successfully updated.");
+    }
 
-    // Removes old delegates that have the same theme as the one chosen;
-    removeOldDelegateTheme(theme.get(), c.get());
+    createDelegateTheme(delegate.get(), theme.get(), voter.get());
+  }
 
-    boolean exists = false;
-    for (int i = 0; i < dtList.size() && !exists; i++) {
-      DelegateTheme dt = dtList.get(i);
-      if (dt.checkDelegateTheme(delegate.get(), theme.get())) {
-        exists = true;
-        dt.addVoter(c.get());
-        c.get().addDelegateTheme(dt);
+  /**
+   * Updates a DelegateTheme object in the voter's list if necessary. It is necessary when a
+   * DelegateTheme object with the same Theme already exists in the voter's list.
+   *
+   * @param delegate The delegate to be associated with the theme.
+   * @param theme    The theme to be associated with the delegate and voter.
+   * @param voter    The voter for whom the delegate theme is being updated.
+   * @return true if the DelegateTheme object was updated in the voter's list, false otherwise.
+   */
+  private boolean updateDelegateThemeForVoter(Delegate delegate, Theme theme, Citizen voter) {
+    List<DelegateTheme> voterDelegateThemeList = voter.getDelegateThemes();
+    for (DelegateTheme dt : voterDelegateThemeList) {
+      if (dt.getTheme().equals(theme)) {
+        disassociateDelegateThemeAndCitizen(dt, voter);
+        createDelegateTheme(delegate, theme, voter);
+        return true;
       }
     }
-    if (!exists) {
-      DelegateTheme dt = new DelegateTheme(delegate.get(), theme.get());
-      dt.addVoter(c.get());
-      c.get().addDelegateTheme(dt);
+    return false;
+  }
+
+  /**
+   * Disassociates the delegate theme and the voter. It removes the voter from the
+   * delegate theme's voter list and removes the delegate theme from the voter's
+   * delegate theme list. If there are no more voters associated with the
+   * delegate theme, it is deleted from the catalog; otherwise, it is saved in the catalog.
+   *
+   * @param dt The delegate theme to be disassociated.
+   * @param voter The voter to be disassociated from the delegate theme.
+   */
+  private void disassociateDelegateThemeAndCitizen(DelegateTheme dt, Citizen voter) {
+    List<Citizen> voters = dt.getVoters();
+    voters.remove(voter);
+    voter.removeDelegateTheme(dt);
+    if (voters.isEmpty()) {
+      dtCatalog.deleteDelegateTheme(dt);
+    } else {
       dtCatalog.saveDelegateTheme(dt);
     }
   }
 
   /**
-   * Removes the delegate theme (i.e., the representation of a citizen by a delegate in a particular
-   * theme) for the given citizen in the specified theme, if it exists. This method removes the
-   * citizen from the voters list of the delegate theme, and removes the delegate theme from the
-   * delegate themes list of the citizen.
+   * Creates a new DelegateTheme object and associates it with the provided delegate, theme, and voter.
    *
-   * @param citizen The citizen for whom the delegate theme needs to be removed.
-   * @param t The theme for which the delegate theme needs to be removed.
+   * @param delegate The delegate to be associated with the theme.
+   * @param theme The theme to be associated with the delegate and voter.
+   * @param voter The voter to be associated with the delegate and theme.
    */
-  private void removeOldDelegateTheme(Theme t, Citizen citizen) {
-    List<DelegateTheme> dt_list = citizen.getDelegateThemes();
-    DelegateTheme delegateThemeToRemove = null;
-    for (DelegateTheme dt : dt_list) {
-      if (dt.checkTheme(t)) {
-        delegateThemeToRemove = dt;
-        dt.removeCitizenRep(citizen);
-        break;
-      }
-    }
-    if (delegateThemeToRemove != null) {
-      citizen.removeDelegateTheme(delegateThemeToRemove);
-    }
+  private void createDelegateTheme(Delegate delegate, Theme theme, Citizen voter) {
+    DelegateTheme dt = new DelegateTheme(delegate, theme);
+    dt.addVoter(voter);
+    dtCatalog.saveDelegateTheme(dt);
   }
+
 }

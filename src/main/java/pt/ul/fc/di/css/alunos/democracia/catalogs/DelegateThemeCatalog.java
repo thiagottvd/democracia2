@@ -41,4 +41,13 @@ public class DelegateThemeCatalog {
   public void saveDelegateTheme(DelegateTheme dt) {
     dtRepository.save(dt);
   }
+
+  /**
+   * Deletes a DelegateTheme object from the database.
+   *
+   * @param delegateTheme The DelegateThem object to delete.
+   */
+  public void deleteDelegateTheme(DelegateTheme delegateTheme) {
+    dtRepository.delete(delegateTheme);
+  }
 }
