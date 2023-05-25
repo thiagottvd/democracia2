@@ -6,8 +6,6 @@
 <section>
     <h2>Escolher Delegado:</h2>
 
-    <div style="color: red" class="error" th:text="${error}"></div><br />
-
     <form action="#" th:action="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}" th:method="patch">
 
         <label for="delegate">Delegado:</label><br />
