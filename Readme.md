@@ -8,7 +8,7 @@
 ## O que já foi feito
 
  ## TODO
-* WEB APP (SSR): Integrar caso de uso 'Votar numa proposta'; melhorar UI/Service do caso de uso 'Escolher Delegado'; verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; testar.
+* WEB APP (SSR): Verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; testar.
 
 ## Dependências
 

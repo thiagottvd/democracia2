@@ -129,8 +129,7 @@ public class VoteActivePollsTest {
     // Ensure that each PollDTO in the list has a status of ACTIVE.
     for (PollDTO pollDTO : activePolls) {
       assertEquals(
-          PollStatus.ACTIVE,
-          pollCatalog.getPollByTitle(pollDTO.getTitle()).orElseThrow().getStatus());
+          PollStatus.ACTIVE, pollCatalog.getPollById(pollDTO.getId()).orElseThrow().getStatus());
     }
   }
 
@@ -149,21 +148,21 @@ public class VoteActivePollsTest {
 
     assertThrows(
         PollNotFoundException.class,
-        () -> voteActivePollsService.vote(null, voter.getCitizenCardNumber(), VoteType.POSITIVE));
+        () -> voteActivePollsService.vote(999L, voter.getCitizenCardNumber(), VoteType.POSITIVE));
 
     entityManager.persist(p);
     assertThrows(
         InvalidVoteTypeException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), null));
+                p.getAssociatedBill().getId(), voter.getCitizenCardNumber(), null));
 
     entityManager.remove(voter);
     assertThrows(
         CitizenNotFoundException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.NEGATIVE));
+                p.getAssociatedBill().getId(), voter.getCitizenCardNumber(), VoteType.NEGATIVE));
   }
 
   /** Tests checkDelegateVote method validation. */
@@ -181,7 +180,7 @@ public class VoteActivePollsTest {
 
     assertThrows(
         PollNotFoundException.class,
-        () -> voteActivePollsService.checkDelegateVote(null, voter.getCitizenCardNumber()));
+        () -> voteActivePollsService.checkDelegateVote(999L, voter.getCitizenCardNumber()));
 
     entityManager.persist(p);
     entityManager.remove(voter);
@@ -189,7 +188,7 @@ public class VoteActivePollsTest {
         CitizenNotFoundException.class,
         () ->
             voteActivePollsService.checkDelegateVote(
-                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber()));
+                p.getAssociatedBill().getId(), voter.getCitizenCardNumber()));
   }
 
   /**
@@ -211,23 +210,20 @@ public class VoteActivePollsTest {
     entityManager.persist(voter);
 
     // citizen first vote
-    voteActivePollsService.vote(
-        p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.NEGATIVE);
+    voteActivePollsService.vote(p.getId(), voter.getCitizenCardNumber(), VoteType.NEGATIVE);
 
     // assert that a CitizenAlreadyVotedException is thrown when the citizen tries to vote again
     assertThrows(
         CitizenAlreadyVotedException.class,
         () ->
             voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), VoteType.POSITIVE));
+                p.getId(), voter.getCitizenCardNumber(), VoteType.POSITIVE));
 
     /* assert that a CitizenAlreadyVotedException is thrown when the delegate tries to
     vote again (he has a POSITIVE vote by default) */
     assertThrows(
         CitizenAlreadyVotedException.class,
-        () ->
-            voteActivePollsService.vote(
-                p.getAssociatedBill().getTitle(), d.getCitizenCardNumber(), VoteType.NEGATIVE));
+        () -> voteActivePollsService.vote(p.getId(), d.getCitizenCardNumber(), VoteType.NEGATIVE));
   }
 
   /**
@@ -267,8 +263,7 @@ public class VoteActivePollsTest {
       }
 
       // call method under test
-      voteActivePollsService.vote(
-          p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber(), voteType);
+      voteActivePollsService.vote(p.getId(), voter.getCitizenCardNumber(), voteType);
     }
 
     // Test that the poll now has three negative votes and four positive votes (as expected)
@@ -286,8 +281,7 @@ public class VoteActivePollsTest {
     entityManager.persist(d2);
 
     // check if delegate can also vote
-    voteActivePollsService.vote(
-        p.getAssociatedBill().getTitle(), d2.getCitizenCardNumber(), VoteType.NEGATIVE);
+    voteActivePollsService.vote(p.getId(), d2.getCitizenCardNumber(), VoteType.NEGATIVE);
     assertTrue(p.getPublicVoters().containsKey(d2));
     assertEquals(4, p.getNumNegativeVotes());
   }
@@ -325,18 +319,16 @@ public class VoteActivePollsTest {
 
     // Set delegate theme for voter and make delegate vote on poll
     voter.addDelegateTheme(dt);
-    voteActivePollsService.vote(
-        p.getAssociatedBill().getTitle(), delegate.getCitizenCardNumber(), VoteType.NEGATIVE);
+    voteActivePollsService.vote(p.getId(), delegate.getCitizenCardNumber(), VoteType.NEGATIVE);
 
     // Check that delegate's vote was properly registered
     VoteType actualVoteType =
-        voteActivePollsService.checkDelegateVote(
-            p.getAssociatedBill().getTitle(), voter.getCitizenCardNumber());
+        voteActivePollsService.checkDelegateVote(p.getId(), voter.getCitizenCardNumber());
     assertEquals(VoteType.NEGATIVE, actualVoteType);
 
     // Check that a citizen with no delegates returns null when checking vote
     assertNull(
         voteActivePollsService.checkDelegateVote(
-            p.getAssociatedBill().getTitle(), voterWithNoDelegates.getCitizenCardNumber()));
+            p.getId(), voterWithNoDelegates.getCitizenCardNumber()));
   }
 }

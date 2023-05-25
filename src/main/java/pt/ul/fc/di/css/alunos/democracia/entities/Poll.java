@@ -36,7 +36,7 @@ public class Poll {
   @Enumerated(EnumType.STRING)
   private PollStatus status;
 
-  @OneToMany private final List<Citizen> privateVoters = new ArrayList<>();
+  @ManyToMany private final List<Citizen> privateVoters = new ArrayList<>();
 
   @OneToOne
   @Cascade(CascadeType.ALL)

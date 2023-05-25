@@ -36,26 +36,26 @@ public class VoteActivePollsService {
   /**
    * Checks a Delegate vote.
    *
-   * @param pollTitle The poll title to search for the actual Poll.
+   * @param pollId The poll id to search for the actual Poll.
    * @param voterCitizenCardNumber The citizen card number.
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(String pollTitle, Integer voterCitizenCardNumber)
+  public VoteType checkDelegateVote(Long pollId, Integer voterCitizenCardNumber)
       throws ApplicationException {
-    return voteActivePollsHandler.checkDelegateVote(pollTitle, voterCitizenCardNumber);
+    return voteActivePollsHandler.checkDelegateVote(pollId, voterCitizenCardNumber);
   }
 
   /**
    * Vote on a Poll using the citizen card number and VoteType.
    *
-   * @param pollTitle The title to search for the actual Poll.
+   * @param pollId The poll id.
    * @param voterCitizenCardNumber The citizen card number.
    * @param option The VoteType of the Citizen.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public void vote(String pollTitle, Integer voterCitizenCardNumber, VoteType option)
+  public void vote(Long pollId, Integer voterCitizenCardNumber, VoteType option)
       throws ApplicationException {
-    voteActivePollsHandler.vote(pollTitle, voterCitizenCardNumber, option);
+    voteActivePollsHandler.vote(pollId, voterCitizenCardNumber, option);
   }
 }

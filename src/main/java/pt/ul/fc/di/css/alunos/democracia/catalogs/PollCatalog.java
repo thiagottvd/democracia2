@@ -38,13 +38,13 @@ public class PollCatalog {
   }
 
   /**
-   * Returns the poll with the specified title.
+   * Returns the poll with the specified id.
    *
-   * @param title the title of the poll to return.
+   * @param pollId the id of the poll to return.
    * @return an Optional containing the poll if found, otherwise an empty Optional.
    */
-  public Optional<Poll> getPollByTitle(String title) {
-    return pollRepository.findPollByTitle(title);
+  public Optional<Poll> getPollById(Long pollId) {
+    return pollRepository.findById(pollId);
   }
 
   /**

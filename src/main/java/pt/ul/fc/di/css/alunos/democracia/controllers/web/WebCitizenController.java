@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.DuplicateDelegateThemeException;
 import pt.ul.fc.di.css.alunos.democracia.services.ChooseDelegateService;
+import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
 
 /**
  * The WebCitizenController class is a controller that handles HTTP requests related to citizens. It
@@ -22,20 +24,27 @@ import pt.ul.fc.di.css.alunos.democracia.services.ChooseDelegateService;
 public class WebCitizenController {
 
   private static final String CHOOSE_DELEGATE_VIEW = "choose_delegate";
+  private static final String VOTE_VIEW = "vote";
   private static final String CHOOSE_DELEGATE_SUCCESS = "Sucesso ao escolher delegado!";
+  private static final String VOTE_SUCCESS = "Voto computado com sucesso!";
   private static final String CITIZEN_NOT_FOUND_VIEW = "error/citizen_404";
 
   private final ChooseDelegateService chooseDelegateService;
+  private final VoteActivePollsService voteActivePollsService;
 
   /**
-   * Constructs a new WebCitizenController with the given ChooseDelegateService.
+   * Constructs a new WebCitizenController with the given ChooseDelegateService and
+   * VoteActivePollsService.
    *
    * @param chooseDelegateService the ChooseDelegateService to use for choosing a delegate for a
    *     particular theme for a citizen.
+   * @param voteActivePollsService the VoteActivePollsService to use for voting.
    */
   @Autowired
-  public WebCitizenController(ChooseDelegateService chooseDelegateService) {
+  public WebCitizenController(
+      ChooseDelegateService chooseDelegateService, VoteActivePollsService voteActivePollsService) {
     this.chooseDelegateService = chooseDelegateService;
+    this.voteActivePollsService = voteActivePollsService;
   }
 
   /**
@@ -88,5 +97,29 @@ public class WebCitizenController {
     }
     model.addAttribute("success", CHOOSE_DELEGATE_SUCCESS);
     return chooseDelegate(model, citizenCardNumber);
+  }
+
+  @GetMapping("/citizens/{citizenCardNumber}/vote")
+  public String vote(final Model model, @PathVariable Integer citizenCardNumber) {
+    model.addAttribute("activePolls", voteActivePollsService.getActivePolls());
+    return VOTE_VIEW;
+  }
+
+  @PatchMapping("/citizens/{citizenCardNumber}/vote")
+  public String voteAction(
+      Model model,
+      @PathVariable("citizenCardNumber") Integer citizenCardNumber,
+      @RequestParam("selectedPollId") Long selectedPollId,
+      @RequestParam("voteType") Integer intVoteType) {
+    VoteType voteType = (intVoteType == 0) ? VoteType.POSITIVE : VoteType.NEGATIVE;
+    try {
+      voteActivePollsService.vote(selectedPollId, citizenCardNumber, voteType);
+    } catch (ApplicationException e) {
+      model.addAttribute("error", e.getMessage());
+      return vote(model, citizenCardNumber);
+    }
+
+    model.addAttribute("success", VOTE_SUCCESS);
+    return vote(model, citizenCardNumber);
   }
 }

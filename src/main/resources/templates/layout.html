@@ -24,7 +24,8 @@
       <li><a th:href="@{/bills/propose}">Apresentar Projeto de Lei</a></li>
 <!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
       <li><a th:href="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}">Escolher Delegado</a></li>
-      <!--      <li><a th:href="@{/polls/vote}">Votar em Projetos de Lei</a></li>-->
+<!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
+      <li><a th:href="@{/citizens/{citizenCardNumber}/vote(citizenCardNumber=${1})}">Votar para Projetos de Lei</a></li>
     </ol>
   </div>
   <div th:replace="${content}">

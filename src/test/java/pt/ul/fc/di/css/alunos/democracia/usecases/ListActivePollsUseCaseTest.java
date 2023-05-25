@@ -121,8 +121,7 @@ public class ListActivePollsUseCaseTest {
     // Ensure that each PollDTO in the list has a status of ACTIVE.
     for (PollDTO pollDTO : activePolls) {
       assertEquals(
-          PollStatus.ACTIVE,
-          pollCatalog.getPollByTitle(pollDTO.getTitle()).orElseThrow().getStatus());
+          PollStatus.ACTIVE, pollCatalog.getPollById(pollDTO.getId()).orElseThrow().getStatus());
     }
   }
 }
