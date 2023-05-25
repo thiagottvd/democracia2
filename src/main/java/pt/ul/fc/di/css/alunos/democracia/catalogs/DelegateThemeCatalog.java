@@ -1,8 +1,11 @@
 package pt.ul.fc.di.css.alunos.democracia.catalogs;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
+import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
+import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.repositories.DelegateThemeRepository;
 
 /**
@@ -49,5 +52,13 @@ public class DelegateThemeCatalog {
    */
   public void deleteDelegateTheme(DelegateTheme delegateTheme) {
     dtRepository.delete(delegateTheme);
+  }
+
+  public boolean delegateThemeExists(Delegate delegate, Theme theme) {
+    return dtRepository.findByDelegateAndTheme(delegate, theme).isPresent();
+  }
+
+  public Optional<DelegateTheme> getDtByDelegateAndTheme(Delegate delegate, Theme theme) {
+    return dtRepository.findByDelegateAndTheme(delegate, theme);
   }
 }
