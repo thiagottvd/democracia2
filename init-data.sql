@@ -5,8 +5,8 @@ INSERT INTO theme(id, designation, parent_theme_id) VALUES (4, 'Criação de Lei
 INSERT INTO citizen(dtype, id, citizen_card_number, name) VALUES ('delegate', 1, 1, 'Thiago');
 INSERT INTO citizen(dtype, id, citizen_card_number, name) VALUES ('citizen', 2, 2, 'Voter 1');
 INSERT INTO citizen(dtype, id, citizen_card_number, name) VALUES ('delegate', 3, 3, 'Roberto C.');
-INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(10, 'first bill desc', NOW(), '0102030405', 0, 'OPEN', 'Criar uma Comissão Nacional para Debates Eleitorais e alterar a Lei da cobertura eleitoral', 1, 4);
-INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(20, 'bla bla bla desc', NOW(), '0102030405', 8273, 'OPEN', 'Indicador de Risco em caso de Sismo', 3, 3);
-INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(30, 'cb desc', NOW(), '0102030405', 0, 'CLOSED', 'Criação da Lei 4093 $2A', 1, 1);
+INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(10, 'first bill desc', NOW(), NULL, 0, 'OPEN', 'Criar uma Comissão Nacional para Debates Eleitorais e alterar a Lei da cobertura eleitoral', 1, 4);
+INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(20, 'bla bla bla desc', NOW(), NULL, 8273, 'OPEN', 'Indicador de Risco em caso de Sismo', 3, 3);
+INSERT INTO bill(id, description, expiration_date, file_data, num_supporters, status, title, delegate_id, theme_id) VALUES(30, 'cb desc', NOW(), NULL, 0, 'CLOSED', 'Criação da Lei 4093 $2A', 1, 1);
 INSERT INTO poll(id, closing_date, num_negative_votes, num_positive_votes, status, associated_bill_id) VALUES (1, NOW(), 0, 0, 'ACTIVE', 10);
 INSERT INTO poll(id, closing_date, num_negative_votes, num_positive_votes, status, associated_bill_id) VALUES (2, NOW(), 0, 0, 'ACTIVE', 30);

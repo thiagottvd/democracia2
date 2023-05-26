@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.dtos.DelegateDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -37,6 +38,7 @@ public class ChooseDelegateService {
    *
    * @return a list of DelegateDTOs.
    */
+  @Transactional(readOnly = true)
   public List<DelegateDTO> getDelegates() {
     return chooseDelegateHandler.getDelegates();
   }
@@ -46,6 +48,7 @@ public class ChooseDelegateService {
    *
    * @return a list of ThemeDTOs.
    */
+  @Transactional(readOnly = true)
   public List<ThemeDTO> getThemes() {
     return chooseDelegateHandler.getThemes();
   }
@@ -62,6 +65,7 @@ public class ChooseDelegateService {
    * @param voterCitizenCardNumber Citizen who is choosing DelegateTheme identification.
    * @throws ApplicationException if an unexpected error occurs while selecting the delegate.
    */
+  @Transactional
   public void chooseDelegate(
       Integer delegateCitizenCardNumber, String themeDesignation, Integer voterCitizenCardNumber)
       throws ApplicationException {

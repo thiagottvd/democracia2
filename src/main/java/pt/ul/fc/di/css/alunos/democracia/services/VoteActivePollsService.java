@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -29,6 +30,7 @@ public class VoteActivePollsService {
    *
    * @return A list containing all active Poll DTOs.
    */
+  @Transactional(readOnly = true)
   public List<PollDTO> getActivePolls() {
     return voteActivePollsHandler.getActivePolls();
   }
@@ -41,6 +43,7 @@ public class VoteActivePollsService {
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
+  @Transactional(readOnly = true)
   public VoteType checkDelegateVote(Long pollId, Integer voterCitizenCardNumber)
       throws ApplicationException {
     return voteActivePollsHandler.checkDelegateVote(pollId, voterCitizenCardNumber);
@@ -54,6 +57,7 @@ public class VoteActivePollsService {
    * @param option The VoteType of the Citizen.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
+  @Transactional
   public void vote(Long pollId, Integer voterCitizenCardNumber, VoteType option)
       throws ApplicationException {
     voteActivePollsHandler.vote(pollId, voterCitizenCardNumber, option);

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -37,6 +38,7 @@ public class ProposeBillService {
    *
    * @return a list of ThemeDTO objects representing all themes.
    */
+  @Transactional(readOnly = true)
   public List<ThemeDTO> getThemes() {
     return proposeBillHandler.getThemes();
   }
@@ -54,6 +56,7 @@ public class ProposeBillService {
    * @throws ApplicationException if there is an exception during the bill proposal process.
    * @return a BillDTO object representing the proposed bill.
    */
+  @Transactional
   public BillDTO proposeBill(
       String title,
       String description,

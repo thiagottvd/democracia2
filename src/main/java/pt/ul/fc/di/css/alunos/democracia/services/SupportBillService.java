@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.SupportBillHandler;
 
@@ -32,6 +33,7 @@ public class SupportBillService {
    * @param citizenCardNumber the citizen card number of the citizen who supports the bill.
    * @throws ApplicationException if an error occurs during the support operation.
    */
+  @Transactional
   public void supportBill(Long billId, Integer citizenCardNumber) throws ApplicationException {
     supportBillHandler.supportBill(billId, citizenCardNumber);
   }

@@ -32,7 +32,7 @@ public class Bill {
 
   private int numSupporters = 1;
 
-  @Lob @NotNull private byte[] fileData;
+  @Lob private byte[] fileData;
 
   @ManyToMany
   @Cascade(CascadeType.ALL)
