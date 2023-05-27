@@ -189,7 +189,7 @@ public class RestBillControllerEndpointTest {
     // Set up test data
     Long billID = 1L;
 
-    // Set up the mock service to throw an BillNotFoundException
+    // Set up the mock service to throw a BillNotFoundException
     when(consultBillsServiceMock.getBillDetails(billID))
         .thenThrow(new BillNotFoundException("The bill \"" + billID + "\" was not found."));
 
@@ -366,7 +366,7 @@ public class RestBillControllerEndpointTest {
     Long billId = 1L;
     Integer cc = 123456789;
 
-    // Set up the mock service to throw an CitizenAlreadySupportsBillException
+    // Set up the mock service to throw a CitizenAlreadySupportsBillException
     doThrow(
             new CitizenAlreadySupportsBillException(
                 "The citizen with cc " + cc + " already supports bill with id " + billId + "."))
