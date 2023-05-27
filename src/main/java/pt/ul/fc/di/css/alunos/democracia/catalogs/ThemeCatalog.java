@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.catalogs;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.repositories.ThemeRepository;
@@ -35,9 +36,9 @@ public class ThemeCatalog {
    * Returns a theme given its designation.
    *
    * @param designation The theme designation.
-   * @return a theme given its designation.
+   * @return an Optional containing the theme if found, otherwise an empty Optional.
    */
-  public Theme getTheme(String designation) {
+  public Optional<Theme> getTheme(String designation) {
     return themeRepository.findThemeByDesignation(designation);
   }
 }

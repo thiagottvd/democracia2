@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.catalogs;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
@@ -37,13 +38,13 @@ public class PollCatalog {
   }
 
   /**
-   * Returns the Poll with a given title.
+   * Returns the poll with the specified id.
    *
-   * @param title The title of the Poll we need.
-   * @return The corresponding Poll.
+   * @param pollId the id of the poll to return.
+   * @return an Optional containing the poll if found, otherwise an empty Optional.
    */
-  public Poll getPollByTitle(String title) {
-    return pollRepository.findPollByTitle(title);
+  public Optional<Poll> getPollById(Long pollId) {
+    return pollRepository.findById(pollId);
   }
 
   /**

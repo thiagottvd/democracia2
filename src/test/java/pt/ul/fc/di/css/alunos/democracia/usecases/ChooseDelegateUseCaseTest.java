@@ -1,7 +1,6 @@
 package pt.ul.fc.di.css.alunos.democracia.usecases;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,9 @@ import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.DelegateTheme;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.DuplicateDelegateThemeException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ThemeNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ChooseDelegateHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.CitizenRepository;
 import pt.ul.fc.di.css.alunos.democracia.repositories.DelegateThemeRepository;
@@ -57,70 +59,198 @@ public class ChooseDelegateUseCaseTest {
     chooseDelegateService = new ChooseDelegateService(chooseDelegateHandler);
   }
 
+  /** Tests the output if there is no themes and delegates in the database. */
+  @Test
+  public void emptyListsTest() {
+    List<ThemeDTO> expectedThemes = chooseDelegateService.getThemes();
+    List<DelegateDTO> expectedDelegates = chooseDelegateService.getDelegates();
+    assertEquals(expectedThemes.size(), 0);
+    assertEquals(expectedDelegates.size(), 0);
+  }
+
+  /** Tests getThemes method. */
+  @Test
+  public void getThemesTest() {
+    List<ThemeDTO> expectedThemes = new ArrayList<>();
+
+    for (int i = 0; i < 5; i++) {
+      Theme theme = new Theme(String.valueOf(i), null);
+      expectedThemes.add(new ThemeDTO(theme.getDesignation()));
+      em.persist(theme);
+    }
+
+    List<ThemeDTO> actualThemes = chooseDelegateService.getThemes();
+
+    assertEquals(expectedThemes.size(), actualThemes.size());
+
+    for (int i = 0; i < actualThemes.size(); i++) {
+      assertEquals(expectedThemes.get(i).getDesignation(), actualThemes.get(i).getDesignation());
+    }
+  }
+
   /** Tests getDelegates method. */
   @Test
   public void getDelegatesTest() {
+    List<DelegateDTO> expectedDelegates = new ArrayList<>();
 
-    Theme theme1 = new Theme("theme1", null);
-    Citizen c1 = new Citizen("Sara", 1);
-    Delegate d1 = new Delegate("Paulo", 2);
-    Delegate d2 = new Delegate("Paula", 3);
+    for (int i = 0; i < 5; i++) {
+      Delegate delegate = new Delegate(String.valueOf(i), i);
+      expectedDelegates.add(new DelegateDTO(String.valueOf(i), i));
+      em.persist(delegate);
+    }
 
-    em.persist(c1);
-    em.persist(theme1);
-    em.persist(d1);
-    em.persist(d2);
+    List<DelegateDTO> actualDelegates = chooseDelegateService.getDelegates();
 
-    List<Delegate> delegates = new ArrayList<>();
-    delegates.add(d1);
-    delegates.add(d2);
+    assertEquals(expectedDelegates.size(), actualDelegates.size());
 
-    List<DelegateDTO> delegateDTOS = chooseDelegateService.getDelegates();
-
-    for (int i = 0; i < delegates.size(); i++) {
-      assertEquals(delegates.get(i).getName(), delegateDTOS.get(i).getName());
-      assertEquals(delegates.get(i).getCc(), delegateDTOS.get(i).getCc());
+    for (int i = 0; i < actualDelegates.size(); i++) {
+      assertEquals(expectedDelegates.get(i).getName(), actualDelegates.get(i).getName());
+      assertEquals(
+          expectedDelegates.get(i).getCitizenCardNumber(),
+          actualDelegates.get(i).getCitizenCardNumber());
     }
   }
 
   /**
-   * Test equals method from Citizen and DelegateTheme classes.
+   * Test case to verify that a CitizenNotFoundException is thrown when the voter is not found.
    *
-   * @throws ApplicationException if an error occurs while testing.
+   * <p>This test case creates a delegate and a theme. It then attempts to choose a delegate for the
+   * theme by specifying a voter citizen card number that does not exist in the database. The test
+   * case expects a CitizenNotFoundException to be thrown.
    */
   @Test
-  public void equalsTest() throws ApplicationException {
-    Citizen c1 = new Citizen("Sara", 1);
-    Theme theme1 = new Theme("Saude", null);
-    Theme theme2 = new Theme("Educacao", null);
-    Delegate d1 = new Delegate("Paulo", 2);
-    Delegate d2 = new Delegate("Paula", 3);
+  public void voterNotFoundExceptionTest() {
+    Delegate delegate = new Delegate("delegate", 1);
+    Theme theme = new Theme("theme", null);
 
-    em.persist(c1);
-    em.persist(theme1);
-    em.persist(theme2);
-    em.persist(d1);
-    em.persist(d2);
+    em.persist(delegate);
+    em.persist(theme);
 
-    List<ThemeDTO> themes = chooseDelegateService.getThemes();
-    List<DelegateDTO> delegateDTOS = chooseDelegateService.getDelegates();
+    assertThrows(
+        CitizenNotFoundException.class,
+        () ->
+            chooseDelegateService.chooseDelegate(
+                delegate.getCitizenCardNumber(), theme.getDesignation(), 99));
+  }
 
-    for (int i = 0; i < themes.size(); i++) {
-      chooseDelegateService.chooseDelegate(
-          delegateDTOS.get(i).getCc(), themes.get(i).getDesignation(), c1.getCc());
-    }
+  /**
+   * Test case to verify that a ThemeNotFoundException is thrown when the specified theme is not
+   * found.
+   *
+   * <p>This test case creates a delegate and a voter. It then attempts to choose a delegate for a
+   * theme by specifying a theme designation that does not exist in the database. The test case
+   * expects a ThemeNotFoundException to be thrown.
+   */
+  @Test
+  public void themeNotFoundExceptionTest() {
+    Delegate delegate = new Delegate("delegate", 1);
+    Citizen voter = new Citizen("voter", 2);
+    em.persist(delegate);
+    em.persist(voter);
 
-    List<DelegateTheme> dt_list = dtRepository.getAllDTs();
-    assertEquals(2, dt_list.size());
+    assertThrows(
+        ThemeNotFoundException.class,
+        () ->
+            chooseDelegateService.chooseDelegate(
+                delegate.getCitizenCardNumber(), "null", voter.getCitizenCardNumber()));
+  }
 
-    Citizen c = citizenRepository.findByCc(1).orElse(null);
-    assertNotNull(c);
-    DelegateTheme dt = c.getDelegateThemes().get(0);
+  /**
+   * Test case to verify that a CitizenNotFoundException is thrown when the delegate is not found.
+   *
+   * <p>This test case creates a voter and a theme. It then attempts to choose a delegate, that does
+   * not exist in the database, for the theme by specifying a voter citizen card number. The test
+   * case expects a CitizenNotFoundException to be thrown.
+   */
+  @Test
+  public void delegateNotFoundExceptionTest() {
+    Theme theme = new Theme("theme", null);
+    Citizen voter = new Citizen("voter", 2);
 
-    // Testing equals method
-    assertEquals(c1, c);
-    assertEquals(dt_list.get(0), dt);
-    assertEquals(dt_list.get(0), dtRepository.getDT(dt_list.get(0).getId()));
+    em.persist(theme);
+    em.persist(voter);
+
+    assertThrows(
+        CitizenNotFoundException.class,
+        () ->
+            chooseDelegateService.chooseDelegate(
+                99, theme.getDesignation(), voter.getCitizenCardNumber()));
+  }
+
+  /**
+   * Test case to verify the handling of DuplicateDelegateThemeException.
+   *
+   * <p>This test case creates two delegates, a theme, and a voter. It associates the first delegate
+   * with the theme using the chooseDelegate() method. It then attempts to update the delegate for
+   * the same theme by selecting the second delegate using the chooseDelegate() method. The test
+   * case expects a DuplicateDelegateThemeException to be thrown, indicating that the voter already
+   * has a delegate associated with the specified theme. It also verifies if the data, in the
+   * database, associated with both operations are correct.
+   */
+  @Test
+  public void duplicateDelegateThemeException() throws ApplicationException {
+    Delegate delegate = new Delegate("delegate", 1);
+    Delegate delegate2 = new Delegate("delegate", 10);
+    Theme theme = new Theme("theme", null);
+    Citizen voter = new Citizen("voter", 2);
+
+    em.persist(delegate);
+    em.persist(delegate2);
+    em.persist(theme);
+    em.persist(voter);
+
+    // associates the citizen delegate (delegate) for the theme.
+    chooseDelegateService.chooseDelegate(
+        delegate.getCitizenCardNumber(), theme.getDesignation(), voter.getCitizenCardNumber());
+
+    assertEquals(1, dtRepository.getAllDTs().size());
+    assertEquals(
+        1,
+        citizenRepository
+            .findByCitizenCardNumber(voter.getCitizenCardNumber())
+            .get()
+            .getDelegateThemes()
+            .size());
+
+    assertEquals(delegate, dtRepository.getAllDTs().get(0).getDelegate());
+    assertEquals(voter, dtRepository.getAllDTs().get(0).getVoters().get(0));
+    assertEquals(theme, dtRepository.getAllDTs().get(0).getTheme());
+    assertEquals(
+        dtRepository.getAllDTs().get(0),
+        citizenRepository
+            .findByCitizenCardNumber(voter.getCitizenCardNumber())
+            .get()
+            .getDelegateThemes()
+            .get(0));
+
+    // updates the citizen delegate (delegate2) associated for the theme
+    assertThrows(
+        DuplicateDelegateThemeException.class,
+        () ->
+            chooseDelegateService.chooseDelegate(
+                delegate2.getCitizenCardNumber(),
+                theme.getDesignation(),
+                voter.getCitizenCardNumber()));
+
+    assertEquals(1, dtRepository.getAllDTs().size());
+    assertEquals(
+        1,
+        citizenRepository
+            .findByCitizenCardNumber(voter.getCitizenCardNumber())
+            .get()
+            .getDelegateThemes()
+            .size());
+
+    assertEquals(delegate2, dtRepository.getAllDTs().get(0).getDelegate());
+    assertEquals(voter, dtRepository.getAllDTs().get(0).getVoters().get(0));
+    assertEquals(theme, dtRepository.getAllDTs().get(0).getTheme());
+    assertEquals(
+        dtRepository.getAllDTs().get(0),
+        citizenRepository
+            .findByCitizenCardNumber(voter.getCitizenCardNumber())
+            .get()
+            .getDelegateThemes()
+            .get(0));
   }
 
   /**
@@ -149,13 +279,15 @@ public class ChooseDelegateUseCaseTest {
 
     for (int i = 0; i < themes.size(); i++) {
       chooseDelegateService.chooseDelegate(
-          delegateDTOS.get(i).getCc(), themes.get(i).getDesignation(), c1.getCc());
+          delegateDTOS.get(i).getCitizenCardNumber(),
+          themes.get(i).getDesignation(),
+          c1.getCitizenCardNumber());
     }
 
     List<DelegateTheme> dt_list = dtRepository.getAllDTs();
     assertEquals(2, dt_list.size());
 
-    // Checking persistance and connections
+    // Checking persistence and connections
     Citizen c2 = new Citizen("Manuel", 5);
     Delegate d3 = new Delegate("Paulina", 4);
     Theme theme3 = new Theme("Climate", null);
@@ -163,40 +295,79 @@ public class ChooseDelegateUseCaseTest {
     em.persist(theme3);
     em.persist(c2);
 
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme3.getDesignation(), c1.getCc());
+    chooseDelegateService.chooseDelegate(
+        d3.getCitizenCardNumber(), theme3.getDesignation(), c1.getCitizenCardNumber());
 
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme3.getDesignation(), c2.getCc());
+    chooseDelegateService.chooseDelegate(
+        d3.getCitizenCardNumber(), theme3.getDesignation(), c2.getCitizenCardNumber());
 
     // Should not create a new DT since there was already one with the same delegate and theme
-    // Size of dtRepo must be 3 even tho there where 4 chooseDelegates that got called
+    // Size of dtRepo must be 3 even tho there were 4 chooseDelegates that got called
     assertEquals(3, dtRepository.getAllDTs().size());
-    assertEquals(3, citizenRepository.findByCc(1).get().getDelegateThemes().size());
+    assertEquals(
+        3, citizenRepository.findByCitizenCardNumber(1).orElseThrow().getDelegateThemes().size());
     assertEquals(2, dtRepository.getAllDTs().get(2).getVoters().size());
 
     // Sara tem Paulo na Health/ Paula na Education / Paulina no Climate
     // Paulo em Saude
     assertEquals(
-        d1.getCc(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(0).getDelegate().getCc());
+        d1.getCitizenCardNumber(),
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(0)
+            .getDelegate()
+            .getCitizenCardNumber());
     assertEquals(
         theme1.getDesignation(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(0).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(0)
+            .getTheme()
+            .getDesignation());
 
     // Paula em Educaçao
     assertEquals(
-        d2.getCc(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(1).getDelegate().getCc());
+        d2.getCitizenCardNumber(),
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(1)
+            .getDelegate()
+            .getCitizenCardNumber());
     assertEquals(
         theme2.getDesignation(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(1).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(1)
+            .getTheme()
+            .getDesignation());
 
     // Paulina em Climate
     assertEquals(
-        d3.getCc(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(2).getDelegate().getCc());
+        d3.getCitizenCardNumber(),
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(2)
+            .getDelegate()
+            .getCitizenCardNumber());
     assertEquals(
         theme3.getDesignation(),
-        citizenRepository.findByCc(1).get().getDelegateThemes().get(2).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(1)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(2)
+            .getTheme()
+            .getDesignation());
 
     // Checking same delegate different themes. Should be allowed
     Theme theme4 = new Theme("Economy", null);
@@ -204,34 +375,66 @@ public class ChooseDelegateUseCaseTest {
     em.persist(theme5);
     em.persist(theme4);
 
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme4.getDesignation(), c2.getCc());
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme5.getDesignation(), c2.getCc());
+    chooseDelegateService.chooseDelegate(
+        d3.getCitizenCardNumber(), theme4.getDesignation(), c2.getCitizenCardNumber());
+    chooseDelegateService.chooseDelegate(
+        d3.getCitizenCardNumber(), theme5.getDesignation(), c2.getCitizenCardNumber());
     assertEquals(5, dtRepository.getAllDTs().size());
     // Manuel has Paulina rep in Economy, Trade and Climate
-    assertEquals(3, citizenRepository.findByCc(5).get().getDelegateThemes().size());
     assertEquals(
-        d3.getCc(),
-        citizenRepository.findByCc(5).get().getDelegateThemes().get(2).getDelegate().getCc());
+        3, citizenRepository.findByCitizenCardNumber(5).orElseThrow().getDelegateThemes().size());
+    assertEquals(
+        d3.getCitizenCardNumber(),
+        citizenRepository
+            .findByCitizenCardNumber(5)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(2)
+            .getDelegate()
+            .getCitizenCardNumber());
     assertEquals(
         theme3.getDesignation(),
-        citizenRepository.findByCc(5).get().getDelegateThemes().get(0).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(5)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(0)
+            .getTheme()
+            .getDesignation());
     assertEquals(
         theme4.getDesignation(),
-        citizenRepository.findByCc(5).get().getDelegateThemes().get(1).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(5)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(1)
+            .getTheme()
+            .getDesignation());
     assertEquals(
         theme5.getDesignation(),
-        citizenRepository.findByCc(5).get().getDelegateThemes().get(2).getTheme().getDesignation());
+        citizenRepository
+            .findByCitizenCardNumber(5)
+            .orElseThrow()
+            .getDelegateThemes()
+            .get(2)
+            .getTheme()
+            .getDesignation());
 
     // Checking same theme but different delegates. Only the new/last one should remain as
     // representative in that theme
     // Sara wants to get Paulina to replace Paulo in theme1 and Paula in theme2
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme1.getDesignation(), c1.getCc());
-    chooseDelegateService.chooseDelegate(d3.getCc(), theme2.getDesignation(), c1.getCc());
-    assertEquals(7, dtRepository.getAllDTs().size());
+    try {
+      chooseDelegateService.chooseDelegate(
+          d3.getCitizenCardNumber(), theme1.getDesignation(), c1.getCitizenCardNumber());
+      chooseDelegateService.chooseDelegate(
+          d3.getCitizenCardNumber(), theme2.getDesignation(), c1.getCitizenCardNumber());
+    } catch (DuplicateDelegateThemeException e) {
+      // Do nothing
+    }
+
+    assertEquals(5, dtRepository.getAllDTs().size());
     // Sara has Paulina in Health Education and Climate
-    assertEquals(3, citizenRepository.findByCc(1).get().getDelegateThemes().size());
-    // Paulo in Health and Paula in Education do not have anymore citizens to represent.
-    assertEquals(0, dtRepository.getAllDTs().get(0).getVoters().size());
-    assertEquals(0, dtRepository.getAllDTs().get(1).getVoters().size());
+    assertEquals(
+        3, citizenRepository.findByCitizenCardNumber(1).orElseThrow().getDelegateThemes().size());
   }
 }

@@ -12,6 +12,7 @@ services:
     container_name: pgserver
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
     expose:
       - 5432
     ports:
@@ -39,7 +40,10 @@ services:
       - pgserver
     networks:
       - dbnet
-    command: /bin/bash
+    command: >
+      /bin/bash -c "
+      ./run.sh &
+      sleep infinity"
 
 volumes:
   postgres-data:

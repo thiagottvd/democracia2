@@ -7,27 +7,16 @@
 
 ## O que já foi feito
 
- * Use Case D: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case E: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case F: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case G: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case H: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case I: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case J: Implementado; Totalmente documentado; Testes Implementados.
- * Use Case K: Implementado; Totalmente documentado; Testes Implementados.
-
  ## TODO
-
- * Verificar se o mapeamento está o melhor possível.
- * **[CRÍTICO]** Entregar projeto.
+* WEB APP (SSR): Verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; testar.
 
 ## Dependências
 
 Este projecto vai usar Java17+ e Postgres, mas esses vão estar disponíveis dentro dos containers Docker. Só são necessários se quiser correr a aplicação nativamente.
 
-## Correr projeto
+## Iniciar aplicação (backend)
 
-Deve correr `run.sh`.
+Deve correr o comando `run.sh`.
 
 Este comando vai iniciar dois containers:
 
@@ -36,4 +25,9 @@ Este comando vai iniciar dois containers:
 
 ## Correr testes
 
-Deve correr `test.sh`.
+Deve correr o comando `test.sh`.
+
+## Inserir dados na base de dados (postgres) para melhor testagem da aplicação
+
+1. Deve correr o comando `run.sh` (caso ainda não o tenha feito) para iniciar a aplicação.
+2. Deve correr o comando `populate-db.sh` para popular a base de dados.

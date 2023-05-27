@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html th:fragment="layout (content)" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" lang="pt-PT">
+
+<head>
+  <title>Customer Manager</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    #container {
+      margin: auto;
+      max-width: 500px;
+    }
+    th {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div layout:fragment="header">
+    <h1>Democracia 2.0</h1>
+    <ol>
+      <li><a th:href="@{/polls/active}">Projetos de Lei em Votação</a></li>
+      <li><a th:href="@{/bills/propose}">Apresentar Projeto de Lei</a></li>
+<!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
+      <li><a th:href="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}">Escolher Delegado</a></li>
+<!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
+      <li><a th:href="@{/citizens/{citizenCardNumber}/vote(citizenCardNumber=${1})}">Votar para Projetos de Lei</a></li>
+    </ol>
+  </div>
+  <div th:replace="${content}">
+  </div>
+</div>
+</body>
+
+</html>

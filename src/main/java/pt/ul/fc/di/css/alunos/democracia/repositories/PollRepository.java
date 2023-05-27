@@ -30,13 +30,4 @@ public interface PollRepository extends JpaRepository<Poll, Long> {
    */
   @Query("SELECT p FROM Poll p WHERE p.closingDate < CURRENT_DATE")
   List<Poll> findAllExpiredPolls();
-
-  /**
-   * Retrieves a poll by its associated bill title.
-   *
-   * @param title the title of the associated bill.
-   * @return the poll associated with the given bill title.
-   */
-  @Query("SELECT p FROM Poll p WHERE p.associatedBill.title = :title")
-  Poll findPollByTitle(@Param("title") String title);
 }

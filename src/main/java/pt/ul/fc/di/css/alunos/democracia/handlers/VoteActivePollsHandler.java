@@ -46,25 +46,46 @@ public class VoteActivePollsHandler {
   public List<PollDTO> getActivePolls() {
     List<Poll> activePolls = pollCatalog.getPollsByStatusType(PollStatus.ACTIVE);
     return activePolls.stream()
-        .map(poll -> new PollDTO(poll.getAssociatedBill().getTitle()))
+        .map(poll -> new PollDTO(poll.getId(), poll.getAssociatedBill().getTitle()))
         .collect(Collectors.toList());
   }
 
   /**
    * Checks a Delegate vote.
    *
-   * @param pollTitle The title to search for the actual Poll.
-   * @param voterCc The Citizen cc.
+   * @param pollId The id to search for the actual Poll.
+   * @param voterCitizenCardNumber The citizen card number.
    * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(String pollTitle, Integer voterCc) throws ApplicationException {
-    Citizen citizen = validateCitizen(voterCc);
-    Poll poll = validatePoll(pollTitle);
+  public VoteType checkDelegateVote(Long pollId, Integer voterCitizenCardNumber)
+      throws ApplicationException {
+    Citizen citizen = validateCitizen(voterCitizenCardNumber);
+    Poll poll = validatePoll(pollId);
     Theme theme = poll.getAssociatedBill().getTheme();
     List<DelegateTheme> delegateThemesList = citizen.getDelegateThemes();
     Delegate delegate = findDelegateForTheme(theme, delegateThemesList);
     return delegate != null ? poll.getDelegateVote(delegate) : null;
+  }
+
+  /**
+   * Vote on a Poll using the citizen card number and VoteType.
+   *
+   * @param pollId The poll id.
+   * @param voterCitizenCardNumber The citizen card number.
+   * @param option The VoteType of the Citizen.
+   * @throws ApplicationException If no Poll or Citizen are found or if the vote type is invalid.
+   */
+  public void vote(Long pollId, Integer voterCitizenCardNumber, VoteType option)
+      throws ApplicationException {
+    if (option == null
+        || (!option.equals(VoteType.POSITIVE) && !option.equals(VoteType.NEGATIVE))) {
+      throw new InvalidVoteTypeException("The vote type is invalid.");
+    }
+    Citizen citizen = validateCitizen(voterCitizenCardNumber);
+    Poll poll = validatePoll(pollId);
+    poll.addVoter(citizen, option);
+    pollCatalog.savePoll(poll);
   }
 
   /**
@@ -88,34 +109,18 @@ public class VoteActivePollsHandler {
   }
 
   /**
-   * Vote on a Poll using the Citizen cc and VoteType.
-   *
-   * @param pollTitle The title to search for the actual Poll.
-   * @param voterCc The Citizen cc.
-   * @param option The VoteType of the Citizen.
-   * @throws ApplicationException If no Poll or Citizen are found or if the vote type is invalid.
-   */
-  public void vote(String pollTitle, Integer voterCc, VoteType option) throws ApplicationException {
-    if (option == null
-        || (!option.equals(VoteType.POSITIVE) && !option.equals(VoteType.NEGATIVE))) {
-      throw new InvalidVoteTypeException("The vote type is invalid.");
-    }
-    Citizen citizen = validateCitizen(voterCc);
-    Poll poll = validatePoll(pollTitle);
-    poll.addVoter(citizen, option);
-  }
-
-  /**
    * Aux method to validate if the Citizen exists, and if so returns the citizen.
    *
-   * @param voterCc The given Citizen cc.
+   * @param voterCitizenCardNumber The given citizen card number.
    * @return The Citizen if found.
    * @throws CitizenNotFoundException If the citizen is not found.
    */
-  private Citizen validateCitizen(Integer voterCc) throws CitizenNotFoundException {
-    Optional<Citizen> citizen = citizenCatalog.getCitizenByCc(voterCc);
+  private Citizen validateCitizen(Integer voterCitizenCardNumber) throws CitizenNotFoundException {
+    Optional<Citizen> citizen =
+        citizenCatalog.getCitizenByCitizenCardNumber(voterCitizenCardNumber);
     if (citizen.isEmpty()) {
-      throw new CitizenNotFoundException("Citizen with id: " + voterCc + " not found.");
+      throw new CitizenNotFoundException(
+          "Citizen with id: " + voterCitizenCardNumber + " not found.");
     }
     return citizen.get();
   }
@@ -123,15 +128,15 @@ public class VoteActivePollsHandler {
   /**
    * Aux method to validate if the Poll exists, and if so returns the poll.
    *
-   * @param pollTitle The title used to search the actual Poll.
+   * @param pollId The id used to search the actual Poll.
    * @return The Poll if found.
    * @throws PollNotFoundException If the poll is not found.
    */
-  private Poll validatePoll(String pollTitle) throws PollNotFoundException {
-    Poll poll = pollCatalog.getPollByTitle(pollTitle);
-    if (poll == null) {
-      throw new PollNotFoundException("Poll with title: " + pollTitle + " not found.");
+  private Poll validatePoll(Long pollId) throws PollNotFoundException {
+    Optional<Poll> poll = pollCatalog.getPollById(pollId);
+    if (poll.isEmpty()) {
+      throw new PollNotFoundException("Poll with id: " + pollId + " was not found.");
     }
-    return poll;
+    return poll.get();
   }
 }

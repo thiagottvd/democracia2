@@ -14,6 +14,7 @@ import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
 import pt.ul.fc.di.css.alunos.democracia.entities.Delegate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Theme;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.CloseExpiredBillsHandler;
 import pt.ul.fc.di.css.alunos.democracia.repositories.BillRepository;
 
@@ -46,19 +47,18 @@ public class CloseExpiredBillsUseCaseTest {
    * closed.
    */
   @Test
-  public void testCloseExpiredBillsWithNoBills() {
+  public void testCloseExpiredBillsWithNoBills() throws InvalidDateException {
+    byte[] bytes = {0x2, 0x42};
+
     // Bills will never be expired
     LocalDate localDate = LocalDate.now().plusDays(1);
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 100; i < 105; i++) {
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
       Delegate d = new Delegate(String.valueOf(i), i);
       entityManager.persist(d);
-
-      Bill b =
-          new Bill(
-              String.valueOf(i), String.valueOf(i), String.valueOf(i).getBytes(), localDate, d, t);
+      Bill b = new Bill(String.valueOf(i), String.valueOf(i), bytes, localDate, d, t);
       entityManager.persist(b);
     }
 
@@ -86,14 +86,16 @@ public class CloseExpiredBillsUseCaseTest {
    * set to "OPEN".
    */
   @Test
-  public void testCloseExpiredBills() {
+  public void testCloseExpiredBills() throws InvalidDateException {
+    byte[] bytes = {0x2, 0x42};
+
     // Set up scenario with expired and unexpired bills
     LocalDate yesterday = LocalDate.now().minusDays(1);
     LocalDate today = LocalDate.now();
 
     // Create 20 bills with different expiration (is expired (yesterday) or will expire (today))
     // dates and add them to the entity manager
-    for (int i = 0; i < 20; i++) {
+    for (int i = 100; i < 120; i++) {
       Theme t = new Theme(String.valueOf(i), null);
       entityManager.persist(t);
       Delegate d = new Delegate(String.valueOf(i), i);
@@ -101,9 +103,8 @@ public class CloseExpiredBillsUseCaseTest {
 
       // Create some bills that are expired and others that are not (10 OPEN and 10 CLOSED)
       LocalDate expiration = i % 2 == 0 ? yesterday : today;
-      Bill b =
-          new Bill(
-              String.valueOf(i), String.valueOf(i), String.valueOf(i).getBytes(), expiration, d, t);
+      Bill b = new Bill(String.valueOf(i), String.valueOf(i), bytes, LocalDate.now(), d, t);
+      b.setDate(expiration);
       entityManager.persist(b);
     }
 

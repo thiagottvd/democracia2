@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}" lang="pt-PT">
+
+<body>
+
+<section>
+    <h2>Escolher Delegado:</h2>
+
+    <form action="#" th:action="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}" th:method="patch">
+
+        <label for="delegate">Delegado:</label><br />
+        <select name="delegate" id="delegate" required>
+            <option value="">Selecione um delegado</option>
+            <th:block th:each="delegate : ${delegates}">
+                <option th:value="${delegate.getCitizenCardNumber()}" th:text="${delegate.getName()}"></option>
+            </th:block>
+        </select><br />
+
+        <label for="theme">Tema:</label><br />
+        <select name="theme" id="theme" required>
+            <option value="">Selecione um tema</option>
+            <th:block th:each="theme : ${themes}">
+                <option th:value="${theme}" th:text="${theme}"></option>
+            </th:block>
+        </select><br />
+
+        <input type="submit" value="Escolher Delegado" />
+
+    </form>
+
+    <div th:if="${error}" style="color: red" class="error" th:text="${error}"></div>
+    <div th:if="${success}" style="color: green" class="success" th:text="${success}"></div>
+
+</section>
+
+</body>
+</html>

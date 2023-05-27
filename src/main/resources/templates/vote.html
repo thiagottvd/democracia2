@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::section})}" lang="pt-PT">
+
+<body>
+<section>
+    <h2>Votar para Projetos de Lei:</h2>
+
+    <form action="#"
+          th:action="@{/citizens/{citizenCardNumber}/vote-show-delegate-vote(citizenCardNumber=${1})}"
+          th:method="get">
+
+        <label for="selectedPollId">Projeto de Lei:</label><br />
+        <select name="selectedPollId" id="selectedPollId" required>
+            <option value="">Selecione um projeto de lei</option>
+            <th:block th:each="poll : ${activePolls}">
+                <option th:value="${poll.id}" th:text="${poll.title}"></option>
+            </th:block>
+        </select><br /> <br /> <br />
+
+        <input style="width: fit-content" type="submit" value="Ver voto do delegado"/> <br />
+        <div>Voto do Delegado: <span th:if="${delegateVote}" th:text="${delegateVote}"></span></div>
+    </form>
+
+    <form action="#"
+          th:action="@{/citizens/{citizenCardNumber}/vote(citizenCardNumber=${1})}" th:method="patch">
+        <br />
+        <label>Tipo de Voto:</label><br />
+        <input type="radio" id="positiveVote" name="voteType" value="0" required>
+        <label for="positiveVote">Positivo</label><br />
+        <input type="radio" id="negativeVote" name="voteType" value="1" required>
+        <label for="negativeVote">Negativo</label><br /><br />
+
+        <input type="submit" value="Votar" /> <br />
+    </form>
+
+    <div th:if="${error}" style="color: red" class="error" th:text="${error}"></div>
+    <div th:if="${success}" style="color: green" class="success" th:text="${success}"></div>
+
+</section>
+</body>
+
+</html>
