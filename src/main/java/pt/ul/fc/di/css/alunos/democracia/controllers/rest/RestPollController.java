@@ -46,7 +46,6 @@ public class RestPollController {
     try {
       VoteType voteType = this.voteActivePollsService.checkDelegateVote(pollId, citizenCardNumber);
       return ResponseEntity.ok().body(voteType);
-
     } catch (PollNotFoundException | CitizenNotFoundException e) {
       return handleException(HttpStatus.NOT_FOUND, e.getMessage());
     } catch (ApplicationException e) {
