@@ -1,5 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.controllers.web;
 
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
+import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
@@ -25,6 +28,7 @@ public class WebCitizenController {
 
   private static final String CHOOSE_DELEGATE_VIEW = "choose_delegate";
   private static final String VOTE_VIEW = "vote";
+  private static final String VOTE_UNAVAILABLE = "Voto indisponível.";
   private static final String CHOOSE_DELEGATE_SUCCESS = "Sucesso ao escolher delegado!";
   private static final String VOTE_SUCCESS = "Voto computado com sucesso!";
   private static final String CITIZEN_NOT_FOUND_VIEW = "error/citizen_404";
@@ -100,8 +104,34 @@ public class WebCitizenController {
   }
 
   @GetMapping("/citizens/{citizenCardNumber}/vote")
-  public String vote(final Model model, @PathVariable Integer citizenCardNumber) {
-    model.addAttribute("activePolls", voteActivePollsService.getActivePolls());
+  public String vote(
+      final Model model, @PathVariable Integer citizenCardNumber, HttpSession session) {
+    List<PollDTO> activePolls = voteActivePollsService.getActivePolls();
+    session.setAttribute("activePolls", activePolls);
+    model.addAttribute("activePolls", activePolls);
+    return VOTE_VIEW;
+  }
+
+  @GetMapping("/citizens/{citizenCardNumber}/vote-show-delegate-vote")
+  public String voteShowDelegateVote(
+      final Model model,
+      @PathVariable Integer citizenCardNumber,
+      @RequestParam("selectedPollId") Long selectedPollId,
+      HttpSession session) {
+    try {
+      VoteType voteType =
+          voteActivePollsService.checkDelegateVote(selectedPollId, citizenCardNumber);
+      String strVote = (voteType != null) ? mapVoteMessage(voteType) : VOTE_UNAVAILABLE;
+      model.addAttribute("delegateVote", strVote);
+
+      List<PollDTO> activePolls = (List<PollDTO>) session.getAttribute("activePolls");
+      model.addAttribute("activePolls", activePolls);
+
+      session.setAttribute("selectedPollId", selectedPollId);
+    } catch (ApplicationException e) {
+      model.addAttribute("error", e.getMessage());
+      return VOTE_VIEW;
+    }
     return VOTE_VIEW;
   }
 
@@ -109,17 +139,29 @@ public class WebCitizenController {
   public String voteAction(
       Model model,
       @PathVariable("citizenCardNumber") Integer citizenCardNumber,
-      @RequestParam("selectedPollId") Long selectedPollId,
-      @RequestParam("voteType") Integer intVoteType) {
+      @RequestParam("voteType") Integer intVoteType,
+      HttpSession session) {
     VoteType voteType = (intVoteType == 0) ? VoteType.POSITIVE : VoteType.NEGATIVE;
+    Long selectedPollId = (Long) session.getAttribute("selectedPollId");
     try {
       voteActivePollsService.vote(selectedPollId, citizenCardNumber, voteType);
     } catch (ApplicationException e) {
       model.addAttribute("error", e.getMessage());
-      return vote(model, citizenCardNumber);
+      return vote(model, citizenCardNumber, session);
     }
 
     model.addAttribute("success", VOTE_SUCCESS);
-    return vote(model, citizenCardNumber);
+    return vote(model, citizenCardNumber, session);
+  }
+
+  private String mapVoteMessage(VoteType voteType) {
+    switch (voteType) {
+      case POSITIVE:
+        return "Positivo";
+      case NEGATIVE:
+        return "Negativo";
+      default:
+        return VOTE_UNAVAILABLE;
+    }
   }
 }

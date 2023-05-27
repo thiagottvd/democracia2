@@ -6,15 +6,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import pt.ul.fc.di.css.alunos.democracia.entities.*;
 
 @SpringBootApplication
-public class Application {
+public class DemocraciaApp {
 
-  private static final Logger log = LoggerFactory.getLogger(Application.class);
+  private static final Logger log = LoggerFactory.getLogger(DemocraciaApp.class);
 
   public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(DemocraciaApp.class, args);
   }
 
   @Bean
