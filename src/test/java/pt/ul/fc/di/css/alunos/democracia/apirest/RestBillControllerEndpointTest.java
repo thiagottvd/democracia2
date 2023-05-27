@@ -143,9 +143,6 @@ public class RestBillControllerEndpointTest {
         .andExpect(jsonPath("$.title", is(expectedBill.getTitle())))
         .andExpect(jsonPath("$.description", is(expectedBill.getDescription())))
         .andExpect(jsonPath("$.numSupporters", is(expectedBill.getNumSupporters())))
-        // BUG: JSON serialization library used may not know how to properly serialize a byte[]
-        // array to JSON.
-        // .andExpect(jsonPath("$.fileData", is(expectedBill.getFileData())))
         .andExpect(
             jsonPath(
                 "$.fileData", is(Base64.getEncoder().encodeToString(expectedBill.getFileData()))))

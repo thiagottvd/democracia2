@@ -4,8 +4,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import pt.ul.fc.di.css.alunos.democracia.controllers.rest.RestPollController;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.PollNotFoundException;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
@@ -99,5 +103,175 @@ public class RestPollControllerEndpointTest {
     // Verify that the service method was called
     verify(listActivePollsServiceMock, times(1)).getActivePolls();
     verifyNoMoreInteractions(listActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollSuccessWhenNoVote() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+
+    // Set up the mock service to return the expected delegate vote (null, in this case).
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenReturn(null);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response (should be an empty string, because the delegate
+    // did not vote)
+    mockMvc.perform(request).andExpect(status().isOk()).andExpect(content().string(""));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollSuccessWhenPositiveVote() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+    VoteType positiveVote = VoteType.POSITIVE;
+    String expectedContent = "\"POSITIVE\"";
+
+    // Set up the mock service to return the expected delegate vote (VoteType.POSITIVE, in this
+    // case).
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenReturn(positiveVote);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response (should be a string with value POSITIVE, because
+    // the delegate voted VoteType.POSITIVE)
+    mockMvc
+        .perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().string(expectedContent));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollSuccessWhenNegativeVote() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+    VoteType negativeVote = VoteType.NEGATIVE;
+    String expectedContent = "\"NEGATIVE\"";
+
+    // Set up the mock service to return the expected delegate vote (VoteType.NEGATIVE, in this
+    // case).
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenReturn(negativeVote);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response (should be a string with value NEGATIVE, because
+    // the delegate voted VoteType.NEGATIVE)
+    mockMvc
+        .perform(request)
+        .andExpect(status().isOk())
+        .andExpect(content().string(expectedContent));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollPollNotFoundException() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+
+    // Set up the mock service to throw an PollNotFoundException
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenThrow(new PollNotFoundException("Poll with id: " + pollId + " was not found."));
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response
+    mockMvc
+        .perform(request)
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value("Poll with id: " + pollId + " was not found."));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollCitizenNotFoundException() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+
+    // Set up the mock service to throw an CitizenNotFoundException
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenThrow(
+            new CitizenNotFoundException(
+                "Citizen with id: " + voterCitizenCardNumber + " not found."));
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response
+    mockMvc
+        .perform(request)
+        .andExpect(status().isNotFound())
+        .andExpect(
+            jsonPath("$.message")
+                .value("Citizen with id: " + voterCitizenCardNumber + " not found."));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testGetDelegateVoteForPollApplicationException() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    Integer voterCitizenCardNumber = 1;
+
+    // Set up the mock service to throw an ApplicationException
+    when(voteActivePollsServiceMock.checkDelegateVote(pollId, voterCitizenCardNumber))
+        .thenThrow(
+            new ApplicationException("An error occurred while retrieving the delegate vote."));
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        get("/api/polls/" + pollId + "/delegate-vote-type")
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response
+    mockMvc.perform(request).andExpect(status().isInternalServerError());
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).checkDelegateVote(pollId, voterCitizenCardNumber);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 }
