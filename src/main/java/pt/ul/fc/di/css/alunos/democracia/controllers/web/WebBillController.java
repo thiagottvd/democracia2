@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.controllers.web;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.*;
+import java.util.List;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +134,7 @@ public class WebBillController {
               file.getBytes(),
               bDTO.getExpirationDate(),
               bDTO.getThemeDesignation(),
-                  userCitizenCardNumber);
+              userCitizenCardNumber);
       logger.debug("INFO: Bill proposed. Reference added to the database.");
       return REDIRECT_TO_BILL_DETAIL_VIEW + billDTO.getId();
     } catch (ApplicationException | IOException e) {
@@ -211,6 +212,13 @@ public class WebBillController {
     } catch (ApplicationException e) {
       return BILL_NOT_FOUND_VIEW;
     }
+  }
+
+  @GetMapping("/bills/open")
+  public String getActivePolls(final Model model) {
+    List<BillDTO> openBills = consultBillsService.getOpenBills();
+    model.addAttribute("openBills", openBills);
+    return "open_bills_list";
   }
 
   /**

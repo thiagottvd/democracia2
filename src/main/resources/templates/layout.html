@@ -20,8 +20,9 @@
   <div layout:fragment="header">
     <h1>Democracia 2.0</h1>
     <ol>
-      <li><a th:href="@{/polls/active}">Projetos de Lei em Votação</a></li>
-      <li><a th:href="@{/bills/propose}">Apresentar Projeto de Lei</a></li>
+      <li><a th:href="@{/polls/active}">Consultar Votações Atuais</a></li>
+      <li><a th:href="@{/bills/propose}">Criar Projeto de Lei</a></li>
+      <li><a th:href="@{/bills/open}"> Consultar Projetos de Lei</a></li>
 <!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->
       <li><a th:href="@{/citizens/{citizenCardNumber}/choose-delegate(citizenCardNumber=${1})}">Escolher Delegado</a></li>
 <!--      The user citizen card number below (1) is a mock, because authentication is not yet implemented.-->

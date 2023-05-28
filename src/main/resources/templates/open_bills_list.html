@@ -11,11 +11,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${activePolls.isEmpty()}">
-            <td colspan="1">Não há projetos de lei em votação neste momento.</td>
+        <tr th:if="${openBills.isEmpty()}">
+            <td colspan="1">Não há projetos de lei abertos neste momento.</td>
         </tr>
-        <tr th:each="activePoll : ${activePolls}">
-            <td th:text="${activePoll.title}"></td>
+        <tr th:each="openBill : ${openBills}">
+            <td>
+                <a th:href="@{/bills/{id}(id=${openBill.id})}"> <span th:text="${openBill.title}"></span> </a>
+            </td>
         </tr>
         </tbody>
     </table>
