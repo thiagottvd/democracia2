@@ -6,8 +6,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@Configuration
+@EnableScheduling
 public class DemocraciaApp {
 
   private static final Logger log = LoggerFactory.getLogger(DemocraciaApp.class);

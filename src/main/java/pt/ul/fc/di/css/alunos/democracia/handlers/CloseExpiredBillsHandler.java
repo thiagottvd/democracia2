@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.BillCatalog;
 
@@ -26,6 +27,7 @@ public class CloseExpiredBillsHandler {
   }
 
   /** Closes all bills that have expired. */
+  @Scheduled(fixedRate = 60000)
   public void closeExpiredBills() {
     billCatalog.closeExpiredBills();
   }

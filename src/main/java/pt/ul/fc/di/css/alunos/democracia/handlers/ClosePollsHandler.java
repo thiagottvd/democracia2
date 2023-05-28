@@ -2,6 +2,7 @@ package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
@@ -33,6 +34,7 @@ public class ClosePollsHandler {
   }
 
   /** Main Body of handler. Gets all expired polls and processes them */
+  @Scheduled(fixedRate = 60000)
   public void closePolls() {
     List<Poll> expiredPolls = pollCatalog.getExpiredPolls();
     getNonVotersAndAssignVotes(expiredPolls);
