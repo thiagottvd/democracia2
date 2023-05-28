@@ -37,6 +37,14 @@
                   <Font size="18.0" />
                </font>
             </Button>
+            <Button fx:id="voteButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleVoteButton" text="Votar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="600.0" />
+               </HBox.margin>
+            </Button>
          </children>
          <VBox.margin>
             <Insets left="25.0" right="25.0" />

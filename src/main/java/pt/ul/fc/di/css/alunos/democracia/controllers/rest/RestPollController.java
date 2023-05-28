@@ -63,7 +63,7 @@ public class RestPollController {
       return ResponseEntity.ok().build();
     } catch (PollNotFoundException | CitizenNotFoundException e) {
       return handleException(HttpStatus.NOT_FOUND, e.getMessage());
-    } catch (InvalidVoteTypeException e) {
+    } catch (InvalidVoteTypeException | CitizenAlreadyVotedException e) {
       return handleException(HttpStatus.CONFLICT, e.getMessage());
     } catch (ApplicationException e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

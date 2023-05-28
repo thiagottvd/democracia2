@@ -42,10 +42,9 @@ public class ConsultBillDetailsController {
 
   private byte[] fileData;
   private Long selectedItemId;
-
   private static final String TYPE_SUCCESS = "Sucesso";
-  private static final String MESSAGE_SUCCESS = "Operação bem-sucedida.";
   private static final String TYPE_ERROR = "Erro";
+  private static final String MESSAGE_SUCCESS = "Operação bem-sucedida.";
 
   @FXML
   void handleBackButton() {

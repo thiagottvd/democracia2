@@ -33,14 +33,6 @@
                   <Insets bottom="25.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="voteActivePollsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleVoteActivePollsButton" text="3. Votar numa proposta." textAlignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="25.0" />
-               </VBox.margin>
-            </Button>
          </children>
          <VBox.margin>
             <Insets />
