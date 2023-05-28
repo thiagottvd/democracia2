@@ -6,10 +6,13 @@
 * Thiago Duarte fc53636
 
  ## TODO
-* DESKTOP APP: Melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar.
-* API REST: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes inclusos); testar.
-* WEB APP (SSR): Criar mocks para os outros casos de uso e criar página de autenticação (parecida com a da aplicação desktop); verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; documentar código; testar.
-* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh
+* [IMPORTANTE] Implementar os casos de uso C à custa de Scheduled Tasks no Spring (https://www.baeldung.com/spring-scheduled-tasks).
+* [IMPORTANTE] Escrever um relatório onde explica a arquitectura interna de cada um destes componentes.
+* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar.
+* API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes inclusos); testar.
+* Web App. (SSR): Criar página de autenticação (parecida com a da aplicação desktop); verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; documentar código; testar.
+* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh.
+* Outras cenas?
 
 ## Dependências
 
