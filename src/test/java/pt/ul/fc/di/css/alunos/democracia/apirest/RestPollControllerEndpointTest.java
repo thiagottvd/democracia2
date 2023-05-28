@@ -19,10 +19,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import pt.ul.fc.di.css.alunos.democracia.controllers.rest.RestPollController;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenNotFoundException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidVoteTypeException;
-import pt.ul.fc.di.css.alunos.democracia.exceptions.PollNotFoundException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.*;
 import pt.ul.fc.di.css.alunos.democracia.repositories.PollRepository;
 import pt.ul.fc.di.css.alunos.democracia.services.ListActivePollsService;
 import pt.ul.fc.di.css.alunos.democracia.services.VoteActivePollsService;
@@ -403,6 +400,44 @@ public class RestPollControllerEndpointTest {
         .perform(request)
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.message").value("The vote type is invalid."));
+
+    // Verify that the service method was called
+    verify(voteActivePollsServiceMock, times(1)).vote(pollId, voterCitizenCardNumber, voteType);
+    verifyNoMoreInteractions(voteActivePollsServiceMock);
+  }
+
+  @Test
+  public void testVoteCitizenAlreadyVotedExceptionException() throws Exception {
+    // Set up test data
+    Long pollId = 1L;
+    VoteType voteType = VoteType.POSITIVE;
+    Integer voterCitizenCardNumber = 1;
+
+    // Set up the mock service to throw a CitizenAlreadyVoted
+    doThrow(
+            new CitizenAlreadyVotedException(
+                "Citizen with citizen card number "
+                    + voterCitizenCardNumber
+                    + " has already voted in this poll."))
+        .when(voteActivePollsServiceMock)
+        .vote(pollId, voterCitizenCardNumber, voteType);
+
+    // Set up the request with the request body
+    MockHttpServletRequestBuilder request =
+        patch("/api/polls/" + pollId + "/vote/" + voteType)
+            .contentType(CONTENT_TYPE)
+            .content(voterCitizenCardNumber.toString());
+
+    // Perform the API call and check the response
+    mockMvc
+        .perform(request)
+        .andExpect(status().isConflict())
+        .andExpect(
+            jsonPath("$.message")
+                .value(
+                    "Citizen with citizen card number "
+                        + voterCitizenCardNumber
+                        + " has already voted in this poll."));
 
     // Verify that the service method was called
     verify(voteActivePollsServiceMock, times(1)).vote(pollId, voterCitizenCardNumber, voteType);
