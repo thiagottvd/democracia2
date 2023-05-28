@@ -6,8 +6,10 @@
 * Thiago Duarte fc53636
 
  ## TODO
-* API REST: Corrigir bugs do caso de uso 'Votar numa proposta.'; verificar se a semântica está de acordo com a semântica rest; testar.
-* WEB APP (SSR): Verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; testar.
+* DESKTOP APP: Melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar.
+* API REST: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes inclusos); testar.
+* WEB APP (SSR): Criar mocks para os outros casos de uso e criar página de autenticação (parecida com a da aplicação desktop); verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; documentar código; testar.
+* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh
 
 ## Dependências
 
