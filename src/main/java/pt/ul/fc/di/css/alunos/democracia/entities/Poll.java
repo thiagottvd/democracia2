@@ -36,7 +36,7 @@ public class Poll {
   @Enumerated(EnumType.STRING)
   private PollStatus status;
 
-  @OneToMany private final List<Citizen> privateVoters = new ArrayList<>();
+  @ManyToMany private final List<Citizen> privateVoters = new ArrayList<>();
 
   @OneToOne
   @Cascade(CascadeType.ALL)
@@ -146,7 +146,9 @@ public class Poll {
   public void addVoter(Citizen citizen, VoteType option) throws CitizenAlreadyVotedException {
     if (hasVoted(citizen)) {
       throw new CitizenAlreadyVotedException(
-          "Citizen with cc " + citizen.getCc() + " has already voted in this poll.");
+          "Citizen with citizen card number "
+              + citizen.getCitizenCardNumber()
+              + " has already voted in this poll.");
     }
     if (citizen.getClass() == Delegate.class) {
       addPublicVoter((Delegate) citizen, option);

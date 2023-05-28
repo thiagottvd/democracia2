@@ -1,6 +1,8 @@
 package pt.ul.fc.di.css.alunos.democracia.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,9 +11,9 @@ import java.util.Objects;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.NonNull;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.BillStatus;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.CitizenAlreadySupportsBillException;
+import pt.ul.fc.di.css.alunos.democracia.exceptions.InvalidDateException;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.VoteInClosedBillException;
 
 /** Represents a Bill. */
@@ -20,20 +22,24 @@ public class Bill {
 
   @Id @GeneratedValue private Long id;
 
-  @NonNull private String title;
+  @NotNull
+  @Size(min = 3, max = 125)
+  private String title;
 
-  @NonNull private String description;
+  @NotNull
+  @Size(min = 3, max = 250)
+  private String description;
 
   private int numSupporters = 1;
 
-  @Lob @NonNull private byte[] fileData;
+  @Lob private byte[] fileData;
 
   @ManyToMany
   @Cascade(CascadeType.ALL)
   private final List<Citizen> supporters = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  @NonNull
+  @NotNull
   private LocalDate expirationDate;
 
   @Enumerated(EnumType.STRING)
@@ -41,12 +47,12 @@ public class Bill {
 
   @OneToOne
   @Cascade(CascadeType.ALL)
-  @NonNull
+  @NotNull
   private Theme theme;
 
   @OneToOne
   @Cascade(CascadeType.ALL)
-  @NonNull
+  @NotNull
   private Delegate delegate;
 
   @OneToOne(mappedBy = "associatedBill")
@@ -68,21 +74,39 @@ public class Bill {
    * @param expirationDate the date the bill will expire.
    * @param delegate the delegate who proposed the bill.
    * @param theme the theme the bill is related to.
+   * @throws InvalidDateException if the expiration date is not valid (i.e., it is before the
+   *     current date).
    */
   public Bill(
-      @NonNull String title,
-      @NonNull String description,
-      @NonNull byte[] fileData,
-      @NonNull LocalDate expirationDate,
-      @NonNull Delegate delegate,
-      @NonNull Theme theme) {
+      String title,
+      String description,
+      byte[] fileData,
+      LocalDate expirationDate,
+      Delegate delegate,
+      Theme theme)
+      throws InvalidDateException {
     this.title = title;
     this.description = description;
     this.fileData = fileData;
-    this.expirationDate = expirationDate;
+    if (isDateValid(expirationDate)) {
+      this.expirationDate = expirationDate;
+    } else {
+      throw new InvalidDateException("The expiration date is invalid.");
+    }
     this.delegate = delegate;
     this.theme = theme;
     supporters.add(delegate);
+  }
+
+  /**
+   * Checks whether a given date is valid. A date is considered valid if it is on or after the
+   * current date.
+   *
+   * @param expirationDate the date to be validated.
+   * @return true if the expiration date is valid, false otherwise.
+   */
+  private boolean isDateValid(LocalDate expirationDate) {
+    return !(LocalDate.now().isAfter(expirationDate));
   }
 
   /**
@@ -106,16 +130,16 @@ public class Bill {
       throws CitizenAlreadySupportsBillException, VoteInClosedBillException {
     if (supportsBill(voter)) {
       throw new CitizenAlreadySupportsBillException(
-          "The citizen with cc "
-              + voter.getCc()
+          "The citizen with citizen card number "
+              + voter.getCitizenCardNumber()
               + " already supports bill with id "
               + this.getId()
               + ".");
     }
     if (this.getStatus().equals(BillStatus.CLOSED)) {
       throw new VoteInClosedBillException(
-          "The citizen with cc "
-              + voter.getCc()
+          "The citizen with citizen card number "
+              + voter.getCitizenCardNumber()
               + " can not vote for bill with id "
               + this.getId()
               + " because it is closed.");
@@ -156,7 +180,6 @@ public class Bill {
    *
    * @return the title of the bill
    */
-  @NonNull
   public String getTitle() {
     return title;
   }
@@ -175,7 +198,6 @@ public class Bill {
    *
    * @return the expiration date of the bill
    */
-  @NonNull
   public LocalDate getExpirationDate() {
     return expirationDate;
   }
@@ -194,7 +216,6 @@ public class Bill {
    *
    * @return the theme of this bill.
    */
-  @NonNull
   public Theme getTheme() {
     return theme;
   }
@@ -204,7 +225,6 @@ public class Bill {
    *
    * @return the bill description.
    */
-  @NonNull
   public String getDescription() {
     return description;
   }
@@ -214,7 +234,6 @@ public class Bill {
    *
    * @return The delegate associated with this bill.
    */
-  @NonNull
   public Delegate getDelegate() {
     return delegate;
   }
@@ -278,5 +297,16 @@ public class Bill {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+  /**
+   * This method must only be used for testing purposes.
+   *
+   * <p>Sets the expiration date of the Bill.
+   *
+   * @param expirationDate the expiration date to set for the Bill.
+   */
+  public void setDate(LocalDate expirationDate) {
+    this.expirationDate = expirationDate;
   }
 }

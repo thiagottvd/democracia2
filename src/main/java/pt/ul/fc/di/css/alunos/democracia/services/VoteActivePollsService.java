@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.dtos.PollDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -29,6 +30,7 @@ public class VoteActivePollsService {
    *
    * @return A list containing all active Poll DTOs.
    */
+  @Transactional(readOnly = true)
   public List<PollDTO> getActivePolls() {
     return voteActivePollsHandler.getActivePolls();
   }
@@ -36,25 +38,28 @@ public class VoteActivePollsService {
   /**
    * Checks a Delegate vote.
    *
-   * @param pollTitle The poll title to search for the actual Poll.
-   * @param voterCc The Citizen cc.
-   * @return The Delegate vote in the form of a string. Returns null if there was no valid delegate
-   *     found for citizen
+   * @param pollId The poll id to search for the actual Poll.
+   * @param voterCitizenCardNumber The citizen card number.
+   * @return The Delegate vote in the form of a string.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public VoteType checkDelegateVote(String pollTitle, Integer voterCc) throws ApplicationException {
-    return voteActivePollsHandler.checkDelegateVote(pollTitle, voterCc);
+  @Transactional(readOnly = true)
+  public VoteType checkDelegateVote(Long pollId, Integer voterCitizenCardNumber)
+      throws ApplicationException {
+    return voteActivePollsHandler.checkDelegateVote(pollId, voterCitizenCardNumber);
   }
 
   /**
-   * Vote on a Poll using the Citizen cc and VoteType.
+   * Vote on a Poll using the citizen card number and VoteType.
    *
-   * @param pollTitle The title to search for the actual Poll.
-   * @param voterCc The Citizen cc.
+   * @param pollId The poll id.
+   * @param voterCitizenCardNumber The citizen card number.
    * @param option The VoteType of the Citizen.
    * @throws ApplicationException If no Poll or Citizen are found.
    */
-  public void vote(String pollTitle, Integer voterCc, VoteType option) throws ApplicationException {
-    voteActivePollsHandler.vote(pollTitle, voterCc, option);
+  @Transactional
+  public void vote(Long pollId, Integer voterCitizenCardNumber, VoteType option)
+      throws ApplicationException {
+    voteActivePollsHandler.vote(pollId, voterCitizenCardNumber, option);
   }
 }

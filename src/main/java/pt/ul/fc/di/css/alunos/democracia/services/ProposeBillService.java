@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pt.ul.fc.di.css.alunos.democracia.dtos.BillDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
 import pt.ul.fc.di.css.alunos.democracia.handlers.ProposeBillHandler;
@@ -36,30 +38,35 @@ public class ProposeBillService {
    *
    * @return a list of ThemeDTO objects representing all themes.
    */
+  @Transactional(readOnly = true)
   public List<ThemeDTO> getThemes() {
     return proposeBillHandler.getThemes();
   }
 
   /**
-   * Proposes a new bill with the given parameters.
+   * Proposes a new bill with the given parameters and retrieves a BillDTO object representing the
+   * proposed bill.
    *
    * @param title the title of the bill.
    * @param description the description of the bill.
    * @param pdfData the pdf data of the bill.
    * @param expirationDate the expiration date of the bill.
    * @param themeDesignation the theme designation of the bill.
-   * @param cc the citizen card number of the bill proposer.
+   * @param citizenCardNumber the citizen card number of the bill proposer.
    * @throws ApplicationException if there is an exception during the bill proposal process.
+   * @return a BillDTO object representing the proposed bill.
    */
-  public void proposeBill(
+  @Transactional
+  public BillDTO proposeBill(
       String title,
       String description,
       byte[] pdfData,
       LocalDate expirationDate,
       String themeDesignation,
-      Integer cc)
+      Integer citizenCardNumber)
       throws ApplicationException {
-    proposeBillHandler.proposeBill(
-        title, description, pdfData, expirationDate, themeDesignation, cc);
+    return new BillDTO(
+        proposeBillHandler.proposeBill(
+            title, description, pdfData, expirationDate, themeDesignation, citizenCardNumber));
   }
 }

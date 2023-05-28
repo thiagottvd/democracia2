@@ -3,6 +3,7 @@ package pt.ul.fc.di.css.alunos.democracia.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.di.css.alunos.democracia.dtos.DelegateDTO;
 import pt.ul.fc.di.css.alunos.democracia.dtos.ThemeDTO;
 import pt.ul.fc.di.css.alunos.democracia.exceptions.ApplicationException;
@@ -37,6 +38,7 @@ public class ChooseDelegateService {
    *
    * @return a list of DelegateDTOs.
    */
+  @Transactional(readOnly = true)
   public List<DelegateDTO> getDelegates() {
     return chooseDelegateHandler.getDelegates();
   }
@@ -46,6 +48,7 @@ public class ChooseDelegateService {
    *
    * @return a list of ThemeDTOs.
    */
+  @Transactional(readOnly = true)
   public List<ThemeDTO> getThemes() {
     return chooseDelegateHandler.getThemes();
   }
@@ -57,13 +60,16 @@ public class ChooseDelegateService {
    * delegate has been chosen for the theme, a new delegate theme is created and added to {@code
    * DelegateThemeCatalog} which is a catalog for storing DelegateTheme objects.
    *
-   * @param delegateCc Delegate identification.
+   * @param delegateCitizenCardNumber Delegate identification.
    * @param themeDesignation Theme identification.
-   * @param voterCc Citizen who is choosing DelegateTheme identification.
+   * @param voterCitizenCardNumber Citizen who is choosing DelegateTheme identification.
    * @throws ApplicationException if an unexpected error occurs while selecting the delegate.
    */
-  public void chooseDelegate(Integer delegateCc, String themeDesignation, Integer voterCc)
+  @Transactional
+  public void chooseDelegate(
+      Integer delegateCitizenCardNumber, String themeDesignation, Integer voterCitizenCardNumber)
       throws ApplicationException {
-    chooseDelegateHandler.chooseDelegate(delegateCc, themeDesignation, voterCc);
+    chooseDelegateHandler.chooseDelegate(
+        delegateCitizenCardNumber, themeDesignation, voterCitizenCardNumber);
   }
 }

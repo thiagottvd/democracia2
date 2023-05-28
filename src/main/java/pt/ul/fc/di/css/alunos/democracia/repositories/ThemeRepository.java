@@ -1,6 +1,7 @@
 package pt.ul.fc.di.css.alunos.democracia.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,8 +26,9 @@ public interface ThemeRepository extends JpaRepository<Theme, Long> {
    * Retrieves a theme by its designation.
    *
    * @param designation the designation of the theme to retrieve.
-   * @return the theme with the specified designation, or null if not found.
+   * @return an Optional containing the theme associated with the given designation, or an empty
+   *     Optional if no such theme exists.
    */
   @Query("SELECT theme FROM Theme theme WHERE theme.designation = :designation")
-  Theme findThemeByDesignation(@Param("designation") String designation);
+  Optional<Theme> findThemeByDesignation(@Param("designation") String designation);
 }

@@ -50,7 +50,6 @@ public class RestBillControllerEndpointTest {
   private static final String CONTENT_TYPE = "application/json";
   private static final String GET_OPEN_BILLS_ENDPOINT_URL = "/api/bills/open";
   private static final String GET_BILL_DETAILS_ENDPOINT_URL = "/api/bills/";
-  private static final String SUPPORT_BILL_ENDPOINT_URL = "/api/bills/support/";
 
   /**
    * Tests the REST endpoint, getOpenBills, that retrieves a list of all open bills. This test case
@@ -144,9 +143,6 @@ public class RestBillControllerEndpointTest {
         .andExpect(jsonPath("$.title", is(expectedBill.getTitle())))
         .andExpect(jsonPath("$.description", is(expectedBill.getDescription())))
         .andExpect(jsonPath("$.numSupporters", is(expectedBill.getNumSupporters())))
-        // BUG: JSON serialization library used may not know how to properly serialize a byte[]
-        // array to JSON.
-        // .andExpect(jsonPath("$.fileData", is(expectedBill.getFileData())))
         .andExpect(
             jsonPath(
                 "$.fileData", is(Base64.getEncoder().encodeToString(expectedBill.getFileData()))))
@@ -193,7 +189,7 @@ public class RestBillControllerEndpointTest {
     // Set up test data
     Long billID = 1L;
 
-    // Set up the mock service to throw an BillNotFoundException
+    // Set up the mock service to throw a BillNotFoundException
     when(consultBillsServiceMock.getBillDetails(billID))
         .thenThrow(new BillNotFoundException("The bill \"" + billID + "\" was not found."));
 
@@ -250,7 +246,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc.perform(request).andExpect(status().isOk());
@@ -279,7 +275,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc
@@ -313,7 +309,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc
@@ -347,7 +343,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc.perform(request).andExpect(status().isInternalServerError());
@@ -370,7 +366,7 @@ public class RestBillControllerEndpointTest {
     Long billId = 1L;
     Integer cc = 123456789;
 
-    // Set up the mock service to throw an CitizenAlreadySupportsBillException
+    // Set up the mock service to throw a CitizenAlreadySupportsBillException
     doThrow(
             new CitizenAlreadySupportsBillException(
                 "The citizen with cc " + cc + " already supports bill with id " + billId + "."))
@@ -379,7 +375,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc
@@ -425,7 +421,7 @@ public class RestBillControllerEndpointTest {
 
     // Set up the request with the request body
     MockHttpServletRequestBuilder request =
-        patch(SUPPORT_BILL_ENDPOINT_URL + billId).contentType(CONTENT_TYPE).content(cc.toString());
+        patch("/api/bills/" + billId + "/support").contentType(CONTENT_TYPE).content(cc.toString());
 
     // Perform the API call and check the response
     mockMvc

@@ -18,7 +18,7 @@ import pt.ul.fc.di.css.alunos.democracia.services.SupportBillService;
  * endpoints to retrieve open bills, get details of a specific bill, and add support of a citizen to
  * a given bill.
  */
-@RestController()
+@RestController
 @RequestMapping("api")
 public class RestBillController {
 
@@ -53,7 +53,7 @@ public class RestBillController {
   }
 
   /**
-   * Retrieves the details of the bill with the specified ID.
+   * Retrieves the details of the bill with the specified ID or an error message.
    *
    * @param billID the bill id.
    * @return a ResponseEntity containing the details of the bill, or a NOT_FOUND response if the
@@ -75,15 +75,16 @@ public class RestBillController {
    * Adds the support of a citizen identified by their citizen card number to a given bill.
    *
    * @param billId the ID of the bill to support.
-   * @param cc the citizen card number of the citizen who wants to support the bill.
+   * @param citizenCardNumber the citizen card number of the citizen who wants to support the bill.
    * @return a ResponseEntity representing the status of the operation, or a NOT_FOUND response if
-   *     the bill is not found or the citizen is not found, or a INTERNAL_SERVER_ERROR response if
-   *     an internal server error occurs.
+   *     the bill is not found or the citizen is not found, or a CONFLICT if the citizen already
+   *     supports the bill or if the bill is closed, or a INTERNAL_SERVER_ERROR response if an
+   *     internal server error occurs.
    */
   @PatchMapping("/bills/{billId}/support")
-  public ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer cc) {
+  public ResponseEntity<?> supportBill(@PathVariable Long billId, @RequestBody Integer citizenCardNumber) {
     try {
-      supportBillService.supportBill(billId, cc);
+      supportBillService.supportBill(billId, citizenCardNumber);
       return ResponseEntity.ok().build();
     } catch (BillNotFoundException | CitizenNotFoundException e) {
       return handleException(HttpStatus.NOT_FOUND, e.getMessage());
