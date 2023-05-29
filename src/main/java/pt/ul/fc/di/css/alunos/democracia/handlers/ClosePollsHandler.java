@@ -115,10 +115,12 @@ public class ClosePollsHandler {
    */
   private void setPollsStatus(List<Poll> expiredPolls) {
     expiredPolls.forEach(
-        poll ->
-            poll.setStatus(
-                poll.getNumPositiveVotes() > poll.getNumNegativeVotes()
-                    ? PollStatus.APPROVED
-                    : PollStatus.REJECTED));
+        poll -> {
+          poll.setStatus(
+              poll.getNumPositiveVotes() > poll.getNumNegativeVotes()
+                  ? PollStatus.APPROVED
+                  : PollStatus.REJECTED);
+          pollCatalog.savePoll(poll);
+        });
   }
 }

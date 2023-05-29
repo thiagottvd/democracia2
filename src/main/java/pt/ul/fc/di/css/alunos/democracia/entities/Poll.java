@@ -21,7 +21,7 @@ public class Poll {
 
   private int numNegativeVotes = 0;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "public_voters")
   @MapKeyJoinColumn(name = "delegate_id")
   @Column(name = "vote_type")
@@ -36,7 +36,8 @@ public class Poll {
   @Enumerated(EnumType.STRING)
   private PollStatus status;
 
-  @ManyToMany private final List<Citizen> privateVoters = new ArrayList<>();
+  @ManyToMany(fetch = FetchType.EAGER)
+  private final List<Citizen> privateVoters = new ArrayList<>();
 
   @OneToOne
   @Cascade(CascadeType.ALL)

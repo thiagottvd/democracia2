@@ -19,7 +19,7 @@ public class Citizen {
   @NonNull
   private Integer citizenCardNumber;
 
-  @ManyToMany(mappedBy = "voters")
+  @ManyToMany(mappedBy = "voters", fetch = FetchType.EAGER)
   @Cascade(CascadeType.ALL)
   private final List<DelegateTheme> delegateThemes = new ArrayList<>();
 
