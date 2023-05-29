@@ -8,16 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WebDashboardController {
 
   /**
-   * Redirects the HTTP request to the dashboard page.
-   *
-   * @return the name of the Thymeleaf template to render.
-   */
-  @GetMapping("/")
-  public String redirectToDashboard() {
-    return "redirect:/dashboard";
-  }
-
-  /**
    * Returns the dashboard page.
    *
    * @return the name of the Thymeleaf template to render.
