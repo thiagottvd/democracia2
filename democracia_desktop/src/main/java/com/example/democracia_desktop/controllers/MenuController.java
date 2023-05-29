@@ -21,12 +21,18 @@ public class MenuController {
 
   @FXML
   void handleStandAsDelegateButton() {
-    // TODO
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/stand_as_delegate_mock.fxml",
+        standAsDelegateButton);
   }
 
   @FXML
   void handleListExpiredPollsButton() {
-    // TODO
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/expired_polls_list_mock.fxml",
+        listExpiredPollsButton);
   }
 
   @FXML

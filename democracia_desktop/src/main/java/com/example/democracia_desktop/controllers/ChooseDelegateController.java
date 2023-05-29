@@ -16,8 +16,6 @@ public class ChooseDelegateController {
 
   @FXML private Button backButton;
 
-  @FXML private Button chooseDelegateButton;
-
   @FXML private ChoiceBox<String> delegateChoiceBox;
 
   @FXML private ChoiceBox<String> themeChoiceBox;

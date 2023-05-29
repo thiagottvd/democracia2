@@ -2,16 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ChooseDelegateController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.StandAsDelegateController">
    <children>
-      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="88.0" text="Escolher Delegado">
+      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="88.0" text="Apresentar-se como Delegado">
          <font>
             <Font size="30.0" />
          </font>
@@ -25,32 +24,14 @@
             <Insets left="100.0" />
          </padding>
       </Label>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Delegado: ">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <ChoiceBox fx:id="delegateChoiceBox" prefWidth="150.0" />
-         </children>
+      <Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,&#10;sed do eiusmod tempor incididunt ut labore et dolore&#10;magna aliqua. Ut enim ad minim veniam, quis nostrud&#10;exercitation ullamco laboris nisi ut aliquip ex ea commodo&#10;consequat. Duis aute irure dolor in reprehenderit in&#10;voluptate velit esse cillum dolore eu fugiat nulla pariatur.&#10;Excepteur sint occaecat cupidatat non proident, sunt in&#10;culpa qui officia deserunt mollit anim id est laborum.">
+         <font>
+            <Font size="18.0" />
+         </font>
          <VBox.margin>
-            <Insets left="25.0" right="25.0" />
+            <Insets left="25.0" top="25.0" />
          </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Tema: ">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <ChoiceBox fx:id="themeChoiceBox" prefWidth="225.0" />
-         </children>
-         <VBox.margin>
-            <Insets left="25.0" right="25.0" />
-         </VBox.margin>
-      </HBox>
+      </Label>
       <Separator prefWidth="200.0">
          <VBox.margin>
             <Insets top="177.0" />
@@ -63,12 +44,12 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleChooseDelegateButton" text="Escolher Delegado">
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleStandAsDelegateButton" text="Apresentar-se como delegado">
                <font>
                   <Font size="18.0" />
                </font>
                <HBox.margin>
-                  <Insets left="480.0" />
+                  <Insets left="378.0" />
                </HBox.margin>
             </Button>
          </children>
