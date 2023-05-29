@@ -45,7 +45,8 @@ public class MenuController {
 
   @FXML
   void handleProposeBillButton() {
-    // TODO
+    navigateToScene(
+        this.getClass(), "/com/example/democracia_desktop/propose_bill.fxml", proposeBillButton);
   }
 
   @FXML
