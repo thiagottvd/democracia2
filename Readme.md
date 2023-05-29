@@ -6,7 +6,7 @@
 * Thiago Duarte fc53636
 
  ## TODO
-* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar. -> THIAGO (menos documentar código)
+* Desktop App.: Documentar código.
 * API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes e Poll); -> IVO
 * Web App: (SSR): criar página de autenticação (parecida com a da aplicação desktop); documentar código; testar: -> IVO
 * Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. DAR FIX DO NUM_SUPPORTS BUG NO INSERT -> IVO
