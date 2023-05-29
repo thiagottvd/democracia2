@@ -6,13 +6,11 @@
 * Thiago Duarte fc53636
 
  ## TODO
-* [IMPORTANTE] Implementar os casos de uso C à custa de Scheduled Tasks no Spring (https://www.baeldung.com/spring-scheduled-tasks).
-* [IMPORTANTE] Escrever um relatório onde explica a arquitectura interna de cada um destes componentes.
-* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar.
-* API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes inclusos); testar.
-* Web App. (SSR): [IMPORTANTE] Criar págnina para consultar projectos de lei; criar página de autenticação (parecida com a da aplicação desktop); melhorar página 'Escolher Delegado' (ao selecionar um Projeto de Lei e cliclar em 'Ver voto delegado', a opção selecionada da lista volta para o valor default, ebora o valor real esteja selecionado - é possível votar, pois o valor antigo está selecionado, embora não esteja sendo displayed); verificar semântica URL; verificar se o mock do usuário (sessão) está feito de maneira suposta; documentar código; testar.
-* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh.
-* Outras cenas?
+* [IMPORTANTE] Escrever um relatório onde explica a arquitectura interna de cada um destes componentes. -> DIOGO
+* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar. -> THIAGO
+* API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes e Poll); -> IVO
+* Web App: (SSR): criar página de autenticação (parecida com a da aplicação desktop); documentar código; testar: -> IVO
+* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. DAR FIX DO NUM_SUPPORTS BUG NO INSERT -> IVO
 
 ## Dependências
 
