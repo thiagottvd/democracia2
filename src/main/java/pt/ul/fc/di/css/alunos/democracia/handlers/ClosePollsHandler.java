@@ -1,12 +1,14 @@
 package pt.ul.fc.di.css.alunos.democracia.handlers;
 
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.CitizenCatalog;
 import pt.ul.fc.di.css.alunos.democracia.catalogs.PollCatalog;
 import pt.ul.fc.di.css.alunos.democracia.datatypes.PollStatus;
+import pt.ul.fc.di.css.alunos.democracia.datatypes.VoteType;
 import pt.ul.fc.di.css.alunos.democracia.entities.*;
 
 /**
@@ -81,13 +83,23 @@ public class ClosePollsHandler {
       for (DelegateTheme delegateTheme : nonVoter.getDelegateThemes()) {
         Delegate delegate = delegateTheme.getDelegate();
         Theme otherTheme = delegateTheme.getTheme();
-        if (expiredPoll.getPublicVoters().containsKey(delegate) && theme.equals(otherTheme)) {
+        if (delegateExistsInPoll(expiredPoll, delegate)
+            && theme.getId().equals(otherTheme.getId())) {
           incVoteInPoll(expiredPoll, delegate);
           return;
         }
       }
       theme = theme.getParentTheme();
     }
+  }
+
+  private boolean delegateExistsInPoll(Poll expiredPoll, Delegate delegate) {
+    for (Delegate d : expiredPoll.getPublicVoters().keySet()) {
+      if (d.getId().equals(delegate.getId())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -97,7 +109,7 @@ public class ClosePollsHandler {
    * @param delegate the delegate that represents someone.
    */
   private void incVoteInPoll(Poll expiredPoll, Delegate delegate) {
-    switch (expiredPoll.getPublicVoters().get(delegate)) {
+    switch (Objects.requireNonNull(getVoteTypeFromDelegate(expiredPoll, delegate))) {
       case POSITIVE:
         expiredPoll.incPositiveVotes();
         break;
@@ -105,6 +117,15 @@ public class ClosePollsHandler {
         expiredPoll.incNegativeVotes();
         break;
     }
+  }
+
+  private VoteType getVoteTypeFromDelegate(Poll expiredPoll, Delegate delegate) {
+    for (Delegate d : expiredPoll.getPublicVoters().keySet()) {
+      if (d.getId().equals(delegate.getId())) {
+        return expiredPoll.getDelegateVote(d);
+      }
+    }
+    return null;
   }
 
   /**
