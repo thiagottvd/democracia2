@@ -17,7 +17,7 @@
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER" maxHeight="500.0" prefHeight="500.0" prefWidth="100.0">
          <children>
-            <Button fx:id="listActivePollsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleListActivePollsButton" text="1. Listar as Votações em Curso" textAlignment="CENTER">
+            <Button fx:id="listActivePollsButton" alignment="TOP_LEFT" maxWidth="385.0" mnemonicParsing="false" onAction="#handleListActivePollsButton" text="1. Consultar Votações em Curso" textAlignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
@@ -25,7 +25,7 @@
                   <Insets bottom="25.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="consultBillsButton" alignment="TOP_LEFT" maxWidth="350.0" mnemonicParsing="false" onAction="#handleConsultBillsButton" text="2. Consultar Projetos de Lei" textAlignment="CENTER">
+            <Button fx:id="consultBillsButton" alignment="TOP_LEFT" maxWidth="385.0" mnemonicParsing="false" onAction="#handleConsultBillsButton" text="2. Consultar Projetos de Lei em Curso" textAlignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
