@@ -1,5 +1,7 @@
 package com.example.democracia_desktop.controllers;
 
+import static com.example.democracia_desktop.controllers.ControllerUtils.navigateToScene;
+
 import com.example.democracia_desktop.models.PollModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,11 +12,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.stage.Stage;
 
 public class ListActivePollsController {
 
@@ -26,17 +25,7 @@ public class ListActivePollsController {
 
   @FXML
   void handleBackButton() {
-    try {
-      FXMLLoader fxmlLoader =
-          new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/menu.fxml"));
-      Stage stage = (Stage) backButton.getScene().getWindow();
-      Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-      stage.setTitle("Democracia 2.0");
-      stage.setScene(scene);
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    navigateToScene(this.getClass(), "/com/example/democracia_desktop/menu.fxml", backButton);
   }
 
   @FXML
@@ -44,22 +33,11 @@ public class ListActivePollsController {
     PollModel selectedItem = activePollsList.getSelectionModel().getSelectedItem();
     if (selectedItem != null) {
       Long selectedItemId = activePollsList.getSelectionModel().getSelectedItem().getId();
-      try {
-        FXMLLoader fxmlLoader =
-            new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/vote.fxml"));
-
-        Stage stage = (Stage) voteButton.getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-
-        VoteController controller = fxmlLoader.getController();
-        controller.setSelectedItemId(selectedItemId);
-
-        stage.setTitle("Democracia 2.0");
-        stage.setScene(scene);
-        stage.show();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      navigateToScene(
+          selectedItemId,
+          VoteController.class,
+          "/com/example/democracia_desktop/vote.fxml",
+          voteButton);
     }
   }
 
@@ -77,7 +55,7 @@ public class ListActivePollsController {
         .sendAsync(request, HttpResponse.BodyHandlers.ofString())
         .thenApply(HttpResponse::body)
         .thenAccept(this::updateActivePollsList)
-        .exceptionally(this::handleError);
+        .exceptionally(ControllerUtils::handleError);
   }
 
   private void updateActivePollsList(String responseBody) {
@@ -88,10 +66,5 @@ public class ListActivePollsController {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  private Void handleError(Throwable throwable) {
-    throwable.printStackTrace();
-    return null;
   }
 }

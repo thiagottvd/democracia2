@@ -1,29 +1,16 @@
 package com.example.democracia_desktop.controllers;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import static com.example.democracia_desktop.controllers.ControllerUtils.navigateToScene;
 
-import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class AuthenticationController {
 
-    @FXML
-    private Button enterButton;
+  @FXML private Button enterButton;
 
-    @FXML
-    void handleEnterButton() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/menu.fxml"));
-            Stage stage = (Stage) enterButton.getScene().getWindow();
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-            stage.setTitle("Democracia 2.0");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+  @FXML
+  void handleEnterButton() {
+    navigateToScene(this.getClass(), "/com/example/democracia_desktop/menu.fxml", enterButton);
+  }
 }

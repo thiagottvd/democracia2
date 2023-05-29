@@ -1,7 +1,8 @@
 package com.example.democracia_desktop.controllers;
 
+import static com.example.democracia_desktop.controllers.ControllerUtils.*;
+
 import com.example.democracia_desktop.models.BillModel;
-import com.example.democracia_desktop.models.MessageModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,11 +17,8 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 public class ConsultBillDetailsController {
 
@@ -48,7 +46,8 @@ public class ConsultBillDetailsController {
 
   @FXML
   void handleBackButton() {
-    setupStage(backButton);
+    navigateToScene(
+        this.getClass(), "/com/example/democracia_desktop/consult_bills.fxml", backButton);
   }
 
   @FXML
@@ -96,13 +95,14 @@ public class ConsultBillDetailsController {
             })
         .thenAccept(
             responseBody -> {
-              Platform.runLater(() -> handleMessage(TYPE_SUCCESS, MESSAGE_SUCCESS));
+              Platform.runLater(
+                  () -> handleMessage(this.getClass(), TYPE_SUCCESS, MESSAGE_SUCCESS));
               fetchAndDisplayConsultBillDetails();
             })
         .exceptionally(
             ex -> {
               String errorMessage = updateMessage(ex.getMessage());
-              Platform.runLater(() -> handleMessage(TYPE_ERROR, errorMessage));
+              Platform.runLater(() -> handleMessage(this.getClass(), TYPE_ERROR, errorMessage));
               return null;
             });
   }
@@ -130,7 +130,7 @@ public class ConsultBillDetailsController {
             ex -> {
               String errorMessage = ex.getMessage();
               if (!errorMessage.isEmpty()) {
-                handleMessage(TYPE_ERROR, errorMessage);
+                handleMessage(this.getClass(), TYPE_ERROR, errorMessage);
               }
               return null;
             });
@@ -152,59 +152,6 @@ public class ConsultBillDetailsController {
             delegateLabel.setText(billModel.getDelegateName());
             fileData = Arrays.copyOf(billModel.getFileData(), billModel.getFileData().length);
           });
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  private String updateMessage(String responseBody) {
-    int startIndex = responseBody.indexOf('{');
-    int endIndex = responseBody.lastIndexOf('}');
-    String extractedMessage = null;
-
-    if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-      extractedMessage = responseBody.substring(startIndex, endIndex + 1);
-    }
-    MessageModel messageModel;
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    try {
-      messageModel = objectMapper.readValue(extractedMessage, new TypeReference<>() {});
-      if (messageModel != null) {
-        return messageModel.getMessage();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return "An error occurred while processing the response.";
-  }
-
-  private void handleMessage(String type, String message) {
-    try {
-      FXMLLoader fxmlLoader =
-          new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/message.fxml"));
-      Stage newStage = new Stage();
-      Scene newScene = new Scene(fxmlLoader.load(), 450, 250);
-      MessageController controller = fxmlLoader.getController();
-      controller.setType(type);
-      controller.setMessage(message);
-      newStage.setScene(newScene);
-      newStage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void setupStage(Button button) {
-    try {
-      FXMLLoader fxmlLoader =
-          new FXMLLoader(
-              getClass().getResource("/com/example/democracia_desktop/consult_bills.fxml"));
-      Stage stage = (Stage) button.getScene().getWindow();
-      Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-      stage.setTitle("Democracia 2.0");
-      stage.setScene(scene);
-      stage.show();
     } catch (IOException e) {
       e.printStackTrace();
     }

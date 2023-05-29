@@ -1,26 +1,18 @@
 package com.example.democracia_desktop.controllers;
 
+import static com.example.democracia_desktop.controllers.ControllerUtils.*;
+
 import com.example.democracia_desktop.datatypes.VoteType;
-import com.example.democracia_desktop.models.MessageModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
 
 public class VoteController {
 
@@ -47,30 +39,20 @@ public class VoteController {
 
   @FXML
   void handleBackButton() {
-    try {
-      FXMLLoader fxmlLoader =
-          new FXMLLoader(
-              getClass().getResource("/com/example/democracia_desktop/active_polls_list.fxml"));
-      Stage stage = (Stage) backButton.getScene().getWindow();
-      Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-      stage.setTitle("Democracia 2.0");
-      stage.setScene(scene);
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    navigateToScene(
+        this.getClass(), "/com/example/democracia_desktop/active_polls_list.fxml", backButton);
   }
 
   @FXML
-  void handleVoteButton(ActionEvent event) {
+  void handleVoteButton() {
     RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
     if (selectedRadioButton != null) {
       // Using a mock citizen card number to represent the session user
       int citizenCardNumberMock = 1;
-      VoteType voteType;
+      VoteType voteType = null;
       if (selectedRadioButton == positiveVoteRadioButton) {
         voteType = VoteType.POSITIVE;
-      } else {
+      } else if (selectedRadioButton == negativeVoteRadioButton) {
         voteType = VoteType.NEGATIVE;
       }
       String apiUrl = "http://localhost:8080/api/polls/" + pollId + "/vote/" + voteType;
@@ -90,23 +72,24 @@ public class VoteController {
                 int statusCode = response.statusCode();
                 String responseBody = response.body();
                 if (statusCode == 200) {
+                  fetchCheckDelegateVote();
                   return responseBody;
                 } else {
                   throw new RuntimeException(responseBody);
                 }
               })
           .thenAccept(
-              responseBody -> {
-                Platform.runLater(() -> handleMessage(TYPE_SUCCESS, MESSAGE_SUCCESS));
-              })
+              responseBody ->
+                  Platform.runLater(
+                      () -> handleMessage(this.getClass(), TYPE_SUCCESS, MESSAGE_SUCCESS)))
           .exceptionally(
               ex -> {
                 String errorMessage = updateMessage(ex.getMessage());
-                Platform.runLater(() -> handleMessage(TYPE_ERROR, errorMessage));
+                Platform.runLater(() -> handleMessage(this.getClass(), TYPE_ERROR, errorMessage));
                 return null;
               });
     } else {
-      handleMessage(TYPE_ERROR, MESSAGE_ERROR_SELECT_OPTION);
+      handleMessage(this.getClass(), TYPE_ERROR, MESSAGE_ERROR_SELECT_OPTION);
     }
   }
 
@@ -116,7 +99,7 @@ public class VoteController {
   }
 
   private void initialize() {
-    fetchAndDisplayCheckDelegateVote();
+    fetchCheckDelegateVote();
 
     hideVoteCheckBox.setSelected(isVoteHidden);
     delegateVoteLabel.setVisible(!isVoteHidden);
@@ -130,7 +113,7 @@ public class VoteController {
             });
   }
 
-  private void fetchAndDisplayCheckDelegateVote() {
+  private void fetchCheckDelegateVote() {
     // Using a mock citizen card number to represent the session user
     int citizenCardNumberMock = 1;
     String apiUrl = "http://localhost:8080/api/polls/" + pollId + "/delegate-vote-type";
@@ -147,7 +130,7 @@ public class VoteController {
         .sendAsync(request, HttpResponse.BodyHandlers.ofString())
         .thenApply(HttpResponse::body)
         .thenAccept(this::updateCheckDelegateVote)
-        .exceptionally(this::handleError);
+        .exceptionally(ControllerUtils::handleError);
   }
 
   private void updateCheckDelegateVote(String responseBody) {
@@ -155,61 +138,12 @@ public class VoteController {
     try {
       if (!responseBody.isEmpty()) {
         String voteTypeStr = objectMapper.readValue(responseBody, new TypeReference<>() {});
-        Platform.runLater(
-            () -> {
-              delegateVoteLabel.setText(voteTypeStr);
-            });
+        Platform.runLater(() -> delegateVoteLabel.setText(voteTypeStr));
       } else {
-        Platform.runLater(
-            () -> {
-              delegateVoteLabel.setText(VOTE_UNAVAILABLE);
-            });
+        Platform.runLater(() -> delegateVoteLabel.setText(VOTE_UNAVAILABLE));
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  private void handleMessage(String type, String message) {
-    try {
-      FXMLLoader fxmlLoader =
-          new FXMLLoader(getClass().getResource("/com/example/democracia_desktop/message.fxml"));
-      Stage newStage = new Stage();
-      Scene newScene = new Scene(fxmlLoader.load(), 450, 250);
-      MessageController controller = fxmlLoader.getController();
-      controller.setType(type);
-      controller.setMessage(message);
-      newStage.setScene(newScene);
-      newStage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  private String updateMessage(String responseBody) {
-    int startIndex = responseBody.indexOf('{');
-    int endIndex = responseBody.lastIndexOf('}');
-    String extractedMessage = null;
-
-    if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-      extractedMessage = responseBody.substring(startIndex, endIndex + 1);
-    }
-    MessageModel messageModel;
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    try {
-      messageModel = objectMapper.readValue(extractedMessage, new TypeReference<>() {});
-      if (messageModel != null) {
-        return messageModel.getMessage();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return "An error occurred while processing the response.";
-  }
-
-  private Void handleError(Throwable throwable) {
-    throwable.printStackTrace();
-    return null;
   }
 }
