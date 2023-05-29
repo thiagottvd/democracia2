@@ -53,6 +53,14 @@ public class RestPollController {
     }
   }
 
+  /**
+   * Recieves the needed data and attributes a vote of a certain citizen to the received poll
+   *
+   * @param pollId The poll in which the vote is made
+   * @param voteType The type of vote, positive or negative.
+   * @param citizenCardNumber The credentials of the citizen who is voting
+   * @return a ResponseEntity that informs if the vote was successful or not
+   */
   @PatchMapping("/polls/{pollId}/vote/{voteType}")
   public ResponseEntity<?> vote(
       @PathVariable Long pollId,

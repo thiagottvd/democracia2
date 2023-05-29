@@ -129,6 +129,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the behavior of the 'getDelegateVoteForPoll' API endpoint when the delegate
+   * has not voted yet.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testGetDelegateVoteForPollSuccessWhenPositiveVote() throws Exception {
     // Set up test data
@@ -160,6 +166,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the behavior of the 'getDelegateVoteForPoll' API endpoint when the delegate
+   * has voted negatively.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testGetDelegateVoteForPollSuccessWhenNegativeVote() throws Exception {
     // Set up test data
@@ -191,6 +203,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the behavior of the 'getDelegateVoteForPoll' API endpoint when the poll
+   * doesnt exist.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testGetDelegateVoteForPollPollNotFoundException() throws Exception {
     // Set up test data
@@ -218,6 +236,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the behavior of the 'getDelegateVoteForPoll' API endpoint when the citizen
+   * does not exist.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testGetDelegateVoteForPollCitizenNotFoundException() throws Exception {
     // Set up test data
@@ -249,6 +273,11 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the behavior of the 'getDelegateVoteForPoll' in an application exception.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testGetDelegateVoteForPollApplicationException() throws Exception {
     // Set up test data
@@ -274,6 +303,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when a positive vote is
+   * submitted.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteSuccessWhenPositiveVote() throws Exception {
     // Set up test data
@@ -294,6 +329,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when a negative vote is
+   * submitted.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteSuccessWhenNegativeVote() throws Exception {
     // Set up test data
@@ -315,6 +356,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when the poll does not
+   * exist.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVotePollNotFoundException() throws Exception {
     // Set up test data
@@ -344,6 +391,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when the citizen does
+   * not exist.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteCitizenNotFoundException() throws Exception {
     // Set up test data
@@ -377,6 +430,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when the VoteType is
+   * invalid.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteInvalidVoteTypeException() throws Exception {
     // Set up test data
@@ -406,6 +465,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint when the citizen already
+   * voted in the poll.
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteCitizenAlreadyVotedExceptionException() throws Exception {
     // Set up test data
@@ -444,6 +509,12 @@ public class RestPollControllerEndpointTest {
     verifyNoMoreInteractions(voteActivePollsServiceMock);
   }
 
+  /**
+   * Test case to verify the successful behavior of the 'vote' API endpoint in an application
+   * exception..
+   *
+   * @throws Exception if an error occurs during the test
+   */
   @Test
   public void testVoteApplicationException() throws Exception {
     // Set up test data
