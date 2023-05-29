@@ -5,9 +5,6 @@
 * Ivo Estrela   fc51051
 * Thiago Duarte fc53636
 
- ## TODO
-* Desktop App.: Documentar código.
-* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. e testar
 
 ## Dependências
 
@@ -29,4 +26,9 @@ Deve correr o comando `test.sh`.
 ## Inserir dados na base de dados (postgres) para melhor testagem da aplicação
 
 1. Deve correr o comando `run.sh` (caso ainda não o tenha feito) para iniciar a aplicação.
-2. Deve correr o comando `populate-db.sh` para popular a base de dados.
+
+2. Deve correr o comando `populate-db.sh` para popular a base de dados:
+    - Existe uma bill com 9999 supporters que ao apoiar deve fechar-se e criar uma votação(poll) associada.
+    - Existe uma bill e uma poll com datas expiradas que devem fechar dentro de um minuto (tempo definido no Schedule) depois de ligar a DB e inserir os dados
+    - Temos um delegate (O user principal) que representa dois voters, o que signifca que ao votar numa poll, a poll vai ter 3 votos a favor ou contra dependedo da escolha. A verificação do resultado da poll pode ser vista na DB.
+    - Os dados restantes são para testes normais. Os mencionados a cima são para a verificação casos extremos e do Schedule.
