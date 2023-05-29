@@ -6,8 +6,7 @@
 * Thiago Duarte fc53636
 
  ## TODO
-* [IMPORTANTE] Escrever um relatório onde explica a arquitectura interna de cada um destes componentes. -> DIOGO
-* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; melhorar código (como por exemplo resolver duplicações de código); verificar se o padrão MVVM (ou MVC?) está sendo respeitado; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar. -> THIAGO
+* Desktop App.: [IMPORTANTE] Fazer mocks das APIs restantes; verificar se todas as possíveis mensagens das APIs estão sendo tratadas; documentar código; testar. -> THIAGO (menos documentar código)
 * API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes e Poll); -> IVO
 * Web App: (SSR): criar página de autenticação (parecida com a da aplicação desktop); documentar código; testar: -> IVO
 * Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. DAR FIX DO NUM_SUPPORTS BUG NO INSERT -> IVO
