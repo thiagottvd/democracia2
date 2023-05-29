@@ -10,7 +10,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ConsultBillDetailsController">
    <children>
-      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="88.0" text="Detalhe do Projeto de Lei">
+      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="88.0" text="Detalhes do Projeto de Lei">
          <font>
             <Font size="30.0" />
          </font>

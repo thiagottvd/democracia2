@@ -9,14 +9,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ConsultBillsController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.democracia_desktop.controllers.ListExpiredPollsController">
    <children>
-      <Label alignment="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" text="Projetos de Lei em Curso">
+      <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="100.0" maxWidth="1.7976931348623157E308" prefHeight="100.0" text="Votações Expiradas">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
       <Separator prefWidth="200.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="45.0" prefHeight="45.0" text="The data below is a Mock. This functionality is not yet integrated." textAlignment="CENTER" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <padding>
+            <Insets left="100.0" />
+         </padding>
+      </Label>
       <Label alignment="CENTER" maxHeight="45.0" prefHeight="45.0" text="Título">
          <font>
             <Font size="18.0" />
@@ -25,7 +33,7 @@
             <Insets left="25.0" />
          </padding>
       </Label>
-      <ListView fx:id="openBillsList" maxHeight="1.7976931348623157E308">
+      <ListView fx:id="expiredPollsList" maxHeight="1.7976931348623157E308">
          <padding>
             <Insets bottom="10.0" left="5.0" />
          </padding>
@@ -36,17 +44,6 @@
                <font>
                   <Font size="18.0" />
                </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="billDetailsButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBillDetailsButton" text="Ver Detalhes">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="530.0" />
-               </HBox.margin>
             </Button>
          </children>
          <VBox.margin>

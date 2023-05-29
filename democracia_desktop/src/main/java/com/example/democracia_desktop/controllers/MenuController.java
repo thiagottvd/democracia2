@@ -1,11 +1,9 @@
 package com.example.democracia_desktop.controllers;
 
-import java.io.IOException;
+import static com.example.democracia_desktop.controllers.ControllerUtils.navigateToScene;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 
 public class MenuController {
 
@@ -13,26 +11,55 @@ public class MenuController {
 
   @FXML private Button listActivePollsButton;
 
+  @FXML private Button standAsDelegateButton;
+
+  @FXML private Button chooseDelegateButton;
+
+  @FXML private Button listExpiredPollsButton;
+
+  @FXML private Button proposeBillButton;
+
+  @FXML
+  void handleStandAsDelegateButton() {
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/stand_as_delegate_mock.fxml",
+        standAsDelegateButton);
+  }
+
+  @FXML
+  void handleListExpiredPollsButton() {
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/expired_polls_list_mock.fxml",
+        listExpiredPollsButton);
+  }
+
   @FXML
   void handleListActivePollsButton() {
-    setupStage("/com/example/democracia_desktop/active_polls_list.fxml", listActivePollsButton);
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/active_polls_list.fxml",
+        listActivePollsButton);
+  }
+
+  @FXML
+  void handleProposeBillButton() {
+    navigateToScene(
+        this.getClass(), "/com/example/democracia_desktop/propose_bill.fxml", proposeBillButton);
   }
 
   @FXML
   void handleConsultBillsButton() {
-    setupStage("/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
+    navigateToScene(
+        this.getClass(), "/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
   }
 
-  private void setupStage(String resource, Button button) {
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
-      Stage stage = (Stage) button.getScene().getWindow();
-      Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-      stage.setTitle("Democracia 2.0");
-      stage.setScene(scene);
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  @FXML
+  void handleChooseDelegateButton() {
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/choose_delegate_mock.fxml",
+        chooseDelegateButton);
   }
 }
