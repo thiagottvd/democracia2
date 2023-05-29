@@ -11,6 +11,24 @@ public class MenuController {
 
   @FXML private Button listActivePollsButton;
 
+  @FXML private Button standAsDelegateButton;
+
+  @FXML private Button chooseDelegateButton;
+
+  @FXML private Button listExpiredPollsButton;
+
+  @FXML private Button proposeBillButton;
+
+  @FXML
+  void handleStandAsDelegateButton() {
+    // TODO
+  }
+
+  @FXML
+  void handleListExpiredPollsButton() {
+    // TODO
+  }
+
   @FXML
   void handleListActivePollsButton() {
     navigateToScene(
@@ -20,8 +38,21 @@ public class MenuController {
   }
 
   @FXML
+  void handleProposeBillButton() {
+    // TODO
+  }
+
+  @FXML
   void handleConsultBillsButton() {
     navigateToScene(
         this.getClass(), "/com/example/democracia_desktop/consult_bills.fxml", consultBillsButton);
+  }
+
+  @FXML
+  void handleChooseDelegateButton() {
+    navigateToScene(
+        this.getClass(),
+        "/com/example/democracia_desktop/choose_delegate_mock.fxml",
+        chooseDelegateButton);
   }
 }

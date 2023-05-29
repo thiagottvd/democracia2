@@ -17,7 +17,7 @@
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER" maxHeight="500.0" prefHeight="500.0" prefWidth="100.0">
          <children>
-            <Button fx:id="listActivePollsButton" alignment="TOP_LEFT" maxWidth="385.0" mnemonicParsing="false" onAction="#handleListActivePollsButton" text="1. Consultar Votações em Curso" textAlignment="CENTER">
+            <Button fx:id="standAsDelegateButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleStandAsDelegateButton" text="1. Apresentar-se como Delegado (Using Mock Data)" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="18.0" />
                </font>
@@ -25,7 +25,39 @@
                   <Insets bottom="25.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="consultBillsButton" alignment="TOP_LEFT" maxWidth="385.0" mnemonicParsing="false" onAction="#handleConsultBillsButton" text="2. Consultar Projetos de Lei em Curso" textAlignment="CENTER">
+            <Button fx:id="listExpiredPollsButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleListExpiredPollsButton" text="2. Consultar Votações Passadas (Using Mock Data)" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="proposeBillButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleProposeBillButton" text="3. Criar Projeto de Lei (Using Mock Data)" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="listActivePollsButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleListActivePollsButton" text="4. Consultar Votações em Curso" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="consultBillsButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleConsultBillsButton" text="5. Consultar Projetos de Lei em Curso" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="chooseDelegateButton" alignment="TOP_LEFT" maxWidth="500.0" mnemonicParsing="false" onAction="#handleChooseDelegateButton" text="6. Escolher Delegado (Using Mock Data)" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="18.0" />
                </font>
