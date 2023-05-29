@@ -42,7 +42,7 @@
     </tr>
   </table>
 
-  <a th:href="@{/bills/{billId}/support(billId=${bill.id})}">(Apoiar Projeto de Lei)</a><br />
+  <a th:href="@{/bills/{billId}/support(billId=${bill.id})}"><button>Apoiar Projeto de Lei</button></a><br />
   <div th:if="${error}" style="color: red" class="error" th:text="${error}"></div>
   <div th:if="${success}" style="color: green" class="success" th:text="${success}"></div>
 
