@@ -7,9 +7,7 @@
 
  ## TODO
 * Desktop App.: Documentar código.
-* API Rest: Verificar se a semântica está de acordo com a semântica rest; documentar código (testes e Poll); -> IVO
-* Web App: (SSR): criar página de autenticação (parecida com a da aplicação desktop); documentar código; testar: -> IVO
-* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. DAR FIX DO NUM_SUPPORTS BUG NO INSERT -> IVO
+* Criar novos dados (no ficheiro init-data.sql) para inserir na aplicação ao correr populate-db.sh. e testar
 
 ## Dependências
 
