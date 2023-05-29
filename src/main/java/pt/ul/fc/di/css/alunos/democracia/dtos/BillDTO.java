@@ -1,6 +1,5 @@
 package pt.ul.fc.di.css.alunos.democracia.dtos;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import pt.ul.fc.di.css.alunos.democracia.entities.Bill;
@@ -10,7 +9,6 @@ public class BillDTO {
 
   private Long id;
 
-  @NotNull
   @Size(min = 3, max = 125)
   private String title;
 
@@ -18,9 +16,10 @@ public class BillDTO {
   private String description;
 
   private int numSupporters;
+
   private byte[] fileData;
-  @NotNull private LocalDate expirationDate;
-  @NotNull private String themeDesignation;
+  private LocalDate expirationDate;
+  private String themeDesignation;
   private String delegateName;
 
   /** Constructs an empty BillDTO object. */

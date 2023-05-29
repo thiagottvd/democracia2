@@ -30,7 +30,7 @@ public class Bill {
   @Size(min = 3, max = 250)
   private String description;
 
-  private int numSupporters = 1;
+  @NotNull private int numSupporters;
 
   @Lob private byte[] fileData;
 
@@ -95,6 +95,7 @@ public class Bill {
     }
     this.delegate = delegate;
     this.theme = theme;
+    this.numSupporters++;
     supporters.add(delegate);
   }
 
@@ -208,7 +209,7 @@ public class Bill {
    * @return the number of supporters of this bill
    */
   public int getNumSupporters() {
-    return supporters.size();
+    return this.numSupporters;
   }
 
   /**
